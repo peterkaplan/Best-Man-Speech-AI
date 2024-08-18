@@ -113,14 +113,14 @@ const SpeechAssistant = () => {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-              >
+                className="absolute left-4 top-0 transform -translate-y-1/2 text-gray-400 pointer-events-none flex items-center h-full"
+                >
                 {inputValue === '' && placeholders[placeholderIndex]}
               </motion.span>
             </AnimatePresence>
             <Button 
               size="sm" 
-              className={`absolute right-1 top-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-all duration-300 ${isTyping ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+              className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-all duration-300 ${isTyping ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
               onClick={handleSend}
             >
               <Send className="w-4 h-4" />

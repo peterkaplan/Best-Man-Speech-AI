@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { StarIcon, AwardIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
-import SpeechAssistant from './SpeechAssistant';  // Adjust the import path as needed
+import SpeechAssistant from './SpeechAssistant';  
 
 const Hero = () => {
   return (
