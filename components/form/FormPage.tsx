@@ -8,7 +8,7 @@ import useFormState from '@/app/form/useFormState';
 
 const FormPage: React.FC = () => {
   const formState = useFormState();
-  const { fakeDocumentText, formStage, apiResponse } = formState;
+  const {formStage, documentProgress } = formState;
 
   return (
     <div className="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex items-center justify-center p-4">
@@ -40,7 +40,9 @@ const FormPage: React.FC = () => {
           </Card>
 
           <div className="flex-1">
-          <FakeDocument text={fakeDocumentText} isLoading={formStage === 'animation'} />
+          <FakeDocument 
+            progress={documentProgress} 
+            isLoading={formStage === 'animation'} />
           </div>
         </div>
 

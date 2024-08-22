@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { useFormValidation } from '@/app/form/useFormValidation';
 import { useFormSubmission } from '@/app/form/useFormSubmission';
@@ -14,41 +14,17 @@ export const useFormState = () => {
   const { toast } = useToast();
   const { isAnswerValid, areAllQuestionsAnswered } = useFormValidation(questions, answers);
   const { isSubmitting, apiResponse, submitForm } = useFormSubmission();
-  const [fakeDocumentText, setFakeDocumentText] = useState<string[]>([]);
-  
-  const fakeDocumentTextRef = useRef(fakeDocumentText);
+  const [documentProgress, setDocumentProgress] = useState(0);
 
   useEffect(() => {
-    fakeDocumentTextRef.current = fakeDocumentText;
-  }, [fakeDocumentText]);
-
-  const getRandomSentence = useCallback(() => {
-    const lengths = [5, 8, 12, 15, 20];
-    const length = lengths[Math.floor(Math.random() * lengths.length)];
-    return "•".repeat(length);
-  }, []);
-
-  const addFakeDocumentText = useCallback(() => {
-    setFakeDocumentText(prev => {
-      if (prev.length === 0) {
-        return ["Best Man Speech", getRandomSentence()];
-      } else if (prev.length % 5 === 0) {
-        return [...prev, "", getRandomSentence()];
-      } else {
-        return [...prev, getRandomSentence()];
-      }
-    });
-  }, [getRandomSentence]);
-
-  const removeFakeDocumentText = useCallback(() => {
-    setFakeDocumentText(prev => {
-      if (prev.length <= 2) return []; // Don't remove the title
-      if (prev[prev.length - 2] === "") {
-        return prev.slice(0, -2); // Remove empty line and last sentence
-      }
-      return prev.slice(0, -1); // Remove last sentence
-    });
-  }, []);
+    if (isSubmitting) {
+      setFormStage('animation');
+    } else if (apiResponse && isAnimationComplete) {
+      setFormStage('results');
+    } else if (!isSubmitting && !apiResponse) {
+      setFormStage('form');
+    }
+  }, [isSubmitting, apiResponse, isAnimationComplete]);
 
   const handleAnswerChange = useCallback((answer: string | string[]) => {
     setAnswers(prev => ({ ...prev, [currentStep]: answer }));
@@ -65,23 +41,26 @@ export const useFormState = () => {
     }
 
     if (currentStep < questions.length - 1) {
-      addFakeDocumentText();
+      console.log("hjere");
+      setDocumentProgress(prev => prev + 1);
       setCurrentStep(prev => prev + 1);
     } else {
+      console.log("here??");
       handleSubmit();
     }
-  }, [currentStep, isAnswerValid, addFakeDocumentText, questions.length, toast]);
+  }, [currentStep, isAnswerValid, questions.length, toast]);
 
   const handlePrevious = useCallback(() => {
     if (currentStep > 0) {
-      removeFakeDocumentText();
       setCurrentStep(prev => prev - 1);
+      setDocumentProgress(prev => prev - 1);
     }
-  }, [currentStep, removeFakeDocumentText]);
+  }, [currentStep]);
 
   const handleSubmit = useCallback(() => {
     if (areAllQuestionsAnswered()) {
       submitForm(answers);
+      setDocumentProgress(prev => prev + 1);
     } else {
       toast({
         title: "Form Incomplete",
@@ -91,18 +70,12 @@ export const useFormState = () => {
     }
   }, [areAllQuestionsAnswered, answers, submitForm, toast]);
 
-  const handleRegenerate = () => {
-    setFormStage('animation');
-    setIsAnimationComplete(false);
-    submitForm(answers);
-  };
-
-  const handleAnimationComplete = () => {
+  const handleAnimationComplete = useCallback(() => {
     setIsAnimationComplete(true);
     if (apiResponse) {
       setFormStage('results');
     }
-  };
+  }, [apiResponse]);
 
   return {
     currentStep,
@@ -113,16 +86,13 @@ export const useFormState = () => {
     setFormStage,
     isAnimationComplete,
     setIsAnimationComplete,
-    fakeDocumentText,
-    setFakeDocumentText,
+    documentProgress,
     apiResponse,
     handleAnswerChange,
     handleNext,
     handlePrevious,
     handleSubmit,
-    handleRegenerate,
     handleAnimationComplete,
-    addFakeDocumentText,
     questions,
   };
 };

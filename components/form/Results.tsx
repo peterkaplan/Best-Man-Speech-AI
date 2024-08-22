@@ -6,10 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 
 interface ResultsProps {
   speech: string;
-  onRegenerate: () => void;
 }
 
-const Results: React.FC<ResultsProps> = ({ speech, onRegenerate }) => {
+const Results: React.FC<ResultsProps> = ({ speech }) => {
   const [reveal, setReveal] = useState(false);
 
   const coverProps = useSpring({
@@ -80,7 +79,7 @@ const Results: React.FC<ResultsProps> = ({ speech, onRegenerate }) => {
         </CardContent>
       </Card>
       <div className="flex justify-between items-center mt-4">
-        <Button variant="outline" className="flex items-center gap-2" onClick={onRegenerate}>
+        <Button variant="outline" className="flex items-center gap-2">
           <Unlock size={18} />
           Regenerate
         </Button>

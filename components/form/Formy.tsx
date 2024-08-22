@@ -1,13 +1,18 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import FormContent from './FormContent';
 import Results from './Results';
+import CheckmarkAnimation from './CheckmarkAnimation';
 
 interface FormyProps {
   formState: ReturnType<typeof import('@/app/form/useFormState').default>;
 }
 
 const Formy: React.FC<FormyProps> = ({ formState }) => {
+
+  const [formDimensions, setFormDimensions] = useState({ width: 0, height: 0 });
+  const formRef = useRef<HTMLDivElement>(null);
+
   const {
     currentStep,
     answers,
@@ -16,13 +21,25 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
     handleAnswerChange,
     handleNext,
     handlePrevious,
-    handleSubmit,
-    handleRegenerate,
     questions,
+    handleAnimationComplete
   } = formState;
 
+  useEffect(() => {
+    if (formRef.current) {
+      setFormDimensions({
+        width: formRef.current.offsetWidth,
+        height: formRef.current.offsetHeight
+      });
+    }
+  }, []);
+
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md relative">
+    <div
+      ref={formRef}
+      className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md relative"
+      style={{ minHeight: formDimensions.height > 0 ? `${formDimensions.height}px` : 'auto' }}
+    >
       {formStage === 'form' && (
         <FormContent
           currentStep={currentStep}
@@ -37,9 +54,15 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
         />
       )}
       {formStage === 'results' && (
-        <Results 
+        <Results
           speech={apiResponse || ''}
-          onRegenerate={handleRegenerate}
+        />
+      )}
+      {formStage === 'animation' && (
+        <CheckmarkAnimation
+          width={formDimensions.width}
+          height={formDimensions.height}
+          onComplete={handleAnimationComplete}
         />
       )}
     </div>
