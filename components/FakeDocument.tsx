@@ -1,7 +1,5 @@
-"use client"
-
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -10,19 +8,17 @@ interface FakeDocumentProps {
   isLoading?: boolean;
 }
 
-const FakeDocument: React.FC<FakeDocumentProps> = ({ text, isLoading = false }) => {
+const FakeDocument: React.FC<FakeDocumentProps> = memo(({ text, isLoading = false }) => {
   return (
-    <Card className="w-full max-w-md mx-auto bg-white shadow-lg">
+    <Card className="w-full max-w-2xl mx-auto bg-white shadow-lg">
       <CardContent className="p-6">
         <div className="flex items-center mb-4">
           <FileText className="w-6 h-6 mr-2 text-blue-500" />
           <h2 className="text-xl font-semibold text-gray-700">Best Man Speech</h2>
         </div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-4"
+        <div
+          className="space-y-4 font-serif text-lg leading-relaxed"
+          style={{ filter: 'blur(4px)' }}
         >
           {isLoading ? (
             <div className="flex items-center justify-center h-32">
@@ -33,23 +29,29 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ text, isLoading = false }) 
               />
             </div>
           ) : (
-            text.map((paragraph, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="h-4 bg-gray-200 rounded"
-                style={{
-                  width: `${Math.random() * 30 + 70}%`,
-                }}
-              />
-            ))
+            <AnimatePresence>
+              {text.map((paragraph, index) => (
+                <motion.p
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className={index === 0 ? "font-bold text-2xl mb-4" : ""}
+                >
+                  {paragraph}
+                </motion.p>
+              ))}
+            </AnimatePresence>
           )}
-        </motion.div>
+        </div>
       </CardContent>
     </Card>
   );
-};
+}, (prevProps, nextProps) => {
+  return prevProps.text.length === nextProps.text.length && prevProps.isLoading === nextProps.isLoading;
+});
+
+FakeDocument.displayName = 'FakeDocument';
 
 export default FakeDocument;

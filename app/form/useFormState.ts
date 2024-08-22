@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { useFormValidation } from '@/app/form/useFormValidation';
 import { useFormSubmission } from '@/app/form/useFormSubmission';
@@ -15,22 +15,46 @@ export const useFormState = () => {
   const { isAnswerValid, areAllQuestionsAnswered } = useFormValidation(questions, answers);
   const { isSubmitting, apiResponse, submitForm } = useFormSubmission();
   const [fakeDocumentText, setFakeDocumentText] = useState<string[]>([]);
+  
+  const fakeDocumentTextRef = useRef(fakeDocumentText);
 
   useEffect(() => {
-    if (isSubmitting) {
-      setFormStage('animation');
-    } else if (apiResponse && isAnimationComplete) {
-      setFormStage('results');
-    } else if (!isSubmitting && !apiResponse) {
-      setFormStage('form');
-    }
-  }, [isSubmitting, apiResponse, isAnimationComplete]);
+    fakeDocumentTextRef.current = fakeDocumentText;
+  }, [fakeDocumentText]);
 
-  const handleAnswerChange = (answer: string | string[]) => {
-    setAnswers({ ...answers, [currentStep]: answer });
-  };
+  const getRandomSentence = useCallback(() => {
+    const lengths = [5, 8, 12, 15, 20];
+    const length = lengths[Math.floor(Math.random() * lengths.length)];
+    return "•".repeat(length);
+  }, []);
 
-  const handleNext = () => {
+  const addFakeDocumentText = useCallback(() => {
+    setFakeDocumentText(prev => {
+      if (prev.length === 0) {
+        return ["Best Man Speech", getRandomSentence()];
+      } else if (prev.length % 5 === 0) {
+        return [...prev, "", getRandomSentence()];
+      } else {
+        return [...prev, getRandomSentence()];
+      }
+    });
+  }, [getRandomSentence]);
+
+  const removeFakeDocumentText = useCallback(() => {
+    setFakeDocumentText(prev => {
+      if (prev.length <= 2) return []; // Don't remove the title
+      if (prev[prev.length - 2] === "") {
+        return prev.slice(0, -2); // Remove empty line and last sentence
+      }
+      return prev.slice(0, -1); // Remove last sentence
+    });
+  }, []);
+
+  const handleAnswerChange = useCallback((answer: string | string[]) => {
+    setAnswers(prev => ({ ...prev, [currentStep]: answer }));
+  }, [currentStep]);
+
+  const handleNext = useCallback(() => {
     if (!isAnswerValid(currentStep)) {
       toast({
         title: "Please answer the question",
@@ -41,21 +65,21 @@ export const useFormState = () => {
     }
 
     if (currentStep < questions.length - 1) {
-      addFakeDocumentText()
-      setCurrentStep(currentStep + 1);
+      addFakeDocumentText();
+      setCurrentStep(prev => prev + 1);
     } else {
       handleSubmit();
     }
-  };
+  }, [currentStep, isAnswerValid, addFakeDocumentText, questions.length, toast]);
 
-  const handlePrevious = () => {
-    removeFakeDocumentText()
+  const handlePrevious = useCallback(() => {
     if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+      removeFakeDocumentText();
+      setCurrentStep(prev => prev - 1);
     }
-  };
+  }, [currentStep, removeFakeDocumentText]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (areAllQuestionsAnswered()) {
       submitForm(answers);
     } else {
@@ -65,7 +89,7 @@ export const useFormState = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [areAllQuestionsAnswered, answers, submitForm, toast]);
 
   const handleRegenerate = () => {
     setFormStage('animation');
@@ -78,15 +102,6 @@ export const useFormState = () => {
     if (apiResponse) {
       setFormStage('results');
     }
-  };
-  
-  const addFakeDocumentText = (times = 1) => {
-    console.log("here:");
-    setFakeDocumentText(prev => [...prev, ...Array(times).fill(0).map((_, i) => `Sentence ${prev.length + i + 1}`)]);
-  };
-
-  const removeFakeDocumentText = (times = 1) => {
-    setFakeDocumentText(prev => prev.slice(0, Math.max(0, prev.length - times)));
   };
 
   return {

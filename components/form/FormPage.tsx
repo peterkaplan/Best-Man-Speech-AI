@@ -40,10 +40,7 @@ const FormPage: React.FC = () => {
           </Card>
 
           <div className="flex-1">
-            <FakeDocument 
-              text={formStage === 'results' ? apiResponse?.split('\n') || [] : fakeDocumentText} 
-              isLoading={formStage === 'animation'}
-            />
+          <FakeDocument text={fakeDocumentText} isLoading={formStage === 'animation'} />
           </div>
         </div>
 
