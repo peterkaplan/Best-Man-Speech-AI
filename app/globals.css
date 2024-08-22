@@ -98,4 +98,8 @@
     background-size: 4px 4px;
     z-index: -1;
   }
+  .pressed {
+    transform: scale(0.95);
+    transition: transform 0.2s ease-in-out;
+  }
 }

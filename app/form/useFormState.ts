@@ -14,6 +14,7 @@ export const useFormState = () => {
   const { toast } = useToast();
   const { isAnswerValid, areAllQuestionsAnswered } = useFormValidation(questions, answers);
   const { isSubmitting, apiResponse, submitForm } = useFormSubmission();
+  const [fakeDocumentText, setFakeDocumentText] = useState<string[]>([]);
 
   useEffect(() => {
     if (isSubmitting) {
@@ -40,6 +41,7 @@ export const useFormState = () => {
     }
 
     if (currentStep < questions.length - 1) {
+      addFakeDocumentText()
       setCurrentStep(currentStep + 1);
     } else {
       handleSubmit();
@@ -47,6 +49,7 @@ export const useFormState = () => {
   };
 
   const handlePrevious = () => {
+    removeFakeDocumentText()
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
@@ -76,17 +79,37 @@ export const useFormState = () => {
       setFormStage('results');
     }
   };
+  
+  const addFakeDocumentText = (times = 1) => {
+    console.log("here:");
+    setFakeDocumentText(prev => [...prev, ...Array(times).fill(0).map((_, i) => `Sentence ${prev.length + i + 1}`)]);
+  };
+
+  const removeFakeDocumentText = (times = 1) => {
+    setFakeDocumentText(prev => prev.slice(0, Math.max(0, prev.length - times)));
+  };
 
   return {
     currentStep,
+    setCurrentStep,
     answers,
+    setAnswers,
     formStage,
-    isSubmitting,
+    setFormStage,
+    isAnimationComplete,
+    setIsAnimationComplete,
+    fakeDocumentText,
+    setFakeDocumentText,
     apiResponse,
     handleAnswerChange,
     handleNext,
     handlePrevious,
+    handleSubmit,
     handleRegenerate,
     handleAnimationComplete,
+    addFakeDocumentText,
+    questions,
   };
 };
+
+export default useFormState;
