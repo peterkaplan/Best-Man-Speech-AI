@@ -41,11 +41,9 @@ export const useFormState = () => {
     }
 
     if (currentStep < questions.length - 1) {
-      console.log("hjere");
-      setDocumentProgress(prev => prev + 1);
       setCurrentStep(prev => prev + 1);
+      setDocumentProgress(prev => prev + 1);
     } else {
-      console.log("here??");
       handleSubmit();
     }
   }, [currentStep, isAnswerValid, questions.length, toast]);

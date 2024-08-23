@@ -8,7 +8,7 @@ export interface Question {
   export const questions: Question[] = [
     { text: "Name of deceased", type: "text", required: true },
     { text: "Your relation to [name]. They were your…", type: "checkbox", options: ["Father", "Mother", "Sibling", "Grandmother", "Grandfather", "Friend"], required: true },
-    // { text: "What is your ideal tone for the speech? Select up to 3", type: "checkbox", options: ["Poetic", "Heartfelt", "Light hearted", "Grateful", "Spiritual", "Uplifting", "Solemn"], required: true },
+   { text: "What is your ideal tone for the speech? Select up to 3", type: "checkbox", options: ["Poetic", "Heartfelt", "Light hearted", "Grateful", "Spiritual", "Uplifting", "Solemn"], required: true },
     // { text: "What were [name]’s most notable personality traits?", type: "checkbox", options: ["Kindness", "Loyalty", "Person of faith", "Generosity", "Humor", "Warmth", "Intelligence", "Resilience", "Other: ____"], required: true },
     // { text: "What’s a story where [name] demonstrated one of these qualities?", type: "textarea", required: true },
     // { text: "What were their passions, hobbies, or interests?", type: "textarea", required: true },

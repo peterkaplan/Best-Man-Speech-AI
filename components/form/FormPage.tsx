@@ -1,15 +1,22 @@
 "use client";
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Formy from "@/components/form/Formy";
 import { Trophy } from 'lucide-react';
-import FakeDocument from '@/components/FakeDocument';
+import FakeDocument from '@/components/fake_document/FakeDocument';
 import useFormState from '@/app/form/useFormState';
 
 const FormPage: React.FC = () => {
   const formState = useFormState();
   const {formStage, documentProgress } = formState;
 
+  const memoizedFakeDocument = useMemo(() => (
+    <FakeDocument 
+      progress={documentProgress} 
+      isLoading={formStage === 'animation'} 
+    />
+  ), [documentProgress, formStage]);
+  
   return (
     <div className="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-6xl">
@@ -38,11 +45,8 @@ const FormPage: React.FC = () => {
               <Formy formState={formState} />
             </CardContent>
           </Card>
-
           <div className="flex-1">
-          <FakeDocument 
-            progress={documentProgress} 
-            isLoading={formStage === 'animation'} />
+            {memoizedFakeDocument}
           </div>
         </div>
 
