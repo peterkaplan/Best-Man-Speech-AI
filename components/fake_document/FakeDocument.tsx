@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { DocumentHeader } from './FakeDocumentHeader';
 import { DocumentContent } from './FakeDocumentContent';
@@ -13,9 +13,9 @@ interface FakeDocumentProps {
 const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, isLoading = false }) => {
   const { displayedText, isTyping } = useTypingEffect(progress);
 
-  const totalText = displayedText.title + '\n' + displayedText.content;
-  const totalLines = Math.ceil(totalText.length / 50);
-  const totalWords = (displayedText.title + ' ' + displayedText.content).split(/\s+/).filter(Boolean).length;
+  const totalWords = useMemo(() => {
+    return (displayedText.title + ' ' + displayedText.content).split(/\s+/).filter(Boolean).length;
+  }, [displayedText]);
 
   return (
     <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg border border-gray-200">
@@ -23,15 +23,10 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, isLoading = false
         <DocumentHeader />
         <div className="flex-grow overflow-hidden">
           <div className="h-full flex">
-            <div className="w-12 bg-gray-100 border-r border-gray-200">
-              {[...Array(totalLines)].map((_, i) => (
-                <div key={i} className="h-6 text-right pr-2 text-gray-400 text-sm">
-                  {i + 1}
-                </div>
-              ))}
-            </div>
-            <div className="flex-grow p-6 relative">
-              <DocumentContent isLoading={isLoading} displayedText={displayedText} isTyping={isTyping} />
+            <div className="w-full p-6 relative overflow-y-auto">
+              <div className="max-w-[650px] mx-auto">
+                <DocumentContent isLoading={isLoading} displayedText={displayedText} isTyping={isTyping} />
+              </div>
               {!isLoading && (
                 <div className="absolute bottom-4 right-4">
                   <TypingIndicator isTyping={isTyping} />

@@ -7,7 +7,7 @@ interface DisplayedText {
 }
 
 export const DocumentContent: React.FC<{ isLoading: boolean; displayedText: DisplayedText; isTyping: boolean }> = ({ isLoading, displayedText, isTyping }) => (
-  <div className="font-serif text-base leading-relaxed min-h-[700px] relative">
+  <div className="font-serif text-base leading-relaxed h-full relative">
     {isLoading ? (
       <div className="flex items-center justify-center h-full">
         <motion.div
@@ -17,16 +17,22 @@ export const DocumentContent: React.FC<{ isLoading: boolean; displayedText: Disp
         />
       </div>
     ) : (
-      <div>
-        {displayedText.title && <h1 className="text-2xl font-bold mb-4">{displayedText.title}</h1>}
-        <div className="whitespace-pre-wrap">
-          {displayedText.content}
-          <motion.div
-            animate={{ opacity: isTyping ? 1 : [1, 0] }}
-            transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-            className="inline-block w-[1px] h-[1.2em] bg-black ml-[1px] align-middle"
-          />
+      <div className="h-full">
+        {displayedText.title && (
+          <h1 className="text-3xl font-bold mb-6 text-center">
+            {displayedText.title}
+          </h1>
+        )}
+        <div className="whitespace-pre-wrap break-words">
+          {displayedText.content.split('\n\n').map((paragraph, index) => (
+            <p key={index} className="mb-4 text-justify">{paragraph}</p>
+          ))}
         </div>
+        <motion.div
+          animate={{ opacity: isTyping ? 1 : [1, 0] }}
+          transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+          className="inline-block w-[1px] h-[1.2em] bg-black ml-[1px] align-middle"
+        />
       </div>
     )}
   </div>
