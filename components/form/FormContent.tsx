@@ -29,11 +29,12 @@ const FormContent: React.FC<FormContentProps> = ({
 }) => {
   return (
     <>
-      <FormProgress currentStep={currentStep + 1} totalSteps={totalSteps} />
       <QuestionCard
         question={question}
         answer={answer}
         onChange={onAnswerChange}
+        currentStep={currentStep + 1} 
+        totalSteps={totalSteps}
       />
       <NavigationButtons
         onPrevious={onPrevious}

@@ -2,20 +2,53 @@ import React, { memo, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { DocumentHeader } from './FakeDocumentHeader';
 import { DocumentContent } from './FakeDocumentContent';
-import { TypingIndicator, useTypingEffect } from './FakeDocumentComponents';
+import { ResultContent } from './ResultContent';
+import { TypingIndicator, useTypingEffect } from './TypingIndicator';
 import { TextCursor } from "lucide-react";
+import { FormStage } from '@/app/form/useFormState';
+import { TypedText } from '@/app/form/useTypingEffect';
+import CheckmarkAnimation from '../form/CheckmarkAnimation';
 
 interface FakeDocumentProps {
   progress: number;
-  isLoading?: boolean;
+  formStage: FormStage;
+  realSpeech: TypedText | null;
+  onAnimationComplete: () => void;
 }
 
-const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, isLoading = false }) => {
+const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, realSpeech , onAnimationComplete }) => {
   const { displayedText, isTyping } = useTypingEffect(progress);
 
   const totalWords = useMemo(() => {
     return (displayedText.title + ' ' + displayedText.content).split(/\s+/).filter(Boolean).length;
   }, [displayedText]);
+
+  const renderContent = () => {
+    switch (formStage) {
+      case 'animation':
+        return <CheckmarkAnimation
+          onComplete={onAnimationComplete}
+        />    
+      case 'results':
+        return <ResultContent displayedText={realSpeech } />;
+      default:
+        return (
+          <>
+            <div className="max-w-[650px] mx-auto">
+              <div className="select-none blur" style={{ userSelect: 'none' }}>
+                <DocumentContent displayedText={displayedText} isTyping={isTyping} />
+              </div>
+            </div>
+            <div className="absolute bottom-4 right-4">
+              <TypingIndicator isTyping={isTyping} />
+            </div>
+            <div className="absolute bottom-4 left-4 text-sm text-gray-400">
+              Words: {totalWords}
+            </div>
+          </>
+        );
+    }
+  };
 
   return (
     <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg border border-gray-200">
@@ -24,17 +57,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, isLoading = false
         <div className="flex-grow overflow-hidden">
           <div className="h-full flex">
             <div className="w-full p-6 relative overflow-y-auto">
-              <div className="max-w-[650px] mx-auto">
-                <DocumentContent isLoading={isLoading} displayedText={displayedText} isTyping={isTyping} />
-              </div>
-              {!isLoading && (
-                <div className="absolute bottom-4 right-4">
-                  <TypingIndicator isTyping={isTyping} />
-                </div>
-              )}
-              <div className="absolute bottom-4 left-4 text-sm text-gray-400">
-                Words: {totalWords}
-              </div>
+              {renderContent()}
             </div>
           </div>
         </div>
@@ -49,5 +72,6 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, isLoading = false
 };
 
 export default memo(FakeDocument, (prevProps, nextProps) => {
-  return prevProps.progress === nextProps.progress && prevProps.isLoading === nextProps.isLoading;
+  return prevProps.progress === nextProps.progress &&
+    prevProps.formStage === nextProps.formStage;
 });

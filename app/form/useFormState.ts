@@ -15,7 +15,7 @@ export const useFormState = () => {
   const { isAnswerValid, areAllQuestionsAnswered } = useFormValidation(questions, answers);
   const { isSubmitting, apiResponse, submitForm } = useFormSubmission();
   const [documentProgress, setDocumentProgress] = useState(0);
-
+  
   useEffect(() => {
     if (isSubmitting) {
       setFormStage('animation');

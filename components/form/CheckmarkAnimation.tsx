@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 
 interface CheckmarkAnimationProps {
-  width: number;
-  height: number;
   steps?: string[];
   stepDuration?: number;
   primaryColor?: string;
@@ -13,14 +11,12 @@ interface CheckmarkAnimationProps {
 }
 
 const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
-  width,
-  height,
   steps = [
-    'Analyzing speech content...',
-    'Generating witty anecdotes...',
-    'Polishing opening lines...',
-    'Crafting emotional moments...',
-    'Finalizing your speech...'
+    'Reflecting on cherished memories...',
+    'Honoring a life well-lived...',
+    'Crafting heartfelt tributes...',
+    'Sharing stories of love and laughter...',
+    'Finalizing your eulogy...'
   ],
   stepDuration = 1000,
   primaryColor = '#3498db',
@@ -30,6 +26,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [showCheckmark, setShowCheckmark] = useState(false);
   const [progress, setProgress] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const progressInterval = setInterval(() => {
@@ -50,11 +47,11 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
 
   return (
     <motion.div 
-      className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg overflow-hidden"
-      style={{ width: `${width}px`, height: `${height}px` }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      ref={containerRef}
+      className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg overflow-hidden w-full h-64"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
     >
       <motion.div 
         className="absolute top-0 left-0 h-1 bg-gray-200"
@@ -62,7 +59,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
       >
         <motion.div 
           className="h-full"
-          style={{ backgroundColor: primaryColor }}
+          style={{ backgroundColor: primaryColor, width: `${progress}%` }}
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -84,6 +81,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
               {steps[Math.min(currentStep, steps.length - 1)]}
             </motion.p>
@@ -97,7 +95,14 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
             className="flex flex-col items-center"
           >
             <CheckCircle2 className="w-16 h-16 mb-4" color={secondaryColor} />
-            <p className="text-lg text-gray-600 mt-4">Speech ready!</p>
+            <motion.p className="text-lg text-gray-600 mt-4" 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              Speech ready!
+            </motion.p>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,63 +1,65 @@
 "use client";
 import React, { useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion, AnimatePresence } from 'framer-motion';
+import { Card, CardContent } from "@/components/ui/card";
 import Formy from "@/components/form/Formy";
-import { Trophy } from 'lucide-react';
 import FakeDocument from '@/components/fake_document/FakeDocument';
 import useFormState from '@/app/form/useFormState';
 
 const FormPage: React.FC = () => {
   const formState = useFormState();
-  const {formStage, documentProgress } = formState;
+  const { formStage, documentProgress, apiResponse, handleAnimationComplete } = formState;
 
   const memoizedFakeDocument = useMemo(() => (
     <FakeDocument 
+      formStage={formStage}
       progress={documentProgress} 
-      isLoading={formStage === 'animation'} 
+      realSpeech={apiResponse}
+      onAnimationComplete={handleAnimationComplete}
     />
   ), [documentProgress, formStage]);
   
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-indigo-900 mb-2">
-            Craft an Unforgettable
-          </h1>
-          <h2 className="text-5xl font-extrabold text-indigo-600">
-            Best Man Speech
-          </h2>
-          <p className="mt-4 text-lg text-indigo-800">
-            Transform your memories and emotions into a heartfelt, hilarious, and
-            perfectly tailored speech with our AI-powered assistant.
-          </p>
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-6">
-          <Card className="bg-white shadow-xl rounded-xl overflow-hidden flex-1">
-            <CardHeader className="bg-indigo-600 text-white p-6">
-              <CardTitle className="text-2xl font-semibold flex items-center justify-center">
-                <Trophy className="mr-2" />
-                #1 AI Best Man Speech Assistant
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <Formy formState={formState} />
-            </CardContent>
-          </Card>
-          <div className="flex-1">
+    <div className="bg-gradient-to-br from-indigo-100 to-blue-200 min-h-screen pt-28 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-4 h-full relative">
+          <AnimatePresence>
+            {formStage === 'form' && (
+              <motion.div
+                key="form"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex-1 lg:w-1/2"
+              >
+                <Card className="bg-white shadow-xl border border-gray-200 rounded-lg overflow-hidden flex flex-col h-full">
+                  <CardContent className="p-6 flex-grow overflow-y-auto">
+                    <Formy formState={formState} />
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <motion.div 
+            key="fakeDocument"
+            className="flex-1 lg:w-1/2 h-full overflow-hidden"
+            animate={{ 
+              width: formStage === 'form' ? '50%' : '100%',
+            }}
+            transition={{ duration: 0.5 }}
+          >
             {memoizedFakeDocument}
-          </div>
+          </motion.div>
         </div>
-
-        <div className="mt-8 text-center">
-          <div className="flex justify-center items-center">
-            <div className="flex -space-x-2">
-              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-white" />
-              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-white" />
-              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-white" />
+        
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center bg-white rounded-full px-4 py-2 shadow-md">
+            <div className="flex -space-x-2 mr-3">
+              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-indigo-100" />
+              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-indigo-100" />
+              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-indigo-100" />
             </div>
-            <span className="ml-2 text-indigo-800">
+            <span className="text-indigo-800 font-semibold">
               ⭐⭐⭐⭐⭐ 50,000+ Speeches Delivered
             </span>
           </div>
