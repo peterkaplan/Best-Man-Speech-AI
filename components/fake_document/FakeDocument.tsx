@@ -13,6 +13,10 @@ interface FakeDocumentProps {
 const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, isLoading = false }) => {
   const { displayedText, isTyping } = useTypingEffect(progress);
 
+  const totalText = displayedText.title + '\n' + displayedText.content;
+  const totalLines = Math.ceil(totalText.length / 50);
+  const totalWords = (displayedText.title + ' ' + displayedText.content).split(/\s+/).filter(Boolean).length;
+
   return (
     <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg border border-gray-200">
       <div className="flex flex-col h-[800px]">
@@ -20,7 +24,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, isLoading = false
         <div className="flex-grow overflow-hidden">
           <div className="h-full flex">
             <div className="w-12 bg-gray-100 border-r border-gray-200">
-              {[...Array(Math.ceil(displayedText.length / 50))].map((_, i) => (
+              {[...Array(totalLines)].map((_, i) => (
                 <div key={i} className="h-6 text-right pr-2 text-gray-400 text-sm">
                   {i + 1}
                 </div>
@@ -34,7 +38,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, isLoading = false
                 </div>
               )}
               <div className="absolute bottom-4 left-4 text-sm text-gray-400">
-                Words: {displayedText.split(/\s+/).length}
+                Words: {totalWords}
               </div>
             </div>
           </div>

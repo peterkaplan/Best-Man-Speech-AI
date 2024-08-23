@@ -1,18 +1,19 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { generateSentence } from "@/app/form/textGenerationUtils";
+import { generateTitle, generateSentence } from "@/app/form/textGenerationUtils";
 
 export const useTypingEffect = (progress: number) => {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState({ title: '', content: '' });
   const [isTyping, setIsTyping] = useState(false);
-  const fullTextRef = useRef('');
+  const fullTextRef = useRef({ title: '', content: '' });
   const typingRef = useRef<NodeJS.Timeout | null>(null);
   const lastProgressRef = useRef(0);
   const sectionsRef = useRef<number[]>([0]);
   const currentSentenceRef = useRef('');
   const isTypingCycleActiveRef = useRef(false);
+  const hasTitleRef = useRef(false);
 
-  const typeText = useCallback((text: string) => {
+  const typeText = useCallback((text: string, isTitle: boolean = false) => {
     if (isTypingCycleActiveRef.current) return;
     isTypingCycleActiveRef.current = true;
     setIsTyping(true);
@@ -22,14 +23,14 @@ export const useTypingEffect = (progress: number) => {
       if (index < text.length) {
         const newChar = text[index];
         setDisplayedText(prev => {
-          const newText = prev + newChar;
-          console.log(`Adding character: "${newChar}", New text: "${newText}"`);
+          const newText = isTitle 
+            ? { ...prev, title: prev.title + newChar }
+            : { ...prev, content: prev.content + newChar };
           return newText;
         });
         index++;
-        typingRef.current = setTimeout(type, Math.random() * 30 + 10); // Random delay between 10-40ms
+        typingRef.current = setTimeout(type, Math.random() * 30 + 10);
       } else {
-        console.log("Finished typing text:", text);
         setIsTyping(false);
         currentSentenceRef.current = '';
         isTypingCycleActiveRef.current = false;
@@ -48,26 +49,27 @@ export const useTypingEffect = (progress: number) => {
 
   useEffect(() => {
     if (progress !== lastProgressRef.current) {
-      console.log(`Progress changed: ${lastProgressRef.current} -> ${progress}`);
       if (progress > lastProgressRef.current) {
         if (!isTypingCycleActiveRef.current) {
-          const newSentence = generateSentence();
-          console.log("Generated new sentence:", newSentence);
-          if (newSentence && typeof newSentence === 'string') {
-            fullTextRef.current += newSentence;
-            sectionsRef.current.push(fullTextRef.current.length);
+          if (!hasTitleRef.current) {
+            const newTitle = generateTitle();
+            fullTextRef.current.title = newTitle;
+            hasTitleRef.current = true;
+            typeText(newTitle, true);
+          } else {
+            const newSentence = generateSentence();
+            fullTextRef.current.content += (fullTextRef.current.content ? ' ' : '') + newSentence;
+            sectionsRef.current.push(fullTextRef.current.content.length);
             currentSentenceRef.current = newSentence;
             typeText(newSentence);
-          } else {
-            console.error("Invalid sentence generated:", newSentence);
           }
         }
       } else if (progress < lastProgressRef.current) {
+        // Handle reverting text (if needed)
         const lastSectionStart = sectionsRef.current[sectionsRef.current.length - 2] || 0;
-        fullTextRef.current = fullTextRef.current.substring(0, lastSectionStart);
+        fullTextRef.current.content = fullTextRef.current.content.substring(0, lastSectionStart);
         sectionsRef.current.pop();
         setDisplayedText(fullTextRef.current);
-        console.log("Reverted text:", fullTextRef.current);
         currentSentenceRef.current = '';
         isTypingCycleActiveRef.current = false;
       }

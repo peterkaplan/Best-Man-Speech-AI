@@ -17,3 +17,7 @@ export const generateWord = (): string => {
     const words = Math.floor(Math.random() * 5) + 3; // 3 to 7 words
     return Array(words).fill(null).map(() => generateWord()).join(' ') + '. ';
   };
+
+  export const generateTitle = (): string => {
+    return "Eulogy Speech";
+  }
