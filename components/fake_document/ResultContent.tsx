@@ -1,59 +1,48 @@
 import React from 'react';
 import { TypedText } from '@/app/form/useTypingEffect';
-import { Scroll } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Button } from "@/components/ui/button";
+import { UnlockCard } from './UnlockCard';
 
 export const ResultContent: React.FC<{ displayedText: TypedText | null }> = ({ displayedText }) => {
   if (!displayedText) return null;
 
-  const sentences = displayedText.content.split('. ');
-  const visibleSentences = sentences.slice(0, 1);
-  const partialSentence = sentences[1]?.split(' ').slice(0, Math.ceil(sentences[1].split(' ').length / 2)).join(' ');
-  const remainingSentences = sentences.slice(1);
+  const words = displayedText.content.split(' ');
+  const visibleWordCount = 35;
 
   return (
-    <div className="font-serif text-base leading-relaxed h-full relative flex flex-col items-center">
-      <div className="h-full w-full flex flex-col items-center">
-        {displayedText.title && (
-          <h1 className="text-3xl font-bold mb-6 text-center">
-            {displayedText.title}
-          </h1>
-        )}
-        <div className="whitespace-pre-wrap break-words">
-          {visibleSentences.map((sentence, index) => (
-            <span key={index} className="mb-4 text-justify">
-              {sentence.trim() + '.'}
-            </span>
-          ))}
-          {partialSentence && (
-            <span className="mb-4 text-justify">
-              {partialSentence.trim() + ' '}
-            </span>
-          )}
-          <div className="blur inline">
-            {remainingSentences.map((sentence, index) => (
-              <span key={index + visibleSentences.length} className="mb-4 text-justify">
-                {sentence.trim() + (index < remainingSentences.length - 1 ? '.' : '')}
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="font-sans text-base leading-relaxed h-full relative flex flex-col items-center max-w-2xl mx-auto p-8 pb-24"
+    >
+      <motion.h1 
+        initial={{ y: -20 }}
+        animate={{ y: 0 }}
+        className="text-3xl font-bold mb-6 text-center text-gray-800"
+      >
+        Eulogy Speech
+      </motion.h1>
+      <div className="relative w-full mb-8">
+        <p className="whitespace-pre-wrap break-words text-gray-700 text-justify">
+          {words.map((word, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && ' '}
+              <span
+                style={{
+                  filter: index >= visibleWordCount ? `blur(${Math.min((index - visibleWordCount) * 0.2 + 1, 5)}px)` : 'none',
+                  opacity: index >= visibleWordCount ? Math.max(1 - (index - visibleWordCount) * 0.02, 0.5) : 1,
+                }}
+              >
+                {word}
               </span>
-            ))}
-          </div>
+            </React.Fragment>
+          ))}
+        </p>
+        <div className="absolute -bottom-16 left-0 right-0 flex justify-center">
+          <UnlockCard />
         </div>
       </div>
-      <motion.div 
-        className="absolute inset-0 flex items-center justify-center"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-      >
-        <Button
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
-          onClick={() => alert('Unlocking full eulogy...')}
-        >
-          <Scroll size={18} />
-          Unlock Full Eulogy
-        </Button>
-      </motion.div>
-    </div>
+    </motion.div>
   );
 };
