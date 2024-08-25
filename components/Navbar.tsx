@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from 'next/link';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,32 +35,40 @@ const Navbar = () => {
 
           {/* Navigation Links - hidden on mobile */}
           <div className="hidden md:flex md:items-center md:space-x-8">
-            <a href="#" className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
+            <Link href="/#" className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
               Home
-            </a>
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
                 Features <ChevronDown className="inline-block ml-1 h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>AI-Powered Writing</DropdownMenuItem>
-                <DropdownMenuItem>Speech Templates</DropdownMenuItem>
-                <DropdownMenuItem>Joke Generator</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/#benefits">AI-Powered Writing</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/#how-it-works">Speech Templates</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/#sample-output">Joke Generator</Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <a href="#" className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
+            <Link href="/#testimonials" className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
               Testimonials
-            </a>
-            <a href="#" className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
+            </Link>
+            <Link href="/#pricing" className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
               Pricing
-            </a>
+            </Link>
           </div>
 
           {/* CTA Button */}
           <div className="hidden md:flex md:items-center">
-            <Button className={`transition-all duration-300 transform hover:scale-105 ${isScrolled ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-white hover:bg-indigo-100 text-indigo-600'}`}>
-              Get Started
-            </Button>
+            <Link href="/creator">
+              <Button className={`transition-all duration-300 transform hover:scale-105 ${isScrolled ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-white hover:bg-indigo-100 text-indigo-600'}`}>
+                Get Started
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -81,14 +90,16 @@ const Navbar = () => {
       {/* Mobile menu */}
       <div className={`md:hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
-          <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-indigo-50">Home</a>
-          <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-indigo-50">Features</a>
-          <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-indigo-50">Testimonials</a>
-          <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-indigo-50">Pricing</a>
+          <Link href="/#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-indigo-50">Home</Link>
+          <Link href="/#benefits" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-indigo-50">Features</Link>
+          <Link href="/#testimonials" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-indigo-50">Testimonials</Link>
+          <Link href="/#pricing" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-indigo-600 hover:bg-indigo-50">Pricing</Link>
           <div className="mt-4 px-3">
-            <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
-              Get Started
-            </Button>
+            <Link href="/creator">
+              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
+                Get Started
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
