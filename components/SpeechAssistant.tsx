@@ -26,9 +26,9 @@ const SpeechAssistant = () => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [placeholders.length]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     setIsTyping(e.target.value.length > 0);
   };
@@ -69,7 +69,7 @@ const SpeechAssistant = () => {
             transition={{ delay: 0.3 }}
             className="bg-indigo-100 p-4 rounded-lg"
           >
-            <p className="text-sm text-indigo-800">John and I have been best friends since college. He's always been the life of the party and has a heart of gold.</p>
+            <p className="text-sm text-indigo-800">John and I have been best friends since college. He&apos;s always been the life of the party and has a heart of gold.</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -77,7 +77,7 @@ const SpeechAssistant = () => {
             transition={{ delay: 0.6 }}
             className="bg-gray-100 p-4 rounded-lg"
           >
-            <p className="text-sm text-gray-600">Great! Now, let's add some humor. What's a funny story you could share?</p>
+            <p className="text-sm text-gray-600">Great! Now, let&apos;s add some humor. What&apos;s a funny story you could share?</p>
           </motion.div>
           <AnimatePresence>
             {showTypingIndicator && (

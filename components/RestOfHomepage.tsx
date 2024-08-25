@@ -109,7 +109,7 @@ const RestOfHomepage = () => {
           <div className="bg-gray-100 p-6 rounded-lg shadow-inner">
             <h3 className="text-xl font-semibold mb-4">Sample Speech Intro:</h3>
             <p className="text-gray-700 italic">
-              "Ladies and gentlemen, I've known [Groom's Name] since we were five years old, and I can confidently say that [Bride's Name] is the best thing that's ever happened to him – besides me, of course! [Pause for laughter] But in all seriousness, watching these two fall in love has been like watching a real-life romantic comedy, minus the predictable plot and cheesy soundtrack..."
+              &ldquo;Ladies and gentlemen, I&apos;ve known [Groom&apos;s Name] since we were five years old, and I can confidently say that [Bride&apos;s Name] is the best thing that&apos;s ever happened to him – besides me, of course! [Pause for laughter] But in all seriousness, watching these two fall in love has been like watching a real-life romantic comedy, minus the predictable plot and cheesy soundtrack...&rdquo;
             </p>
           </div>
           <div className="text-center mt-8">
@@ -133,7 +133,7 @@ const RestOfHomepage = () => {
                 transition={{ duration: 0.5 }}
                 className="bg-white p-6 rounded-lg shadow"
               >
-                <p className="text-lg mb-4">"{testimonial.quote}"</p>
+                <p className="text-lg mb-4">&ldquo;{testimonial.quote}&rdquo;</p>
                 <div className="font-semibold">{testimonial.name}</div>
                 <div className="text-indigo-600">{testimonial.role}</div>
               </motion.div>

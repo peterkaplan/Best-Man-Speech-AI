@@ -1,5 +1,6 @@
 "use client";
 import React, { useMemo } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
 import Formy from "@/components/form/Formy";
@@ -17,7 +18,7 @@ const FormPage: React.FC = () => {
       realSpeech={apiResponse}
       onAnimationComplete={handleAnimationComplete}
     />
-  ), [documentProgress, formStage]);
+  ), [documentProgress, formStage, apiResponse, handleAnimationComplete]);
   
   return (
     <div className="bg-gradient-to-br from-indigo-100 to-blue-200 min-h-screen pt-28 pb-12 px-4 sm:px-6 lg:px-8">
@@ -55,9 +56,9 @@ const FormPage: React.FC = () => {
         <div className="mt-12 text-center">
           <div className="inline-flex items-center bg-white rounded-full px-4 py-2 shadow-md">
             <div className="flex -space-x-2 mr-3">
-              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-indigo-100" />
-              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-indigo-100" />
-              <img src="/api/placeholder/32/32" alt="User" className="w-8 h-8 rounded-full border-2 border-indigo-100" />
+              <Image src="/api/placeholder/32/32" alt="User" width={32} height={32} className="w-8 h-8 rounded-full border-2 border-indigo-100" />
+              <Image src="/api/placeholder/32/32" alt="User" width={32} height={32} className="w-8 h-8 rounded-full border-2 border-indigo-100" />
+              <Image src="/api/placeholder/32/32" alt="User" width={32} height={32} className="w-8 h-8 rounded-full border-2 border-indigo-100" />
             </div>
             <span className="text-indigo-800 font-semibold">
               ⭐⭐⭐⭐⭐ 50,000+ Speeches Delivered
