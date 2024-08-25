@@ -12,11 +12,11 @@ interface CheckmarkAnimationProps {
 
 const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
   steps = [
-    'Reflecting on cherished memories...',
-    'Honoring a life well-lived...',
-    'Crafting heartfelt tributes...',
-    'Sharing stories of love and laughter...',
-    'Finalizing your eulogy...'
+    'Recalling hilarious anecdotes...',
+    'Crafting witty one-liners...',
+    'Balancing humor and sentiment...',
+    'Polishing those embarrassing stories...',
+    'Finalizing your best man speech...'
   ],
   stepDuration = 1000,
   primaryColor = '#3498db',
@@ -101,7 +101,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              Speech ready!
+              Best man speech ready!
             </motion.p>
           </motion.div>
         )}

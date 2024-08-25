@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import FormContent from './FormContent';
-import Results from './Results';
 import CheckmarkAnimation from './CheckmarkAnimation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { HelpCircle } from 'lucide-react';
@@ -53,7 +52,7 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
     >
       <CardHeader className="bg-white p-6 rounded-t-lg flex items-center">
         <CardTitle className="text-2xl font-bold text-gray-800 flex items-center">
-          Eulogy Generator
+          Best Man Speech Generator
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -62,12 +61,12 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Fill out the form to generate your eulogy. Watch it appear in real-time on the right!</p>
+                <p>Fill out the form to generate your best man speech. Watch it appear in real-time on the right!</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </CardTitle>
-        <CardDescription className="text-gray-600 mt-2">Complete this form to create a heartfelt eulogy in honor of your loved one.</CardDescription>
+        <CardDescription className="text-gray-600 mt-2">Complete this form to create a memorable and entertaining best man speech for the groom.</CardDescription>
       </CardHeader>
       <CardContent className="p-6">
         {formStage === 'form' && (

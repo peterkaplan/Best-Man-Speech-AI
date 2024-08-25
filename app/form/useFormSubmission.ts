@@ -41,16 +41,18 @@ export const useFormSubmission = () => {
 };
 
 const speech = {
-  title: "Eulogy Speech",
-  content: `Dear friends and family,
+  title: "Best Man Speech",
+  content: `Ladies and gentlemen,
 
-We gather here today to celebrate the life of a remarkable individual who touched our hearts in countless ways. [Name] was not just a friend, a sibling, or a parent; [he/she/they] was a beacon of light in our lives, illuminating our paths with love, kindness, and unwavering support.
+If I could have your attention for just a moment, I promise to keep this short and sweet—just like the groom's attention span! For those who don’t know me, I’m [Your Name], the best man and [Groom's Name]'s partner in crime for many years.
 
-As we reflect on the memories we shared, let us remember the laughter that filled the room, the stories that brought us together, and the moments that defined our time with [Name]. [He/She/They] had a unique ability to make everyone feel special, to listen without judgment, and to offer comfort in times of need.
+Today, we gather to celebrate the love between [Groom's Name] and [Bride's Name]. I’ve had the privilege of knowing [Groom's Name] for quite some time, and let me tell you, he’s always been a bit of a character. From our wild adventures to our late-night talks, I’ve seen him at his best and, well, let’s just say, at his “learning experiences.”
 
-Though we may feel a profound sense of loss today, let us also celebrate the legacy that [Name] leaves behind. [He/She/They] taught us the importance of compassion, the value of friendship, and the beauty of living life to the fullest. Let us honor [his/her/their] memory by carrying forward these lessons in our own lives.
+But in all seriousness, [Groom's Name] has always had a heart of gold. He’s the kind of guy who would give you the shirt off his back—though I wouldn’t recommend it, as he has questionable fashion sense! 
 
-In closing, let us hold onto the love we shared with [Name] and cherish the moments we had together. May [he/she/they] rest in peace, knowing that [his/her/their] spirit will forever live on in our hearts.
+And then came [Bride's Name]. The moment he met her, I knew something had changed. He started showing up on time, dressing better, and even learned how to cook! [Bride's Name], you’ve truly brought out the best in him, and for that, we are all grateful.
 
-Thank you.`
+As we raise our glasses, let’s toast to love, laughter, and a happily ever after. May your life together be filled with joy, adventure, and endless love. Here’s to [Groom's Name] and [Bride's Name]—may your love be modern enough to survive the times and old-fashioned enough to last forever.
+
+Cheers!`
 };

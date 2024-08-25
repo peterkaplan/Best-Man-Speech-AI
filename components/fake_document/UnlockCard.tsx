@@ -7,8 +7,8 @@ export const UnlockCard: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState('single');
 
   const options = [
-    { id: 'single', name: 'Just this speech', price: '€2.99' },
-    { id: 'multiple', name: '3 unique versions', price: '€4.99' },
+    { id: 'single', name: 'Just this speech', price: '€9.99' },
+    { id: 'multiple', name: '3 unique versions', price: '€19.99' },
   ];
 
   return (
@@ -20,10 +20,10 @@ export const UnlockCard: React.FC = () => {
     >
       <div className="flex items-center mb-6">
         <Lock className="text-indigo-600 mr-3" size={24} />
-        <h2 className="text-2xl font-bold text-gray-800">Unlock full eulogy</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Unlock full best man speech</h2>
       </div>
       <ul className="mb-6 space-y-3">
-        {['Access the complete tribute', 'Unlimited views and shares', 'Download as PDF'].map((benefit, index) => (
+        {['Access the complete speech', 'Unlimited views and shares', 'Download as PDF', 'Customization options'].map((benefit, index) => (
           <motion.li 
             key={index}
             initial={{ opacity: 0, x: -20 }}
