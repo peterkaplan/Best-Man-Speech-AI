@@ -114,7 +114,7 @@ const RestOfHomepage = () => {
           </div>
           <div className="text-center mt-8">
             <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
-              Generate Your Custom Intro
+              Generate Your Custom Intro Now
             </Button>
           </div>
         </div>
