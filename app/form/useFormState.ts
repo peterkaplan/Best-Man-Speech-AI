@@ -44,9 +44,18 @@ export const useFormState = () => {
       setCurrentStep(prev => prev + 1);
       setDocumentProgress(prev => prev + 1);
     } else {
-      handleSubmit();
+      if (areAllQuestionsAnswered()) {
+        submitForm(answers);
+        setDocumentProgress(prev => prev + 1);
+      } else {
+        toast({
+          title: "Form Incomplete",
+          description: "Please answer all required questions before submitting.",
+          variant: "destructive",
+        });
+      }
     }
-  }, [currentStep, isAnswerValid, questions.length, toast]);
+  }, [currentStep, isAnswerValid, toast, areAllQuestionsAnswered, submitForm, answers]);
 
   const handlePrevious = useCallback(() => {
     if (currentStep > 0) {
