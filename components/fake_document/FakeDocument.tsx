@@ -52,7 +52,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, realSp
 
   return (
     <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg border border-gray-200">
-      <div className="flex flex-col h-[800px]">
+      <div className="flex flex-col lg:h-[800px]">
         <DocumentHeader />
         <div className="flex-grow overflow-hidden">
           <div className="h-full flex">

@@ -47,11 +47,18 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
   return (
     <Card
       ref={formRef}
-      className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden relative"
-      style={{ minHeight: formDimensions.height > 0 ? `${formDimensions.height}px` : 'auto' }}
+      className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden relative
+                 sm:w-full sm:mx-0 sm:rounded-none sm:shadow-none sm:border-0
+                 sm:min-h-screen sm:flex sm:flex-col"
+      style={{ 
+        minHeight: formDimensions.height > 0 ? `${formDimensions.height}px` : 'auto',
+        background: 'linear-gradient(to bottom, #f0f4ff, #ffffff)'
+      }}
     >
-      <CardHeader className="bg-white p-6 rounded-t-lg flex items-center">
-        <CardTitle className="text-2xl font-bold text-gray-800 flex items-center">
+      <CardHeader className="bg-white p-6 rounded-t-lg flex items-center
+                             sm:py-8 sm:px-4 sm:bg-transparent">
+        <CardTitle className="text-2xl font-bold text-gray-800 flex items-center
+                              sm:text-3xl sm:mb-2">
           Best Man Speech Generator
           <TooltipProvider>
             <Tooltip>
@@ -66,9 +73,11 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
             </Tooltip>
           </TooltipProvider>
         </CardTitle>
-        <CardDescription className="text-gray-600 mt-2">Complete this form to create a memorable and entertaining best man speech for the groom.</CardDescription>
+        <CardDescription className="text-gray-600 mt-2 sm:text-lg sm:mb-4">
+          Complete this form to create a memorable and entertaining best man speech for the groom.
+        </CardDescription>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-6 sm:p-4 sm:flex-grow sm:flex sm:flex-col sm:justify-center">
         {formStage === 'form' && (
           <FormContent
             currentStep={currentStep}

@@ -21,7 +21,7 @@ const FormPage: React.FC = () => {
   ), [documentProgress, formStage, apiResponse, handleAnimationComplete]);
   
   return (
-    <div className="bg-gradient-to-br from-indigo-100 to-blue-200 min-h-screen pt-28 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-br from-indigo-200 via-blue-200 to-blue-300 min-h-screen pt-28 pb-12 px-4 sm:px-6 lg:px-8 lg:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] lg:from-indigo-200 lg:via-blue-200 lg:to-blue-300">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-4 h-full relative">
           <AnimatePresence>
@@ -33,7 +33,7 @@ const FormPage: React.FC = () => {
                 transition={{ duration: 0.5 }}
                 className="flex-1 lg:w-1/2"
               >
-                <Card className="bg-white shadow-xl border border-gray-200 rounded-lg overflow-hidden flex flex-col h-full">
+                <Card className="bg-white/90 backdrop-blur-sm shadow-xl border border-gray-200/50 rounded-lg overflow-hidden flex flex-col h-full">
                   <CardContent className="p-6 flex-grow overflow-y-auto">
                     <Formy formState={formState} />
                   </CardContent>
@@ -54,7 +54,7 @@ const FormPage: React.FC = () => {
         </div>
         
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center bg-white rounded-full px-4 py-2 shadow-md">
+          <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-md">
             <div className="flex -space-x-2 mr-3">
               <Image src="/api/placeholder/32/32" alt="User" width={32} height={32} className="w-8 h-8 rounded-full border-2 border-indigo-100" />
               <Image src="/api/placeholder/32/32" alt="User" width={32} height={32} className="w-8 h-8 rounded-full border-2 border-indigo-100" />
