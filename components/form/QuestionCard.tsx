@@ -3,6 +3,7 @@ import QuestionText from './QuestionText';
 import AnswerInput from './AnswerInput';
 import FormProgress from './FormProgress';
 import { motion } from "framer-motion";
+import NavigationButtons from './NavigationButtons';
 
 interface Question {
   text: string;
@@ -16,9 +17,23 @@ interface QuestionCardProps {
   onChange: (answer: string | string[]) => void;
   currentStep: number;
   totalSteps: number;
+  onPrevious: () => void;
+  onNext: () => void;
+  isFirstStep: boolean;
+  isLastStep: boolean;
 }
 
-const QuestionCard: React.FC<QuestionCardProps> = ({ question, answer, onChange, currentStep, totalSteps }) => {
+const QuestionCard: React.FC<QuestionCardProps> = ({ 
+  question, 
+  answer, 
+  onChange, 
+  currentStep, 
+  totalSteps,
+  onPrevious,
+  onNext,
+  isFirstStep,
+  isLastStep
+}) => {
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: {
@@ -45,6 +60,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, answer, onChange,
         options={question.options}
         value={answer}
         onChange={onChange}
+      />
+      <NavigationButtons
+        onPrevious={onPrevious}
+        onNext={onNext}
+        isFirstStep={isFirstStep}
+        isLastStep={isLastStep}
       />
     </motion.div>
   );

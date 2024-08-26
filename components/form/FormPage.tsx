@@ -43,9 +43,9 @@ const FormPage: React.FC = () => {
           </AnimatePresence>
           <motion.div 
             key="fakeDocument"
-            className="flex-1 lg:w-1/2 h-full overflow-hidden"
+            className="flex-1 w-full lg:w-1/2 h-full overflow-hidden"
             animate={{ 
-              width: formStage === 'form' ? '50%' : '100%',
+              width: '100%',
             }}
             transition={{ duration: 0.5 }}
           >
