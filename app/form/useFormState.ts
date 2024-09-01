@@ -15,6 +15,8 @@ export const useFormState = () => {
   const { isAnswerValid, areAllQuestionsAnswered } = useFormValidation(questions, answers);
   const { isSubmitting, apiResponse, submitForm } = useFormSubmission();
   const [documentProgress, setDocumentProgress] = useState(0);
+
+
   
   useEffect(() => {
     if (isSubmitting) {
@@ -44,18 +46,9 @@ export const useFormState = () => {
       setCurrentStep(prev => prev + 1);
       setDocumentProgress(prev => prev + 1);
     } else {
-      if (areAllQuestionsAnswered()) {
-        submitForm(answers);
-        setDocumentProgress(prev => prev + 1);
-      } else {
-        toast({
-          title: "Form Incomplete",
-          description: "Please answer all required questions before submitting.",
-          variant: "destructive",
-        });
-      }
+      handleSubmit();
     }
-  }, [currentStep, isAnswerValid, toast, areAllQuestionsAnswered, submitForm, answers]);
+  }, [currentStep, isAnswerValid, questions.length, toast]);
 
   const handlePrevious = useCallback(() => {
     if (currentStep > 0) {

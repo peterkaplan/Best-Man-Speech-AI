@@ -3,6 +3,8 @@ import "./globals.css";
 import Navbar from '@/components/Navbar'
 import { Toaster } from "@/components/form/Toaster"
 import RestOfHomepage from "@/components/RestOfHomepage";
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,6 +23,8 @@ export default function RootLayout({
       {children}
       <RestOfHomepage />
       <Toaster />
+      <Analytics/> 
+      <SpeedInsights/>
     </body>
   </html>
   );

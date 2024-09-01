@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { TypedText } from './useTypingEffect';
+import { questions } from './questions';
 
 export const useFormSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -9,14 +10,22 @@ export const useFormSubmission = () => {
 
   const submitForm = async (answers: Record<number, string | string[]>) => {
     setIsSubmitting(true);
+
+    // join answers with questions in order to get the "ShortName" and "Answer"
+    const formData = Object.entries(answers).map(([key, value]) => ({
+      shortName: questions[Number(key)].shortName,
+      answer: value
+    }));
+
     try {
       const response = await fetch('/api/submit-form', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(answers),
+        body: JSON.stringify(formData),
       });
+      console.log("mioo");
       
       if (!response.ok) {
         const errorData = await response.json();
