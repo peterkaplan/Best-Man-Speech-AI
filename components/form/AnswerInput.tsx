@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Plus } from 'lucide-react';
 
 interface AnswerInputProps {
   type: 'text' | 'textarea' | 'radio' | 'checkbox';
@@ -15,6 +15,7 @@ interface AnswerInputProps {
   label?: string;
   required?: boolean;
   error?: string;
+  allowCustom?: boolean;
 }
 
 const AnswerInput: React.FC<AnswerInputProps> = ({ 
@@ -24,11 +25,23 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   onChange, 
   label, 
   required = false, 
-  error 
+  error,
+  allowCustom = false
 }) => {
+  const [customOption, setCustomOption] = useState('');
+  const [customOptions, setCustomOptions] = useState<string[]>([]);
+
   const inputVariants = {
     hidden: { opacity: 0, y: 5 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.2 } }
+  };
+
+  const handleCustomOptionAdd = () => {
+    if (customOption && !customOptions.includes(customOption)) {
+      setCustomOptions([...customOptions, customOption]);
+      onChange([...(value as string[]), customOption]);
+      setCustomOption('');
+    }
   };
 
   const renderInput = () => {
@@ -54,10 +67,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         return (
           <RadioGroup value={value as string} onValueChange={onChange} className="space-y-2">
             {options?.map((option, index) => (
-              <div
-                key={index}
-                className="relative"
-              >
+              <div key={index} className="relative">
                 <motion.label
                   htmlFor={`option-${index}`}
                   className="flex items-center space-x-2 w-full cursor-pointer p-3 rounded-lg hover:bg-indigo-50 transition-colors duration-200"
@@ -83,11 +93,8 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
       case 'checkbox':
         return (
           <div className="space-y-2">
-            {options?.map((option, index) => (
-              <div
-                key={index}
-                className="relative"
-              >
+            {options?.concat(customOptions).map((option, index) => (
+              <div key={index} className="relative">
                 <motion.label
                   htmlFor={`option-${index}`}
                   className="flex items-center space-x-2 w-full cursor-pointer p-3 rounded-lg hover:bg-indigo-50 transition-colors duration-200"
@@ -115,6 +122,26 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
                 />
               </div>
             ))}
+            {allowCustom && (
+              <div className="mt-2">
+                <div className="flex items-center space-x-2">
+                  <Input
+                    value={customOption}
+                    onChange={(e) => setCustomOption(e.target.value)}
+                    placeholder="Add another"
+                    className="flex-grow border-2 border-indigo-300 focus:border-indigo-500 rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-indigo-200"
+                  />
+                  <motion.button
+                    onClick={handleCustomOptionAdd}
+                    className="p-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Plus className="w-5 h-5" />
+                  </motion.button>
+                </div>
+              </div>
+            )}
           </div>
         );
       default:
@@ -129,12 +156,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
       variants={inputVariants}
       className="space-y-2"
     >
-      {label && (
-        <Label htmlFor={`input-${type}`} className="block text-sm font-medium text-gray-700">
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
-        </Label>
-      )}
+
       {renderInput()}
       <AnimatePresence>
         {error && (

@@ -4,12 +4,7 @@ import AnswerInput from './AnswerInput';
 import FormProgress from './FormProgress';
 import { motion } from "framer-motion";
 import NavigationButtons from './NavigationButtons';
-
-interface Question {
-  text: string;
-  type: 'text' | 'textarea' | 'radio' | 'checkbox';
-  options?: string[];
-}
+import { Question } from '@/app/form/questions';
 
 interface QuestionCardProps {
   question: Question;
@@ -56,11 +51,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
     >
       <QuestionText text={question.text} />
       <AnswerInput
-        type={question.type}
-        options={question.options}
-        value={answer}
-        onChange={onChange}
-      />
+          type={question.type}
+          options={question.options}
+          value={answer}
+          onChange={onChange}
+          label={question.text}
+          required={question.required}
+          allowCustom={question.allowCustom}
+        />
       <NavigationButtons
         onPrevious={onPrevious}
         onNext={onNext}

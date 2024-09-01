@@ -50,7 +50,7 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
       className={`bg-white shadow-lg rounded-lg overflow-hidden relative
                   ${isMobile 
                     ? 'w-full max-w-md mx-auto' 
-                    : 'max-w-2xl mx-auto sm:w-full sm:mx-0 sm:h-[600px] sm:flex sm:flex-col'}`}
+                    : 'max-w-2xl mx-auto sm:w-full sm:mx-0 sm:h-[750px] sm:flex sm:flex-col'}`}
       style={{ 
         background: 'linear-gradient(to bottom, #f0f4ff, #ffffff)'
       }}

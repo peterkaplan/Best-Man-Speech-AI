@@ -34,7 +34,7 @@ const FormPage: React.FC = () => {
                 className="flex-1 lg:w-1/2"
               >
                 <Card className="bg-white/90 backdrop-blur-sm shadow-xl border border-gray-200/50 rounded-lg overflow-hidden flex flex-col h-full">
-                  <CardContent className="p-6 flex-grow overflow-y-auto">
+                  <CardContent className="p-6 flex-grow overflow-y-auto h-[200px]">
                     <Formy formState={formState} />
                   </CardContent>
                 </Card>

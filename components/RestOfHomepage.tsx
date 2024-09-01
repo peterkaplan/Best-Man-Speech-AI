@@ -1,10 +1,40 @@
 "use client";
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Smile, Zap, Target, MessageCircle, CheckCircle, X  } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const RestOfHomepage = () => {
+  const howItWorksRef = useRef<HTMLElement>(null);
+  const testimonialsRef = useRef<HTMLElement>(null);
+  const tipsRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const scrollToSection = (sectionId: string) => {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    const handleHashChange = () => {
+      if (window.location.hash === '#how-it-works') {
+        scrollToSection('how-it-works');
+      } else if (window.location.hash === '#testimonials') {
+        scrollToSection('testimonials');
+      } else if (window.location.hash === '#tips') {
+        scrollToSection('tips');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // Check hash on initial load
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
   const benefits = [
     { icon: <Smile className="w-8 h-8 text-indigo-600" />, title: "Personal Touch", description: "Our AI understands wedding dynamics and your unique relationship with the groom, ensuring a speech that feels genuine and heartfelt." },
     { icon: <Zap className="w-8 h-8 text-indigo-600" />, title: "Time-Saving", description: "Generate a full speech draft in minutes, not hours. More time for bachelor party planning!" },
@@ -99,7 +129,7 @@ const RestOfHomepage = () => {
   return (
     <div className="bg-white">
       {/* How It Works Section */}
-      <section className="bg-white py-12">
+      <section id="how-it-works" ref={howItWorksRef} className="bg-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-12">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -128,7 +158,7 @@ const RestOfHomepage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-indigo-100">
+      <section id="testimonials" ref={testimonialsRef} className="py-20 bg-indigo-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-12">What Best Men Are Saying</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -150,7 +180,7 @@ const RestOfHomepage = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-white">
+      <section id="tips" ref={tipsRef} className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-12">Why Choose BestManAI?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
