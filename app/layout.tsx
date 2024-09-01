@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar'
 import { Toaster } from "@/components/form/Toaster"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { CSPostHogProvider } from './providers'
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
     <body> 
       <Navbar />
+      <CSPostHogProvider>
       {children}
+      </CSPostHogProvider>
       <Toaster />
       <Analytics/> 
       <SpeedInsights/>
