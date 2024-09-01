@@ -25,7 +25,7 @@ export const generateSentence = (): string => {
 };
 
 export const generateTitle = (): string => {
-  return "Eulogy Speech";
+  return "Best Man Speech";
 };
 
 export const generateContent = (sentenceCount: number): string => {

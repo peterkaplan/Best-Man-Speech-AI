@@ -8,7 +8,6 @@ export const ResultContent: React.FC<{ displayedText: TypedText | null }> = ({ d
 
   const words = displayedText.content.split(' ');
   const visibleWordCount = 35;
-
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -21,9 +20,9 @@ export const ResultContent: React.FC<{ displayedText: TypedText | null }> = ({ d
         animate={{ y: 0 }}
         className="text-3xl font-bold mb-6 text-center text-gray-800"
       >
-        Eulogy Speech
+        Best Man Speech
       </motion.h1>
-      <div className="relative w-full mb-8">
+      <div className="relative w-full mb-8 md:mb-8 mobile:mb-0">
         <p className="whitespace-pre-wrap break-words text-gray-700 text-justify">
           {words.map((word, index) => (
             <React.Fragment key={index}>
@@ -39,9 +38,14 @@ export const ResultContent: React.FC<{ displayedText: TypedText | null }> = ({ d
             </React.Fragment>
           ))}
         </p>
-        <div className="absolute -bottom-16 left-0 right-0 flex justify-center">
+      </div>
+      <div className="fixed inset-x-0 bottom-0 flex items-center justify-center z-50 md:hidden mx-4">
+        <div className="bg-white rounded-t-lg shadow-lg p-6 w-full h-full">
           <UnlockCard />
         </div>
+      </div>
+      <div className="absolute bottom-[6.5rem] left-0 right-0 hidden md:flex justify-center mx-4">
+        <UnlockCard />
       </div>
     </motion.div>
   );

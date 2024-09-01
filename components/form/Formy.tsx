@@ -1,24 +1,23 @@
-"use client";
 import React, { useEffect, useRef, useState } from 'react';
 import FormContent from './FormContent';
 import CheckmarkAnimation from './CheckmarkAnimation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, ChevronRight } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 interface FormyProps {
   formState: ReturnType<typeof import('@/app/form/useFormState').default>;
 }
 
 const Formy: React.FC<FormyProps> = ({ formState }) => {
-  const [formDimensions, setFormDimensions] = useState({ width: 0, height: 0 });
+  const [isMobile, setIsMobile] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
   const {
     currentStep,
     answers,
     formStage,
-    apiResponse,
     handleAnswerChange,
     handleNext,
     handlePrevious,
@@ -27,12 +26,13 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
   } = formState;
 
   useEffect(() => {
-    if (formRef.current) {
-      setFormDimensions({
-        width: formRef.current.offsetWidth,
-        height: formRef.current.offsetHeight
-      });
-    }
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // Adjust breakpoint as needed
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const replaceNameInQuestions = (questions: any[], name: string) => {
@@ -47,37 +47,51 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
   return (
     <Card
       ref={formRef}
-      className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden relative
-                 sm:w-full sm:mx-0 sm:rounded-none sm:shadow-none sm:border-0
-                 sm:min-h-screen sm:flex sm:flex-col"
+      className={`bg-white shadow-lg rounded-lg overflow-hidden relative
+                  ${isMobile 
+                    ? 'w-full max-w-md mx-auto' 
+                    : 'max-w-2xl mx-auto sm:w-full sm:mx-0 sm:h-[600px] sm:flex sm:flex-col'}`}
       style={{ 
-        minHeight: formDimensions.height > 0 ? `${formDimensions.height}px` : 'auto',
         background: 'linear-gradient(to bottom, #f0f4ff, #ffffff)'
       }}
     >
-      <CardHeader className="bg-white p-6 rounded-t-lg flex items-center
-                             sm:py-8 sm:px-4 sm:bg-transparent">
-        <CardTitle className="text-2xl font-bold text-gray-800 flex items-center
-                              sm:text-3xl sm:mb-2">
-          Best Man Speech Generator
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button className="ml-2" aria-label="Help">
-                  <HelpCircle size={16} className="text-indigo-600" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Fill out the form to generate your best man speech. Watch it appear in real-time on the right!</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </CardTitle>
-        <CardDescription className="text-gray-600 mt-2 sm:text-lg sm:mb-4">
-          Complete this form to create a memorable and entertaining best man speech for the groom.
-        </CardDescription>
+      <CardHeader className="bg-transparent py-4 px-4 sm:py-6 sm:px-6">
+        <div className="flex justify-between items-center mb-2">
+          <CardTitle className="text-xl font-bold text-gray-800 sm:text-3xl">
+            Best Man Speech Assistant
+          </CardTitle>
+          {isMobile && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <HelpCircle size={20} className="text-indigo-600" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Complete these questions to create a memorable and entertaining best man speech.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
+        {!isMobile && (
+          <CardDescription className="text-sm text-gray-600 mt-2 sm:text-lg">
+            Complete these questions to create a memorable and entertaining best man speech.
+          </CardDescription>
+        )}
+        <div className="w-full bg-indigo-200 h-1 mt-2 rounded-full overflow-hidden">
+          <div 
+            className="bg-indigo-600 h-full transition-all duration-300 ease-in-out"
+            style={{ width: `${(currentStep / (currentQuestions.length - 1)) * 100}%` }}
+          ></div>
+        </div>
       </CardHeader>
-      <CardContent className="p-6 sm:p-4 sm:flex-grow sm:flex sm:flex-col sm:justify-center">
+      <CardContent 
+        className={`p-4 ${isMobile 
+          ? '' 
+          : 'sm:p-6 sm:flex-grow sm:flex sm:flex-col sm:overflow-y-auto'}`}
+      >
         {formStage === 'form' && (
           <FormContent
             currentStep={currentStep}
@@ -91,11 +105,8 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
             isLastStep={currentStep === currentQuestions.length - 1}
           />
         )}
-        {formStage === 'results'}
         {formStage === 'animation' && (
-          <CheckmarkAnimation
-            onComplete={handleAnimationComplete}
-          />
+          <CheckmarkAnimation onComplete={handleAnimationComplete} />
         )}
       </CardContent>
     </Card>

@@ -45,6 +45,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       }
     }
   };
+//     <FormProgress currentStep={currentStep} totalSteps={totalSteps} />
 
   return (
     <motion.div
@@ -53,7 +54,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       animate="visible"
       variants={cardVariants}
     >
-      <FormProgress currentStep={currentStep} totalSteps={totalSteps} />
       <QuestionText text={question.text} />
       <AnswerInput
         type={question.type}

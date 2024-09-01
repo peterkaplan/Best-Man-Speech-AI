@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PenTool, GlassesIcon, SmileIcon, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 const SpeechAssistant = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -118,13 +119,15 @@ const SpeechAssistant = () => {
                 {inputValue === '' && placeholders[placeholderIndex]}
               </motion.span>
             </AnimatePresence>
-            <Button 
-              size="sm" 
-              className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-all duration-300 ${isTyping ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-              onClick={handleSend}
-            >
-              <Send className="w-4 h-4" />
-            </Button>
+            <Link href="/creator">
+              <Button 
+                size="sm" 
+                className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-all duration-300 ${isTyping ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                onClick={handleSend}
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </CardContent>

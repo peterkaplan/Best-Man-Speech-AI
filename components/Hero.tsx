@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { StarIcon, AwardIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import SpeechAssistant from './SpeechAssistant';  
+import Link from 'next/link';
 
 const Hero = () => {
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-4 sm:px-6 lg:px-8 min-h-[80vh] flex items-center">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <motion.div 
@@ -41,9 +42,11 @@ const Hero = () => {
             <p className="text-xl mb-8 text-gray-600">
               Transform your memories and emotions into a heartfelt, hilarious, and perfectly tailored speech with our AI-powered assistant.
             </p>
-            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
-              Start Your Legendary Speech
-            </Button>
+            <Link href="/creator">
+              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
+                Start Your Legendary Speech
+              </Button>
+            </Link>
             
             <div className="mt-12 flex items-center justify-center lg:justify-start">
               <div className="flex -space-x-2 overflow-hidden">
