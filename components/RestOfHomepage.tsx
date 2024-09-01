@@ -87,7 +87,7 @@ const RestOfHomepage = () => {
           </li>
         ))}
       </ul>
-      <a href="/your-link-here">
+      <a href="/creator">
         <Button size="sm" className={`w-full ${highlighted ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'} transition-all duration-300`}>
           {buttonText}
         </Button>
@@ -118,7 +118,7 @@ const RestOfHomepage = () => {
             ))}
           </div>
           <div className="text-center mt-12">
-            <a href="/your-link-here">
+            <a href="/creator">
               <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
                 Try It Free
               </Button>
@@ -182,7 +182,7 @@ const RestOfHomepage = () => {
             </p>
           </div>
           <div className="text-center mt-8">
-            <a href="/your-link-here">
+            <a href="/creator">
               <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
                 Generate Your Custom Intro Now
               </Button>
@@ -261,7 +261,7 @@ const RestOfHomepage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-extrabold text-white mb-4">Ready to Craft Your Legendary Speech?</h2>
           <p className="text-xl text-indigo-100 mb-8">Join other best men who have delivered unforgettable speeches with BestManSpeechAI.</p>
-          <a href="/your-link-here">
+          <a href="/creator">
             <Button size="lg" className="bg-white text-indigo-600 hover:bg-indigo-50 transition-all duration-300 transform hover:scale-105">
               Start Your Speech Now
             </Button>
