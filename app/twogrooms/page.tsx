@@ -27,7 +27,7 @@ const BestManSpeechTipsTwoGrooms: NextPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100  py-[100px] px-4 sm:px-6 lg:px-8">
       <Head>
         <title>Best Man Speech Tips for Two Grooms - Best Man Speech AI</title>
         <meta name="description" content="Tips for crafting the perfect best man speech for a wedding with two grooms" />

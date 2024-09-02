@@ -66,11 +66,6 @@ export const UnlockCard: React.FC = () => {
       >
         Unlock Now
       </Button>
-      <div className="mt-2 text-center text-xs text-gray-500">
-        <a href="#" className="hover:text-indigo-600 transition-colors">Privacy Policy</a>
-        <span className="mx-1">•</span>
-        <a href="#" className="hover:text-indigo-600 transition-colors">Terms & Conditions</a>
-      </div>
     </motion.div>
   );
 };

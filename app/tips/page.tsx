@@ -26,7 +26,7 @@ const BestManSpeechTips: NextPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100 py-[100px] px-4 sm:px-6 lg:px-8">
       <Head>
         <title>Best Man Speech Tips - Best Man Speech AI</title>
         <meta name="description" content="Tips for crafting the perfect best man speech" />
