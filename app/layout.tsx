@@ -5,6 +5,7 @@ import { Toaster } from "@/components/form/Toaster"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { CSPostHogProvider } from './providers'
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,6 +24,7 @@ export default function RootLayout({
       <CSPostHogProvider>
       {children}
       </CSPostHogProvider>
+      <Footer />
       <Toaster />
       <Analytics/> 
       <SpeedInsights/>

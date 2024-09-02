@@ -75,7 +75,7 @@ const Navbar = () => {
             <Link href={isOnCreatorPage ? "/" : "/#how-it-works"} className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
               How it works
             </Link>
-            <Link href={isOnCreatorPage ? "/" : "/#tips"} className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
+            <Link href={isOnCreatorPage ? "/" : "/tips"} className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
               Tips
             </Link>
             <Link href={isOnCreatorPage ? "/" : "/#testimonials"} className={`text-sm font-medium transition-colors duration-300 ${isScrolled ? 'text-gray-900 hover:text-indigo-600' : 'text-white hover:text-indigo-200'}`}>
