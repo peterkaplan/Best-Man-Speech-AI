@@ -206,15 +206,15 @@ const RestOfHomepage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-12">See BestManAI in Action</h2>
           <div className="bg-white p-6 rounded-lg shadow-inner">
-            <h3 className="text-xl font-semibold mb-4">Sample Speech Intro:</h3>
+            <h3 className="text-xl font-semibold mb-4">Example Speech Intro:</h3>
             <p className="text-gray-700 italic">
-              &ldquo;Ladies and gentlemen, I&apos;ve known [Groom&apos;s Name] since we were five years old, and I can confidently say that [Bride&apos;s Name] is the best thing that&apos;s ever happened to him – besides me, of course! [Pause for laughter] But in all seriousness, watching these two fall in love has been like watching a real-life romantic comedy, minus the predictable plot and cheesy soundtrack...&rdquo;
+              &ldquo;Good evening everyone! I can’t believe this night is finally here.<br /> <br /> My name is Michael, and while Jake and I have no brothers I like to consider us unofficial ones.<br /> <br />I’m also an amateur fortune teller. Years ago, I predicted that Jake would marry someone way out of his league. Emily, thank you for proving me correct...&rdquo;
             </p>
           </div>
           <div className="text-center mt-8">
             <a href="/creator">
               <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
-                Generate Your Custom Intro Now
+                Generate Your Custom Intro Now For Free
               </Button>
             </a>
           </div>

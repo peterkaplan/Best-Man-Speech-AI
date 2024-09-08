@@ -3,13 +3,23 @@ import { Check, Lock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 
-export const UnlockCard: React.FC = () => {
+interface UnlockCardProps {
+  onUnlock: (option: string) => void;
+}
+
+export const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
   const [selectedOption, setSelectedOption] = useState('single');
 
   const options = [
     { id: 'single', name: 'Just this speech', price: '$2.99' },
     { id: 'multiple', name: '3 unique versions', price: '$4.99' },
   ];
+
+  const handleUnlock = () => {
+    // Here you would typically handle the payment process
+    // For now, we'll just call the onUnlock function
+    onUnlock(selectedOption);
+  };
 
   return (
     <motion.div 
@@ -62,6 +72,7 @@ export const UnlockCard: React.FC = () => {
         ))}
       </div>
       <Button
+        onClick={handleUnlock}
         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg transition-colors text-md shadow-md"
       >
         Unlock Now
