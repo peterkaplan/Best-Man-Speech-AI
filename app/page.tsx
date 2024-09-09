@@ -6,7 +6,6 @@ export default function Home() {
     <div>
       <Hero />
       <RestOfHomepage />
-
     </div>
   );
 }

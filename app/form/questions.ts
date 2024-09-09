@@ -9,6 +9,8 @@ export interface Question {
 
 export const questions: Question[] = [
   { text: "What's the name of the groom?", type: "text", required: true, shortName: "groomName" },
+  { text: "What's the name of the groom's partner?", type: "text", required: true, shortName: "partnerName" },
+  { text: "What is your name?", type: "text", required: true, shortName: "yourName" },
   { text: "How long have you known [name]?", type: "text", required: true, shortName: "knownDuration" },
   { text: "How did you and [name] meet?", type: "textarea", required: true, shortName: "howMet" },
   { 

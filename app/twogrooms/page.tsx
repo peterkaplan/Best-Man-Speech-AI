@@ -87,7 +87,7 @@ const BestManSpeechTipsTwoGrooms: NextPage = () => {
             <p className="mb-6">With Best Man Speech AI, you'll have the tools to create a speech that truly honors and celebrates both grooms on their special day.</p>
             <Link href="/creator">
               <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 transform hover:scale-105">
-                Craft Your Inclusive Speech Now
+                Craft Your Speech Now
               </Button>
             </Link>
           </div>

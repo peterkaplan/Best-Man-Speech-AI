@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 
 export type ResponseData = {
   message: string;
@@ -10,6 +11,24 @@ export type ResponseData = {
 
 // Initialize the Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+  },
+];
 
 const speechFormat = `
 You are an expert best man speech writer who is in his mid 20s. You have been chosen to be the best man and now have to write a speech. 
@@ -64,9 +83,9 @@ START STORIES & FACTS:
 
 
 END STORIES & FACTS
-You can embellish the stories but do not make up stories or facts not found in the "STORIES & FACTS" Section. Do not be mean to the groom.
+You can embellish the stories but do not make up stories or facts not found in the "STORIES & FACTS" Section. Do not be mean to the groom. DO NOT MAKE UP STORIES.
 
-Output the FULL speech and ONLY the speech. DO NOT ASK for any more information. 
+Output the FULL speech and ONLY the speech. DO NOT ASK for any more information. Make the speech safe for work. 
 `;
 
 interface FormDataItem {
@@ -74,9 +93,14 @@ interface FormDataItem {
   answer: string | string[];
 }
 
-export function mergeSpeechData(speechFormat: string, cleansedFormData: Record<string, FormDataItem>): string {
+export function mergeSpeechData(
+  speechFormat: string, 
+  cleansedFormData: Record<string, FormDataItem>, 
+  suffix?: string
+): string {
   const groomName = cleansedFormData['0']?.answer as string || 'Groom';
-  const partnerName = "Partner"; // Placeholder, replace with actual partner name when available
+  const partnerName = cleansedFormData['1']?.answer as string || 'Partner';
+  const yourName = cleansedFormData['2']?.answer as string || 'YourName';
 
   // Replace {name} and {partner name} in the speech format
   let mergedSpeech = speechFormat.replace(/{name}/g, groomName).replace(/{partner name}/g, partnerName);
@@ -88,9 +112,15 @@ export function mergeSpeechData(speechFormat: string, cleansedFormData: Record<s
 
   // Create the stories and facts section
   let storiesAndFacts = `
-Here are details about ${groomName} and stories:
+Names:
+- The Grooms name is:  "${groomName}"
+- The bride or partner's name is "${partnerName}"
+- Your name is "${yourName}"
 
+ONLY USE THE NAMES ${groomName}, ${partnerName}, ${yourName} DURING THE SPEECH. 
+Here are details about ${groomName} and stories:
 - Known ${groomName} for: ${getAnswer('1')}
+- The groom's partners name is ${partnerName}
 - How they met: ${getAnswer('2')}
 - ${groomName}'s best qualities: ${Array.isArray(getAnswer('3')) ? (getAnswer('3') as string[]).join(", ") : getAnswer('3')}
 - Funny story: ${getAnswer('4')}
@@ -99,19 +129,21 @@ Here are details about ${groomName} and stories:
 - What's admirable about their relationship: ${getAnswer('7')}
 - Marriage advice: ${getAnswer('8')}
 ${getAnswer('9', '') ? `- Additional notes: ${getAnswer('9')}` : ''}
-
-ONLY use the names ${groomName} for the groom and ${partnerName} for the partner.
 `.trim();
 
   // Replace the [FACTSANDSTORIES] placeholder with the actual stories and facts
   mergedSpeech = mergedSpeech.replace('[FACTSANDSTORIES]', storiesAndFacts);
 
+  // Append the suffix if it exists
+  if (suffix) {
+    mergedSpeech += '\n\n' + suffix;
+  }
+
   return mergedSpeech;
 }
-
 async function callModel(modelName: string, input: string): Promise<string> {
   try {
-    const model = genAI.getGenerativeModel({ model: modelName });
+    const model = genAI.getGenerativeModel({ model: modelName, safetySettings });
     const result = await model.generateContent(input);
     return result.response.text();
   } catch (error) {
@@ -159,16 +191,18 @@ export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>
     console.log(cleansedFormData);
 
     const transformation1 =  mergeSpeechData(speechFormat, cleansedFormData);
-
-    console.log("HERE");
     console.log(transformation1);
-    const transformation2 = `Create a short story based on: ${Object.values(cleansedFormData).join(' - ')}`;
-    const transformation3 = `Generate a poem inspired by: ${Object.keys(cleansedFormData).map(key => `${key}:${cleansedFormData[key]}`).join(' | ')}`;
+
+    const transformation2 =  mergeSpeechData(speechFormat, cleansedFormData, " Make the speech FUNNY.");
+    console.log(transformation2);
+
+    const transformation3 =  mergeSpeechData(speechFormat, cleansedFormData, " Make the speech SENTIMENTAL.");
+    console.log(transformation3);
 
     const [result1, result2, result3] = await Promise.all([
       callModel("gemini-1.5-pro", transformation1),
-      simulateCallModel("gemini-1.5-pro-latest", transformation2),
-      simulateCallModel("gemini-1.5-pro-latest", transformation3)
+      callModel("gemini-1.5-flash", transformation2),
+      callModel("gemini-1.5-flash", transformation3)
     ]);
 
     return NextResponse.json(
