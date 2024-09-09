@@ -119,16 +119,16 @@ Names:
 
 ONLY USE THE NAMES ${groomName}, ${partnerName}, ${yourName} DURING THE SPEECH. 
 Here are details about ${groomName} and stories:
-- Known ${groomName} for: ${getAnswer('1')}
+- Known ${groomName} for: ${getAnswer('3')}
 - The groom's partners name is ${partnerName}
-- How they met: ${getAnswer('2')}
-- ${groomName}'s best qualities: ${Array.isArray(getAnswer('3')) ? (getAnswer('3') as string[]).join(", ") : getAnswer('3')}
-- Funny story: ${getAnswer('4')}
-- Biggest accomplishment: ${getAnswer('5')}
-- How ${groomName} changed since meeting partner: ${getAnswer('6')}
-- What's admirable about their relationship: ${getAnswer('7')}
-- Marriage advice: ${getAnswer('8')}
-${getAnswer('9', '') ? `- Additional notes: ${getAnswer('9')}` : ''}
+- How they met: ${getAnswer('4')}
+- ${groomName}'s best qualities: ${Array.isArray(getAnswer('5')) ? (getAnswer('5') as string[]).join(", ") : getAnswer('5')}
+- Funny story: ${getAnswer('6')}
+- Biggest accomplishment: ${getAnswer('7')}
+- How ${groomName} changed since meeting partner: ${getAnswer('8')}
+- What's admirable about their relationship: ${getAnswer('8')}
+- Marriage advice: ${getAnswer('9')}
+${getAnswer('9', '') ? `- Additional notes: ${getAnswer('10')}` : ''}
 `.trim();
 
   // Replace the [FACTSANDSTORIES] placeholder with the actual stories and facts
