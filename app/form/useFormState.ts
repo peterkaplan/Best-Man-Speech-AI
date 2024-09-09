@@ -15,8 +15,6 @@ export const useFormState = () => {
   const { isAnswerValid, areAllQuestionsAnswered } = useFormValidation(questions, answers);
   const { isSubmitting, apiResponse, submitForm } = useFormSubmission();
   const [documentProgress, setDocumentProgress] = useState(0);
-
-
   
   useEffect(() => {
     if (isSubmitting) {
@@ -77,6 +75,18 @@ export const useFormState = () => {
     }
   }, [apiResponse]);
 
+  const getResults = useCallback(() => {
+    if (apiResponse) {
+      return {
+        message: apiResponse.message || '',
+        result1: apiResponse.result1 || '',
+        result2: apiResponse.result2 || '',
+        result3: apiResponse.result3 || ''
+      };
+    }
+    return null;
+  }, [apiResponse]);
+
   return {
     currentStep,
     setCurrentStep,
@@ -93,6 +103,7 @@ export const useFormState = () => {
     handlePrevious,
     handleSubmit,
     handleAnimationComplete,
+    getResults,
     questions,
   };
 };

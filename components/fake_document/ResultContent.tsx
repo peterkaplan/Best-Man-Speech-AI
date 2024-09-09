@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TypedText } from '@/app/form/useTypingEffect';
 import { motion } from 'framer-motion';
 import { UnlockCard } from './UnlockCard';
 import { Button } from "@/components/ui/button";
@@ -7,23 +6,32 @@ import { Download, Copy, CheckCircle } from 'lucide-react';
 import { usePdfGenerator } from './PdfGenerator';
 
 interface ResultContentProps {
-  displayedText: TypedText | null;
+  results: {
+    message: string;
+    result1: string;
+    result2: string;
+    result3: string;
+  } | null;
 }
 
-export const ResultContent: React.FC<ResultContentProps> = ({ displayedText }) => {
+export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   
-  const fullContent = displayedText?.content || '';
+  const fullContent = results?.result1 || '';
   const { generatePdf, PdfContent } = usePdfGenerator(fullContent);
 
   useEffect(() => {
-    console.log('ResultContent rendered with displayedText:', displayedText);
-  }, [displayedText]);
+    console.log('ResultContent rendered with results:', results);
+    if (results) {
+      console.log('Gemini Flash Result 1:', results.result2);
+      console.log('Gemini Flash Result 2:', results.result3);
+    }
+  }, [results]);
 
-  if (!displayedText) return null;
+  if (!results) return null;
 
   const words = fullContent.split(' ');
   const visibleWordCount = isUnlocked ? words.length : 35;

@@ -9,16 +9,18 @@ import useFormState from '@/app/form/useFormState';
 
 const FormPage: React.FC = () => {
   const formState = useFormState();
-  const { formStage, documentProgress, apiResponse, handleAnimationComplete } = formState;
+  const { formStage, documentProgress, handleAnimationComplete, getResults } = formState;
+  const results = getResults();
+
 
   const memoizedFakeDocument = useMemo(() => (
     <FakeDocument 
       formStage={formStage}
       progress={documentProgress} 
-      realSpeech={apiResponse}
+      results={results}
       onAnimationComplete={handleAnimationComplete}
     />
-  ), [documentProgress, formStage, apiResponse, handleAnimationComplete]);
+  ), [documentProgress, formStage, results, handleAnimationComplete]);
   
   return (
     <div className="bg-gradient-to-br from-indigo-200 via-blue-200 to-blue-300 min-h-screen pt-28 pb-12 px-4 sm:px-6 lg:px-8 lg:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] lg:from-indigo-200 lg:via-blue-200 lg:to-blue-300">

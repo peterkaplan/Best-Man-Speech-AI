@@ -6,17 +6,21 @@ import { ResultContent } from './ResultContent';
 import { TypingIndicator, useTypingEffect } from './TypingIndicator';
 import { TextCursor } from "lucide-react";
 import { FormStage } from '@/app/form/useFormState';
-import { TypedText } from '@/app/form/useTypingEffect';
 import CheckmarkAnimation from '../form/CheckmarkAnimation';
 
 interface FakeDocumentProps {
   progress: number;
   formStage: FormStage;
-  realSpeech: TypedText | null;
+  results: {
+    message: string;
+    result1: string;
+    result2: string;
+    result3: string;
+  } | null;
   onAnimationComplete: () => void;
 }
 
-const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, realSpeech , onAnimationComplete }) => {
+const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, results, onAnimationComplete }) => {
   const { displayedText, isTyping } = useTypingEffect(progress);
 
   const totalWords = useMemo(() => {
@@ -30,7 +34,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, realSp
           onComplete={onAnimationComplete}
         />    
       case 'results':
-        return <ResultContent displayedText={realSpeech } />;
+        return <ResultContent results={results} />;
       default:
         return (
           <>
@@ -73,5 +77,6 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, realSp
 
 export default memo(FakeDocument, (prevProps, nextProps) => {
   return prevProps.progress === nextProps.progress &&
-    prevProps.formStage === nextProps.formStage;
+    prevProps.formStage === nextProps.formStage &&
+    prevProps.results === nextProps.results;
 });
