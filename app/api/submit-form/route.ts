@@ -93,7 +93,7 @@ interface FormDataItem {
   answer: string | string[];
 }
 
-export function mergeSpeechData(
+function mergeSpeechData(
   speechFormat: string, 
   cleansedFormData: Record<string, FormDataItem>, 
   suffix?: string
