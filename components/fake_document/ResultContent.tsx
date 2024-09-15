@@ -35,10 +35,10 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
     setSelectedOption(option);
     console.log('Content unlocked');
   };
-
+  
   const handleCopy = () => {
-    if (isUnlocked && contentRef.current) {
-      navigator.clipboard.writeText(contentRef.current.innerText)
+    if (isUnlocked) {
+      navigator.clipboard.writeText(currentSpeech)
         .then(() => {
           setIsCopied(true);
           setTimeout(() => setIsCopied(false), 2000);
@@ -47,7 +47,6 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
         .catch(err => console.error('Failed to copy text: ', err));
     }
   };
-
   const handleDownloadPDF = () => {
     if (isUnlocked) {
       console.log('Initiating PDF download');
