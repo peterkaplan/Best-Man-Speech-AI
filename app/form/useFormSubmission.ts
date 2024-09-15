@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { questions } from './questions';
-import { ResponseData } from "@/app/api/submit-form/route";
+import { ResponseData } from "@/app/api/submit/route";
 
 export const useFormSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,7 +18,7 @@ export const useFormSubmission = () => {
     }));
 
     try {
-      const response = await fetch('/api/submit-form', {
+      const response = await fetch('/api/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
