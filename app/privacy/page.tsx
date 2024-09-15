@@ -46,7 +46,7 @@ const PrivacyPolicy: NextPage = () => {
 
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">5. Sharing of Information</h2>
-              <p>We do not sell or lease your personal information to third parties. We might share anonymous, aggregated data with third-party service providers that support our Service, under strict confidentiality agreements.</p>
+              <p>We do not sell or lease your personal information to third parties.</p>
             </section>
 
             <section>
