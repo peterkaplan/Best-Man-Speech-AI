@@ -177,6 +177,7 @@ function cleanseFormData(formData: Record<string, any>): Record<string, any> {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>> {
+  console.log("Hello");
   try {
     const formData = await req.json();
 
