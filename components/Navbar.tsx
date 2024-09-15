@@ -67,7 +67,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center">
             <PenSquare className={`h-8 w-8 transition-colors duration-300 ${isScrolled ? 'text-indigo-600' : 'text-white'}`} />
-            <span className={`ml-2 text-xl font-bold transition-colors duration-300 ${isScrolled ? 'text-gray-900' : 'text-white'}`}>BestManAI</span>
+            <span className={`ml-2 text-xl font-bold transition-colors duration-300 ${isScrolled ? 'text-gray-900' : 'text-white'}`}>BestManSpeechAI</span>
           </Link>
 
           {/* Navigation Links - hidden on mobile */}

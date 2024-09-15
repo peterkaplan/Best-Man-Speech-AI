@@ -53,7 +53,7 @@ export const useFormSubmission = () => {
         });
       }
 
-      if (!hasSafetyError && !hasModelOverloadError) {
+      if (!hasSafetyError && !hasModelOverloadError && (!(data.errors && data.errors.length > 0))) {
         setApiResponse({
           message: 'success',
           result1: data.result1,
