@@ -6,7 +6,8 @@ import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { CSPostHogProvider } from './providers'
 import Footer from "@/components/Footer";
-import Head from "next/head";
+import { Head } from "next/document";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
   title: "Best Man Speech AI",
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-      <link rel="icon" href="public/favicon.webp" /> 
+      <link rel="icon" href="/favicon.webp" /> 
     </Head>
     <body> 
       <Navbar />
@@ -33,6 +34,7 @@ export default function RootLayout({
       <Analytics/> 
       <SpeedInsights/>
     </body>
+    <GoogleAnalytics gaId="G-XDCZZMDBEL" />
   </html>
   );
 }
