@@ -87,24 +87,31 @@ const RestOfHomepage = () => {
       answer: "The entire process is quick and efficient. You'll spend about 5-10 minutes answering our tailored questions. Then, our AI will generate multiple speech options for you in just a minute. So, you can have a polished, personalized speech ready in less than 20 minutes!"
     }
   ];
-
   interface Feature {
     included: boolean;
     text: string;
   }
-
+  
   interface PricingTierProps {
     title: string;
-    price: string;
+    originalPrice: string;
     features: Feature[];
     buttonText: string;
     highlighted?: boolean;
   }
-
-  const PricingTier: React.FC<PricingTierProps> = ({ title, price, features, buttonText, highlighted = false }) => (
-    <div className={`bg-white p-6 rounded-lg shadow-lg flex-1 ${highlighted ? 'border-2 border-indigo-500' : ''}`}>
-      <h3 className="text-xl font-bold text-center mb-2">{title}</h3>
-      <div className="text-3xl font-bold text-center text-indigo-600 mb-4">{price}</div>
+  
+  const PricingTier: React.FC<PricingTierProps> = ({ title, originalPrice, features, buttonText, highlighted = false }) => (
+    <div className={`bg-white p-6 rounded-lg shadow-lg flex-1 ${highlighted ? 'border-2 border-green-500' : ''}`}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xl font-bold">{title}</h3>
+        <div className="flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full">
+          <span className="text-sm font-semibold">Now Free!</span>
+        </div>
+      </div>
+      <div className="flex items-center justify-center mb-4">
+        <span className="text-gray-400 line-through text-lg mr-2">{originalPrice}</span>
+        <span className="text-3xl font-bold text-green-600">$0</span>
+      </div>
       <ul className="mb-6 space-y-2">
         {features.map((feature, index) => (
           <li key={index} className="flex items-center text-sm">
@@ -118,13 +125,13 @@ const RestOfHomepage = () => {
         ))}
       </ul>
       <a href="/creator">
-        <Button size="sm" className={`w-full ${highlighted ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'} transition-all duration-300`}>
+        <Button size="sm" className={`w-full ${highlighted ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'} transition-all duration-300`}>
           {buttonText}
         </Button>
       </a>
     </div>
   );
-
+  
   
   return (
     <div className="bg-white">
@@ -223,47 +230,37 @@ const RestOfHomepage = () => {
 
 
       {/* Pricing Section */}
- <section className="py-20 bg-gray-100">
+      <section className="py-20 bg-gray-100">
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-12">Simple, Transparent Pricing</h2>
       <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch">
         <PricingTier
-          title="Free Intro"
-          price="$0"
-          features={[
-            { included: true, text: "Generate a sample intro" },
-            { included: true, text: "PDF download" },
-            { included: false, text: "Full speech generation" },
-            { included: false, text: "Multiple speech options" },
-          ]}
-          buttonText="Try for Free"
-        />
-        <PricingTier
-          title="Single Speech"
-          price="$2.99"
+          title="Basic Speech"
+          originalPrice="$2.99"
           features={[
             { included: true, text: "1 personalized speech" },
             { included: true, text: "PDF download" },
-            { included: true, text: "Full speech generation" },
+            { included: true, text: "Use high quality AI model" },
             { included: false, text: "Multiple speech options" },
           ]}
           buttonText="Get Started"
         />
         <PricingTier
-          title="Multiple Options"
-          price="$4.99"
+          title="Premium Speech Pack"
+          originalPrice="$4.99"
           features={[
             { included: true, text: "3 personalized speeches" },
             { included: true, text: "PDF download" },
-            { included: true, text: "Full speech generation" },
+            { included: true, text: "Use highest quality AI model" },
             { included: true, text: "Multiple speech options" },
           ]}
-          buttonText="Best Value"
+          buttonText="Get Premium"
           highlighted={true}
         />
       </div>
     </div>
   </section>
+
 
       {/* FAQ Section */}
       <section className="bg-indigo-100 py-20">

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Send } from 'lucide-react';
+import { useScroll } from './ScrollContext';
 
 interface NavigationButtonsProps {
   onPrevious: () => void;
@@ -15,9 +16,14 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
     hover: { scale: 1.05 },
     tap: { scale: 0.95 }
   };
+  const { scrollToForm } = useScroll();
 
   const nextButtonRef = useRef<HTMLDivElement>(null);
 
+  const combinedClick = () => {
+    scrollToForm();
+    onNext();
+  }
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
@@ -59,7 +65,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
         className="glow-container"
       >
         <Button
-          onClick={onNext}
+          onClick={combinedClick}
           className="flex items-center space-x-2 bg-indigo-600 text-white hover:bg-indigo-700 transition-colors duration-300"
         >
           {isLastStep ? (

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UnlockCard } from './UnlockCard';
+import UnlockCard from './UnlockCard'; // Changed to default import
 import { Button } from "@/components/ui/button";
 import { Download, Copy, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { usePdfGenerator } from './PdfGenerator';

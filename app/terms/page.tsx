@@ -9,84 +9,107 @@ const TermsAndConditions: NextPage = () => {
         <title>Terms and Conditions - Best Man Speech AI</title>
         <meta name="description" content="Terms and Conditions for Best Man Speech AI" />
       </Head>
-      
+
       <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
         <div className="px-4 py-5 sm:p-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Terms and Conditions for Best Man Speech AI</h1>
-          
-          <div className="space-y-6 text-gray-700">
+          <div className="space-y-8">
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">1. Acceptance of Terms</h2>
-              <p>By accessing and using Best Man Speech AI ("the Service"), provided by Best Man Speech AI ("we", "us", "our"), you agree to comply with and be bound by these terms and conditions. If you do not agree to these terms, please do not use the Service.</p>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">1. Acceptance of Terms</h2>
+              <p className="text-gray-600 leading-relaxed">
+                By accessing and using Best Man Speech AI ("the Service"), provided by Best Man Speech AI ("we", "us", "our"), you agree to comply with and be bound by these terms and conditions. If you do not agree to these terms, please do not use the Service.
+              </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">2. Changes to Terms</h2>
-              <p>We reserve the right to change, modify, or revise these terms and conditions at any time. The continued use of the Service following the posting of any changes to the terms constitutes acceptance of those changes.</p>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">2. Changes to Terms</h2>
+              <p className="text-gray-600 leading-relaxed">
+                We reserve the right to change, modify, or revise these terms and conditions at any time. The continued use of the Service following the posting of any changes to the terms constitutes acceptance of those changes.
+              </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">3. Description of Service</h2>
-              <p>Best Man Speech AI is a speech generation service that utilizes Large Language Models (LLMs) to process user inputs and create personalized best man speeches. The Service does not store user inputs or generated speeches but does collect and store analytics data related to usage.</p>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">3. Description of Service</h2>
+              <p className="text-gray-600 leading-relaxed">
+                Best Man Speech AI is a speech generation service that utilizes Large Language Models (LLMs) provided by third-party services to process user inputs and create personalized best man speeches. The Service does not store user inputs or generated speeches but does collect and store analytics data related to usage.
+              </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">4. User Conduct</h2>
-              <p>Users agree not to use the Service to:</p>
-              <ul className="list-disc list-inside pl-4">
-                <li>Violate any laws or regulations.</li>
-                <li>Infringe upon the rights of any third party, including copyright, trademark, privacy, or other personal or proprietary rights.</li>
-                <li>Generate content that is illegal, offensive, or harmful.</li>
-                <li>Attempt to interfere with or disrupt the Service or servers or networks connected to the Service.</li>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">4. Service Pricing</h2>
+              <p className="text-gray-600 leading-relaxed">
+                The Service is currently offered free of charge to all users. However, we reserve the right to implement fees or change our pricing structure at any time. We will provide reasonable notice of any pricing changes before they take effect. Continued use of the Service after such changes constitutes acceptance of the new pricing terms.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">5. Third-Party LLM Providers</h2>
+              <ul className="list-disc pl-6 text-gray-600 leading-relaxed space-y-2">
+                <li>Our Service utilizes LLMs from various third-party provider, Gemini, who maintain their own Terms of Service and Privacy Policies</li>
+                <li>By using our Service, you also agree to comply with the Terms of Service and Privacy Policies of these third-party LLM providers</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">5. Privacy and Data Usage</h2>
-              <ul className="list-disc list-inside pl-4">
-                <li>We do not store user inputs or the speeches generated by the LLM.</li>
-                <li>We do collect and store analytics data related to the usage of the Service to improve our offerings and user experience.</li>
-                <li>For more information on how we handle data, please refer to our Privacy Policy.</li>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">6. User Conduct</h2>
+              <p className="text-gray-600 mb-4">Users agree not to use the Service to:</p>
+              <ul className="list-disc pl-6 text-gray-600 leading-relaxed space-y-2">
+                <li>Violate any laws or regulations</li>
+                <li>Infringe upon the rights of any third party, including copyright, trademark, privacy, or other personal or proprietary rights</li>
+                <li>Generate content that is illegal, offensive, or harmful</li>
+                <li>Attempt to interfere with or disrupt the Service or servers or networks connected to the Service</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">6. Intellectual Property</h2>
-              <p>The Service, including its original content, features, and functionality, is owned by Best Man Speech AI and is protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">7. User Content</h2>
-              <p>Users retain ownership of the content they submit to the Service. By using the Service, users grant us a non-exclusive, transferable, sub-licensable, royalty-free, and global license to use, store, and process the content solely for the purpose of providing and improving the Service.</p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">8. Refunds</h2>
-              <p>We strive to provide high-quality service to all our users. If you are not satisfied with the quality of the speech generated by our Service, you may be eligible for a refund under the following conditions:</p>
-              <ul className="list-disc list-inside pl-4">
-                <li>Refunds requested within 7 days of purchase are eligible for a full refund.</li>
-                <li>To request a refund, customers must contact our customer support team at help@bestmanspeechai.com with detailed reasons for their dissatisfaction.</li>
-                <li>Our team will review each refund request on a case-by-case basis, taking into account the specific circumstances and usage of the Service.</li>
-                <li>If the Service fails to meet the customer's expectations due to technical issues or discrepancies in the quality of the AI-generated speech, we encourage customers to contact our customer support within the same 7-day period.</li>
-                <li>After a review of the service usage and the issues encountered, Best Man Speech AI reserves the right to offer a partial or full refund at its discretion.</li>
-                <li>This policy is in place to ensure customer satisfaction while preventing abuse of the refund process.</li>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">7. Privacy and Data Usage</h2>
+              <ul className="list-disc pl-6 text-gray-600 leading-relaxed space-y-2">
+                <li>We do not store user inputs or the speeches generated by the LLM</li>
+                <li>We do collect and store analytics data related to the usage of the Service to improve our offerings and user experience</li>
+                <li>Your data may be processed by our third-party LLM providers according to their respective privacy policies</li>
+                <li>For more information on how we handle data, please refer to our Privacy Policy</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">9. Limitation of Liability</h2>
-              <p>To the maximum extent permitted by applicable law, Best Man Speech AI shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from your use or inability to use the Service.</p>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">8. Intellectual Property</h2>
+              <p className="text-gray-600 leading-relaxed">
+                The Service, including its original content, features, and functionality, is owned by Best Man Speech AI and is protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
+              </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">10. Contact Information</h2>
-              <p>If you have any questions about these Terms, including our refund policy, please contact us at help@bestmanspeechai.com.</p>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">9. User Content</h2>
+              <p className="text-gray-600 leading-relaxed">
+                Users retain ownership of the content they submit to the Service. By using the Service, users grant us and our third-party LLM providers a non-exclusive, transferable, sub-licensable, royalty-free, and global license to use, store, and process the content solely for the purpose of providing the Service.
+              </p>
             </section>
 
-            <p className="italic">By using Best Man Speech AI, you acknowledge that you have read and understood these Terms and agree to be bound by them.</p>
-            <p className="italic">Last updated: September 1, 2024</p>
+            <section>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">10. Limitation of Liability</h2>
+              <p className="text-gray-600 leading-relaxed">
+                To the maximum extent permitted by applicable law, Best Man Speech AI shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from your use or inability to use the Service. This includes any issues or damages arising from the use of third-party LLM providers.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">11. Contact Information</h2>
+              <p className="text-gray-600 leading-relaxed">
+                If you have any questions about these Terms, please contact us at <a href="mailto:help@bestmanspeechai.com" className="text-blue-600 hover:text-blue-800">help@bestmanspeechai.com</a>.
+              </p>
+            </section>
+
+            <div className="mt-8 pt-8 border-t border-gray-200">
+              <p className="text-gray-600 italic">
+                By using Best Man Speech AI, you acknowledge that you have read and understood these Terms and agree to be bound by them.
+              </p>
+              <p className="text-gray-500 text-sm mt-4">
+                Last updated: October 29, 2024
+              </p>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   );
