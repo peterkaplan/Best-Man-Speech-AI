@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { CSPostHogProvider } from './providers'
 import Footer from "@/components/Footer";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Best Man Speech AI",
@@ -19,6 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+      <link rel="icon" href="public/favicon.webp" /> 
+    </Head>
     <body> 
       <Navbar />
       <CSPostHogProvider>
