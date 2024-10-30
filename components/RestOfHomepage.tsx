@@ -80,11 +80,11 @@ const RestOfHomepage = () => {
     },
     {
       question: "Is my information kept confidential?",
-      answer: "Your privacy is our top priority. All the information you provide and the speeches generated are kept strictly confidential. We use state-of-the-art encryption and security measures to protect your data. Your personal stories and the content of your speech will never be shared or used for any other purpose without your explicit permission."
+      answer: "Your privacy is our top priority. All the information you provide and the speeches generated are kept strictly confidential and it is not stored."
     },
     {
       question: "How long does it take to get my speech?",
-      answer: "The entire process is quick and efficient. You'll spend about 5-10 minutes answering our tailored questions. Then, our AI will generate multiple speech options for you in just a minute. So, you can have a polished, personalized speech ready in less than 20 minutes!"
+      answer: "The entire process is quick and efficient. You'll spend about 5-10 minutes answering our tailored questions. Then, our AI will generate multiple speech options for you in just a few seconds. So, you can have a polished, personalized speech ready in less than 10 minutes!"
     }
   ];
   interface Feature {
