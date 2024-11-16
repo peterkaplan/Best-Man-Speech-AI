@@ -36,7 +36,7 @@ export const useFormSubmission = () => {
         throw new Error(errorData.message || 'Network response was not ok');
       }
 
-      const data = await response.json();
+      const data: ResponseData = await response.json();
       
       let hasSafetyError = false;
       let hasModelOverloadError = false;
@@ -53,13 +53,14 @@ export const useFormSubmission = () => {
         });
       }
 
-      if (!hasSafetyError && !hasModelOverloadError && (!(data.errors && data.errors.length > 0))) {
+      if (!hasSafetyError && !hasModelOverloadError) {
         setApiResponse({
-          message: 'success',
+          message: data.message,
           result1: data.result1,
           result2: data.result2,
           result3: data.result3,
-          errors: data.errors
+          errors: data.errors,
+          successCount: data.successCount
         });
       }
 
@@ -80,7 +81,7 @@ export const useFormSubmission = () => {
       } else if (data.errors && data.errors.length > 0) {
         toast({
           title: "Partial Success",
-          description: "Your form was submitted, but there were some issues. Please check the results.",
+          description: `Generated ${data.successCount} speeches successfully. Please check the results.`,
           variant: "destructive",
         });
       } else {

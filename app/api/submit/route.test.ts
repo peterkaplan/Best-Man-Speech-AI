@@ -1,101 +1,165 @@
-// import { expect, test, describe } from 'vitest';
-// import { mergeSpeechData } from './route'; // Adjust the import path as needed
+import { expect, test, describe, vi, beforeEach, Mock, afterEach } from 'vitest';
+import { NextRequest } from 'next/server';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { POST } from './route';
+import { SpeechFormat, mergeSpeechData, cleanseFormData } from "./prompt";
 
-// describe('mergeSpeechData', () => {
-//   const mockSpeechFormat = `
-// START BEST MAN SPEECH FORMAT TO FOLLOW:
-// {format_placeholder}
-// END BEST MAN SPEECH FORMAT TO FOLLOW
+// Mock environment variables
+vi.stubEnv('GEMINI_API_KEY_1', 'test-key-1');
+vi.stubEnv('GEMINI_API_KEY_2', 'test-key-2');
+vi.stubEnv('GEMINI_API_KEY_3', 'test-key-3');
 
-// START STORIES & FACTS ABOUT {name}
-// [FACTSANDSTORIES]
+// Mock the GoogleGenerativeAI module
+vi.mock("@google/generative-ai", () => ({
+  GoogleGenerativeAI: vi.fn()
+}));
 
-// I want you to follow the BEST MAN SPEECH FORMAT to produce a best man speech for: {name} and {partner name} use the details from the stories and facts sections. DO NOT use examples from the example speeches or I will be fired. 
+// Mock the prompt module
+vi.mock("./prompt", () => ({
+  SpeechFormat: "mock speech format",
+  mergeSpeechData: vi.fn((format, data, suffix) => `mock merged data ${suffix || ''}`),
+  cleanseFormData: vi.fn(data => data),
+  safetySettings: [
+    {
+      category: 'HARM_CATEGORY_HARASSMENT',
+      threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+    }
+  ]
+}));
 
-// Output the FULL speech and ONLY the speech. 
-// `;
+describe('POST Route Handler', () => {
+  const mockFormData = {
+    '0': { shortName: 'groomName', answer: 'Peter' },
+    '1': { shortName: 'knownDuration', answer: '10 years' },
+    '2': { shortName: 'howMet', answer: 'At university' }
+  };
 
-//   const mockFormData = {
-//     '0': { shortName: 'groomName', answer: 'Peter' },
-//     '1': { shortName: 'knownDuration', answer: '10 years' },
-//     '2': { shortName: 'howMet', answer: 'At university' },
-//     '3': { shortName: 'bestQualities', answer: ['Loyal', 'Funny'] },
-//     '4': { shortName: 'funnyStory', answer: 'That time we got lost in Paris' },
-//     '5': { shortName: 'biggestAccomplishment', answer: 'Started his own company' },
-//     '6': { shortName: 'changeSincePartner', answer: 'Hes more organized now' },
-//     '7': { shortName: 'admiration', answer: 'Their ability to communicate' },
-//     '8': { shortName: 'marriageAdvice', answer: 'Always make time for date nights' }
-//   };
+  let mockGenerateContent: Mock;
+  let genAIInstance: {
+    getGenerativeModel: Mock;
+  };
 
-//   test('correctly merges speech format with form data without suffix', () => {
-//     const result = mergeSpeechData(mockSpeechFormat, mockFormData);
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Reset console mocks for each test
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
 
-//     console.log(result); // This will help us see the full output
+    // Setup the mock response
+    mockGenerateContent = vi.fn();
+    genAIInstance = {
+      getGenerativeModel: vi.fn().mockReturnValue({
+        generateContent: mockGenerateContent
+      })
+    };
+    (GoogleGenerativeAI as Mock).mockImplementation(() => genAIInstance);
+  });
 
-//     // Check if the groom's name is correctly inserted
-//     expect(result).toContain('Peter');
+  test('handles successful responses from all models', async () => {
+    const mockText = 'Generated Speech';
+    const mockResponse = { text: mockText };
 
-//     // Check if all form data is included in the result
-//     expect(result).toContain('10 years');
-//     expect(result).toContain('At university');
-//     expect(result).toContain('Loyal, Funny');
-//     expect(result).toContain('That time we got lost in Paris');
-//     expect(result).toContain('Started his own company');
-//     expect(result).toContain('Hes more organized now');
-//     expect(result).toContain('Their ability to communicate');
-//     expect(result).toContain('Always make time for date nights');
+    mockGenerateContent
+      .mockResolvedValueOnce({ response: mockResponse })
+      .mockResolvedValueOnce({ response: mockResponse })
+      .mockResolvedValueOnce({ response: mockResponse });
 
-//     // Check if the structure is maintained
-//     expect(result).toContain('START BEST MAN SPEECH FORMAT TO FOLLOW:');
-//     expect(result).toContain('END BEST MAN SPEECH FORMAT TO FOLLOW');
-//     expect(result).toContain('START STORIES & FACTS ABOUT Peter');
+    const request = new NextRequest('http://localhost', {
+      method: 'POST',
+      body: JSON.stringify(mockFormData)
+    });
 
-//     // Check that the [FACTSANDSTORIES] placeholder has been replaced
-//     expect(result).not.toContain('[FACTSANDSTORIES]');
+    const response = await POST(request);
+    const data = await response.json();
 
-//     // Check that there's no suffix
-//     expect(result).not.toContain('This speech was generated');
-//   });
+    expect(response.status).toBe(200);
+    expect(data.successCount).toBe(3);
+    expect(data.result1).toBe(mockText);
+    expect(data.result2).toBe(mockText);
+    expect(data.result3).toBe(mockText);
+    expect(data.errors).toBeUndefined();
+  });
 
-//   test('correctly merges speech format with form data and appends suffix', () => {
-//     const suffix = "This speech was generated with the help of AI. Please review and edit as needed.";
-//     const result = mergeSpeechData(mockSpeechFormat, mockFormData, suffix);
+  test('handles partial success (2 out of 3 models)', async () => {
+    const mockText1 = 'Speech 1';
+    const mockText2 = 'Speech 2';
+    mockGenerateContent
+      .mockResolvedValueOnce({ response: { text: () => mockText1 } })
+      .mockResolvedValueOnce({ response: { text: () => mockText2 } })
+      .mockRejectedValueOnce(new Error('Model overloaded'));
 
-//     console.log(result); // This will help us see the full output
+    const request = new NextRequest('http://localhost', {
+      method: 'POST',
+      body: JSON.stringify(mockFormData)
+    });
 
-//     // Check all the previous conditions
-//     expect(result).toContain('Peter');
-//     expect(result).toContain('10 years');
-//     expect(result).toContain('At university');
-//     expect(result).toContain('Loyal, Funny');
-//     expect(result).toContain('That time we got lost in Paris');
-//     expect(result).toContain('Started his own company');
-//     expect(result).toContain('Hes more organized now');
-//     expect(result).toContain('Their ability to communicate');
-//     expect(result).toContain('Always make time for date nights');
-//     expect(result).toContain('START BEST MAN SPEECH FORMAT TO FOLLOW:');
-//     expect(result).toContain('END BEST MAN SPEECH FORMAT TO FOLLOW');
-//     expect(result).toContain('START STORIES & FACTS ABOUT Peter');
-//     expect(result).not.toContain('[FACTSANDSTORIES]');
+    const response = await POST(request);
+    const data = await response.json();
 
-//     // Check that the suffix is appended
-//     expect(result).toContain(suffix);
-//     expect(result.endsWith(suffix)).toBe(true);
-//   });
+    expect(response.status).toBe(200);
+    expect(data.successCount).toBe(2);
+    expect(data.result1).toBe(mockText1);
+    expect(data.result2).toBe(mockText2);
+    expect(data.errors).toHaveLength(1);
+  });
 
-//   test('handles missing form data gracefully', () => {
-//     const incompleteFormData = {
-//       '0': { shortName: 'groomName', answer: 'John' },
-//       '1': { shortName: 'knownDuration', answer: '5 years' }
-//     };
+  test('handles complete failure (all models fail)', async () => {
+    const error = new Error('Model overloaded');
+    mockGenerateContent
+      .mockRejectedValueOnce(error)
+      .mockRejectedValueOnce(error)
+      .mockRejectedValueOnce(error);
 
-//     const result = mergeSpeechData(mockSpeechFormat, incompleteFormData);
+    const request = new NextRequest('http://localhost', {
+      method: 'POST',
+      body: JSON.stringify(mockFormData)
+    });
 
-//     console.log(result); // This will help us see the full output
+    const response = await POST(request);
+    const data = await response.json();
 
-//     expect(result).toContain('John');
-//     expect(result).toContain('5 years');
-//     expect(result).toContain('N/A');  // Default value for missing fields
-//     expect(result).not.toContain('[FACTSANDSTORIES]');
-//   });
-// });
+    expect(response.status).toBe(500);
+    expect(data.message).toBe('All model calls failed');
+    expect(data.successCount).toBe(0);
+    expect(data.errors).toBeDefined();
+    expect(data.errors).toHaveLength(3);
+  });
+
+  test('handles method not allowed', async () => {
+    const request = new NextRequest('http://localhost', {
+      method: 'GET'
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(405);
+    expect(data.message).toBe('Method Not Allowed');
+    expect(data.successCount).toBe(0);
+  });
+
+  test('logs request completion with success count', async () => {
+    const mockText = 'Generated Speech';
+    const mockResponse = { text: mockText };
+
+    mockGenerateContent
+      .mockResolvedValueOnce({ response: mockResponse })
+      .mockResolvedValueOnce({ response: mockResponse })
+      .mockResolvedValueOnce({ response: mockResponse });
+
+    const request = new NextRequest('http://localhost', {
+      method: 'POST',
+      body: JSON.stringify(mockFormData)
+    });
+
+    await POST(request);
+
+    expect(console.log).toHaveBeenCalledWith(
+      expect.stringContaining('Request completed with 3 successful generations')
+    );
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+});

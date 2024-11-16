@@ -8,6 +8,7 @@ export type ResponseData = {
   result2?: string;
   result3?: string;
   errors?: string[];
+  successCount: number;
 }
 
 const API_KEYS = [
@@ -28,6 +29,48 @@ function isRetryableError(error: any): boolean {
   }
   return false;
 }
+const handleModelResponses = (result1: string, result2: string, result3: string): ResponseData => {
+  const response: ResponseData = { 
+    message: 'Form processed successfully',
+    errors: [],
+    successCount: 0
+  };
+
+  // Track successful results
+  if (!result1.startsWith("Error:")) {
+    response.result1 = result1;
+    response.successCount++;
+  } else {
+    response.errors?.push(result1);
+  }
+
+  if (!result2.startsWith("Error:")) {
+    response.result2 = result2;
+    response.successCount++;
+  } else {
+    response.errors?.push(result2);
+  }
+
+  if (!result3.startsWith("Error:")) {
+    response.result3 = result3;
+    response.successCount++;
+  } else {
+    response.errors?.push(result3);
+  }
+
+  if (response.successCount > 0) {
+    if (response.errors?.length === 0) {
+      delete response.errors;
+    }
+    return response;
+  }
+
+  return {
+    message: 'All model calls failed',
+    errors: response.errors,
+    successCount: 0
+  };
+};
 
 async function callModelSafely(modelName: string, input: string): Promise<string> {
   const overloadError = "The AI model is currently overloaded. Please try again in a few minutes.";
@@ -41,70 +84,63 @@ async function callModelSafely(modelName: string, input: string): Promise<string
     const apiKey = API_KEYS[currentIndex];
     
     try {
-      console.log("trying with ", apiKey, modelName);
+      console.log(`[${modelName}] Trying with API key ${apiKey.substring(10, 14)}...`);
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: modelName, safetySettings });
       const result = await model.generateContent(input);
-      return result.response.text();
+      const response = result.response.text();
+      console.log(`[${modelName}] Success! Generated ${response.length} characters`);
+      return response;
     } catch (error) {
       lastError = error;
-      console.log("Error, in model: maybe retrying", error);
+      console.log(`[${modelName}] Error with key ${apiKey.substring(10, 14)}...`, error);
       if (!isRetryableError(error)) {
-        break; // If it's not an overload error, don't retry with other keys
+        console.log(`[${modelName}] Non-retryable error encountered, stopping retry attempts`);
+        break;
       }
+      console.log(`[${modelName}] Retryable error encountered, will try next API key`);
     }
   }
 
-  console.error(`Error calling ${modelName}:`, lastError);
+  console.error(`[${modelName}] All attempts failed:`, lastError);
   return `Error: Failed to generate content with ${modelName}. ${lastError instanceof Error ? lastError.message : String(lastError)}`;
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>> {
-  console.log("Hello");
+  console.log("Starting POST request processing");
   try {
-    const formData = await req.json();
-
     if (req.method !== 'POST') {
       return NextResponse.json(
-        { message: 'Method Not Allowed' },
+        { message: 'Method Not Allowed', successCount: 0 },
         { status: 405 }
       );
     }
 
+    const formData = await req.json();
     const cleansedFormData = cleanseFormData(formData);
-    console.log(cleansedFormData);
-
-    const transformation1 = mergeSpeechData(SpeechFormat, cleansedFormData);
-    const transformation2 = mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.");
-    const transformation3 = mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL.");
-
+    
     const [result1, result2, result3] = await Promise.all([
-      callModelSafely("gemini-1.5-pro", transformation1),
-      callModelSafely("gemini-1.5-flash", transformation2),
-      callModelSafely("gemini-1.5-flash", transformation3)
+      callModelSafely("gemini-1.5-pro", mergeSpeechData(SpeechFormat, cleansedFormData)),
+      callModelSafely("gemini-1.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.")),
+      callModelSafely("gemini-1.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL."))
     ]);
 
-    const response: ResponseData = { 
-      message: 'Form processed successfully',
-      errors: []
-    };
+    const response = handleModelResponses(result1, result2, result3);
+    console.log(`Request completed with ${response.successCount} successful generations`);
 
-    if (result1.startsWith("Error:")) response.errors?.push(result1);
-    else response.result1 = result1;
+    return NextResponse.json(
+      response,
+      { status: response.successCount > 0 ? 200 : 500 }
+    );
 
-    if (result2.startsWith("Error:")) response.errors?.push(result2);
-    else response.result2 = result2;
-
-    if (result3.startsWith("Error:")) response.errors?.push(result3);
-    else response.result3 = result3;
-
-    if (response.errors?.length === 0) delete response.errors;
-
-    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error('Error processing form submission:', error);
     return NextResponse.json(
-      { message: 'Internal Server Error', errors: [String(error)] },
+      { 
+        message: 'Internal Server Error', 
+        errors: [String(error)],
+        successCount: 0 
+      },
       { status: 500 }
     );
   }
