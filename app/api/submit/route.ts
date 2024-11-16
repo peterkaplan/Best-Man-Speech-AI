@@ -25,7 +25,8 @@ function getRandomApiKey(): string {
 function isRetryableError(error: any): boolean {
   if (error instanceof Error) {
     const errorMessage = error.message.toLowerCase();
-    return errorMessage.includes("overloaded") || errorMessage.includes("error fetching") || errorMessage.includes("exhausted");
+    // errorMessage.includes("overloaded")  not retrtyable  errorMessage.includes("error fetching") || 
+    return errorMessage.includes("exhausted");
   }
   return false;
 }
@@ -121,8 +122,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>
     
     const [result1, result2, result3] = await Promise.all([
       callModelSafely("gemini-1.5-pro", mergeSpeechData(SpeechFormat, cleansedFormData)),
-      callModelSafely("gemini-1.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.")),
-      callModelSafely("gemini-1.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL."))
+      callModelSafely("", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.")),
+      callModelSafely("", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL."))
     ]);
 
     const response = handleModelResponses(result1, result2, result3);
