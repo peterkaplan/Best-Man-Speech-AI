@@ -38,7 +38,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
         setShowCheckmark(true);
         setTimeout(() => {
           onComplete && onComplete();
-        }, 1000); // Wait for 1 second after showing the checkmark
+        }, 1000);
       }
     }, stepDuration);
 
@@ -94,14 +94,30 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
             exit={{ opacity: 0, scale: 0.8 }}
             className="flex flex-col items-center"
           >
-            <CheckCircle2 className="w-16 h-16 mb-4" color={secondaryColor} />
-            <motion.p className="text-lg text-gray-600 mt-4" 
+            <div className="relative">
+              <CheckCircle2 className="w-16 h-16 mb-4" color={secondaryColor} />
+              <Loader2 
+                className="w-6 h-6 animate-spin absolute -top-1 -right-1" 
+                color={primaryColor}
+              />
+            </div>
+            <motion.p 
+              className="text-lg text-gray-600 mt-4" 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
               Best man speech ready!
+            </motion.p>
+            <motion.p 
+              className="text-sm text-gray-400 mt-2" 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.2, duration: 0.3 }}
+            >
+              Hold tight, coming right up...
             </motion.p>
           </motion.div>
         )}

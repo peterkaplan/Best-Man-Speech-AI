@@ -10,18 +10,31 @@ export const useFormSubmission = () => {
   const [modelOverloadError, setModelOverloadError] = useState<string | null>(null);
   const { toast } = useToast();
 
+  const parseResponse = async (response: Response) => {
+    const contentType = response.headers.get("content-type");
+    if (!contentType?.includes("application/json")) {
+      // If it's not JSON, try to get the text content for error details
+      const textContent = await response.text();
+      throw new Error(
+        `Expected JSON response but received ${contentType}. ` +
+        `Status: ${response.status} ${response.statusText}`
+      );
+    }
+    return response.json();
+  };
+
   const submitForm = async (answers: Record<number, string | string[]>) => {
     setIsSubmitting(true);
     setSafetyError(null);
     setModelOverloadError(null);
     setApiResponse(null);
 
-    const formData = Object.entries(answers).map(([key, value]) => ({
-      shortName: questions[Number(key)].shortName,
-      answer: value
-    }));
-
     try {
+      const formData = Object.entries(answers).map(([key, value]) => ({
+        shortName: questions[Number(key)].shortName,
+        answer: value
+      }));
+
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: {
@@ -30,13 +43,21 @@ export const useFormSubmission = () => {
         body: JSON.stringify(formData),
         cache: 'no-store'
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Network response was not ok');
+
+      let data: ResponseData;
+      try {
+        data = await parseResponse(response);
+      } catch (parseError) {
+        console.error('Response parsing error:', parseError);
+        throw new Error(
+          "Unable to process server response. Please try again later. " +
+          "If the problem persists, contact support."
+        );
       }
 
-      const data: ResponseData = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Network response was not ok');
+      }
       
       let hasSafetyError = false;
       let hasModelOverloadError = false;
@@ -64,6 +85,7 @@ export const useFormSubmission = () => {
         });
       }
 
+      // Handle different scenarios with appropriate toast messages
       if (hasSafetyError) {
         toast({
           title: "Safety Concern",
@@ -81,7 +103,7 @@ export const useFormSubmission = () => {
       } else if (data.errors && data.errors.length > 0) {
         toast({
           title: "Partial Success",
-          description: `Generated ${data.successCount} speeches successfully. Please check the results.`,
+          description: `Generated ${data.successCount} out of 3 responses successfully. Please check the results.`,
           variant: "destructive",
         });
       } else {
@@ -97,6 +119,7 @@ export const useFormSubmission = () => {
         title: "Submission Error",
         description: error instanceof Error ? error.message : "There was an error submitting your form. Please try again.",
         variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);
