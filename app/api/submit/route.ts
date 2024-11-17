@@ -122,8 +122,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>
     
     const [result1, result2, result3] = await Promise.all([
       callModelSafely("gemini-1.5-pro", mergeSpeechData(SpeechFormat, cleansedFormData)),
-      callModelSafely("", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.")),
-      callModelSafely("", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL."))
+      callModelSafely("gemini-1.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.")),
+      callModelSafely("gemini-1.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL."))
     ]);
 
     const response = handleModelResponses(result1, result2, result3);
