@@ -74,16 +74,15 @@ export const useFormSubmission = () => {
         });
       }
 
-      if (!hasSafetyError && !hasModelOverloadError) {
-        setApiResponse({
-          message: data.message,
-          result1: data.result1,
-          result2: data.result2,
-          result3: data.result3,
-          errors: data.errors,
-          successCount: data.successCount
-        });
-      }
+      setApiResponse({
+        message: data.message,
+        result1: data.result1,
+        result2: data.result2,
+        result3: data.result3,
+        errors: data.errors,
+        successCount: data.successCount
+      });
+      
 
       // Handle different scenarios with appropriate toast messages
       if (hasSafetyError) {
@@ -93,17 +92,18 @@ export const useFormSubmission = () => {
           duration: 10000,
           variant: "destructive",
         });
-      } else if (hasModelOverloadError) {
+      } 
+      else if (data.errors && data.errors.length > 0) {
+        toast({
+          title: "Partial Success",
+          description: `Generated ${data.successCount} out of 3 responses successfully. Please check the results.`,
+          variant: "destructive",
+        });
+      }else if (hasModelOverloadError) {
         toast({
           title: "Model Overloaded",
           description: "The AI model is currently overloaded. Please try again in a few minutes.",
           duration: 10000,
-          variant: "destructive",
-        });
-      } else if (data.errors && data.errors.length > 0) {
-        toast({
-          title: "Partial Success",
-          description: `Generated ${data.successCount} out of 3 responses successfully. Please check the results.`,
           variant: "destructive",
         });
       } else {
