@@ -77,6 +77,8 @@ async function callModelSafely(modelName: string, input: string): Promise<string
   const overloadError = "The AI model is currently overloaded. Please try again in a few minutes.";
   let lastError: any;
 
+  console.log(`[${modelName}] Calling model with input: ${input}`);
+
   // Start with a random API key
   const startIndex = API_KEYS.indexOf(getRandomApiKey());
   
@@ -121,9 +123,9 @@ export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>
     const cleansedFormData = cleanseFormData(formData);
     
     const [result1, result2, result3] = await Promise.all([
-      callModelSafely("gemini-1.5-pro", mergeSpeechData(SpeechFormat, cleansedFormData)),
-      callModelSafely("gemini-1.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.")),
-      callModelSafely("gemini-1.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL."))
+      callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData)),
+      callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.")),
+      callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL."))
     ]);
 
     const response = handleModelResponses(result1, result2, result3);
