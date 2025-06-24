@@ -118,6 +118,8 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
               transition={{ delay: 0.2, duration: 0.3 }}
             >
               Hold tight, coming right up...
+
+              We're using the most powerful AI models to generate your speech. This may take up to 30 seconds.
             </motion.p>
           </motion.div>
         )}
