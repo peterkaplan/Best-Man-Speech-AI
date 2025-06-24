@@ -26,6 +26,16 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/how-to-write-a-speech" className="text-sm hover:text-indigo-200 transition-colors duration-300">
+                  How to Write a Speech
+                </Link>
+              </li>
+              <li>
+                <Link href="/bachelor-party-speech" className="text-sm hover:text-indigo-200 transition-colors duration-300">
+                  Bachelor Party Speech
+                </Link>
+              </li>
+              <li>
                 <Link href="/tips" className="text-sm hover:text-indigo-200 transition-colors duration-300">
                   Tips
                 </Link>
