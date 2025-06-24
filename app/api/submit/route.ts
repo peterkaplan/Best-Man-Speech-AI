@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { SpeechFormat, mergeSpeechData, cleanseFormData, safetySettings } from "./prompt";
 
+export const maxDuration = 60; // This function can run for a maximum of 60 seconds
+export const dynamic = 'force-dynamic';
+
 export type ResponseData = {
   message: string;
   result1?: string;
@@ -11,11 +14,16 @@ export type ResponseData = {
   successCount: number;
 }
 
+// Filter out any undefined keys to prevent errors
 const API_KEYS = [
-  process.env.GEMINI_API_KEY_1!,
-  process.env.GEMINI_API_KEY_2!,
-  process.env.GEMINI_API_KEY_3!
-];
+  process.env.GEMINI_API_KEY_1,
+  process.env.GEMINI_API_KEY_2,
+  process.env.GEMINI_API_KEY_3,
+].filter((key): key is string => !!key);
+
+if (API_KEYS.length === 0) {
+  console.error("CRITICAL: No Gemini API keys found. Please check your .env file and restart the server.");
+}
 
 function getRandomApiKey(): string {
   const randomIndex = Math.floor(Math.random() * API_KEYS.length);
@@ -74,6 +82,12 @@ const handleModelResponses = (result1: string, result2: string, result3: string)
 };
 
 async function callModelSafely(modelName: string, input: string): Promise<string> {
+  if (API_KEYS.length === 0) {
+    const errorMessage = "Error: Server is not configured with API keys. Please contact support.";
+    console.error(`[${modelName}] ${errorMessage}`);
+    return errorMessage;
+  }
+
   const overloadError = "The AI model is currently overloaded. Please try again in a few minutes.";
   let lastError: any;
 
@@ -85,9 +99,15 @@ async function callModelSafely(modelName: string, input: string): Promise<string
   for (let i = 0; i < API_KEYS.length; i++) {
     const currentIndex = (startIndex + i) % API_KEYS.length;
     const apiKey = API_KEYS[currentIndex];
+
+    // This check should no longer be necessary due to the filter above, but it's good practice
+    if (!apiKey) {
+      console.log(`[${modelName}] Skipped an undefined API key.`);
+      continue;
+    }
     
     try {
-      console.log(`[${modelName}] Trying with API key ${apiKey.substring(10, 14)}...`);
+      console.log(`[${modelName}] Trying with API key ending in ...${apiKey.slice(-4)}`);
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: modelName, safetySettings });
       const result = await model.generateContent(input);
@@ -96,7 +116,7 @@ async function callModelSafely(modelName: string, input: string): Promise<string
       return response;
     } catch (error) {
       lastError = error;
-      console.log(`[${modelName}] Error with key ${apiKey.substring(10, 14)}...`, error);
+      console.log(`[${modelName}] Error with key ending in ...${apiKey.slice(-4)}`, error);
       if (!isRetryableError(error)) {
         console.log(`[${modelName}] Non-retryable error encountered, stopping retry attempts`);
         break;
