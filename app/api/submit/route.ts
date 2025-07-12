@@ -142,13 +142,16 @@ export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>
     const formData = await req.json();
     const cleansedFormData = cleanseFormData(formData);
     
-    const [result1, result2, result3] = await Promise.all([
-      callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData)),
-      callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech FUNNY.")),
-      callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, " Make the speech SENTIMENTAL."))
-    ]);
-
-    const response = handleModelResponses(result1, result2, result3);
+    // Make a single call instead of three parallel calls
+    const result1 = await callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData));
+    
+    // For now, we'll just return the single result
+    const response = {
+      message: 'Form processed successfully',
+      result1: result1.startsWith("Error:") ? undefined : result1,
+      errors: result1.startsWith("Error:") ? [result1] : undefined,
+      successCount: result1.startsWith("Error:") ? 0 : 1
+    };
     console.log(`Request completed with ${response.successCount} successful generations`);
 
     return NextResponse.json(
