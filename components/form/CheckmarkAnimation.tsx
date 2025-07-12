@@ -101,6 +101,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
                 color={primaryColor}
               />
             </div>
+            
             <motion.p 
               className="text-lg text-gray-600 mt-4" 
               initial={{ opacity: 0 }}
