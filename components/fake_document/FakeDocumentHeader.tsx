@@ -3,8 +3,8 @@ import { Save, Undo, Redo, Bold, Italic, Underline, Menu } from 'lucide-react';
 
 export const DocumentHeader: React.FC = () => (
   <div className="bg-muted border-b border-border p-2">
-    <div className="flex flex-wrap items-center justify-between gap-2">
-      <div className="flex items-center space-x-2">
+    <div className="flex items-center justify-between gap-1 overflow-hidden">
+      <div className="flex items-center space-x-1 flex-shrink-0">
         <button className="p-1 hover:bg-accent rounded">
           <Save size={16} />
         </button>
@@ -15,26 +15,26 @@ export const DocumentHeader: React.FC = () => (
           <Redo size={16} />
         </button>
       </div>
-      <div className="hidden sm:flex items-center space-x-2">
+      <div className="flex items-center space-x-1 flex-1 justify-center min-w-0">
         <div className="h-4 w-px bg-border mx-2" />
-        <select className="text-xs sm:text-sm bg-background border border-border rounded px-1 sm:px-2 py-1">
+        <select className="text-xs bg-background border border-border rounded px-1 py-1 min-w-0 max-w-20">
           <option>Normal</option>
           <option>Heading 1</option>
           <option>Heading 2</option>
         </select>
-        <select className="text-xs sm:text-sm bg-background border border-border rounded px-1 sm:px-2 py-1">
+        <select className="text-xs bg-background border border-border rounded px-1 py-1 min-w-0 max-w-20">
           <option>Arial</option>
           <option>Times New Roman</option>
           <option>Calibri</option>
         </select>
-        <select className="text-xs sm:text-sm bg-background border border-border rounded px-1 sm:px-2 py-1">
+        <select className="text-xs bg-background border border-border rounded px-1 py-1 min-w-0 max-w-20">
           <option>11</option>
           <option>12</option>
           <option>14</option>
         </select>
         <div className="h-4 w-px bg-border mx-2" />
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-1 flex-shrink-0">
         <button className="p-1 hover:bg-accent rounded">
           <Bold size={16} />
         </button>
@@ -44,7 +44,7 @@ export const DocumentHeader: React.FC = () => (
         <button className="p-1 hover:bg-accent rounded">
           <Underline size={16} />
         </button>
-        <button className="sm:hidden p-1 hover:bg-accent rounded">
+        <button className="hidden p-1 hover:bg-accent rounded">
           <Menu size={16} />
         </button>
       </div>
