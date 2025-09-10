@@ -47,17 +47,14 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
   return (
     <Card
       ref={formRef}
-      className={`bg-white shadow-lg rounded-lg overflow-hidden relative
+      className={`bg-card shadow-lg rounded-lg overflow-hidden relative
                   ${isMobile 
                     ? 'w-full max-w-md mx-auto' 
                     : 'max-w-2xl mx-auto sm:w-full sm:mx-0 sm:h-[750px] sm:flex sm:flex-col'}`}
-      style={{ 
-        background: 'linear-gradient(to bottom, #f0f4ff, #ffffff)'
-      }}
     >
       <CardHeader className="bg-transparent py-4 px-4 sm:py-6 sm:px-6">
         <div className="flex justify-between items-center mb-2">
-          <CardTitle className="text-xl font-bold text-gray-800 sm:text-3xl">
+          <CardTitle className="text-xl font-bold text-card-foreground sm:text-3xl">
             Best Man Speech Assistant
           </CardTitle>
           {isMobile && (
@@ -65,7 +62,7 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant="ghost" size="icon">
-                    <HelpCircle size={20} className="text-indigo-600" />
+                    <HelpCircle size={20} className="text-primary" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -76,13 +73,13 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
           )}
         </div>
         {!isMobile && (
-          <CardDescription className="text-sm text-gray-600 mt-2 sm:text-lg">
+          <CardDescription className="text-sm text-muted-foreground mt-2 sm:text-lg">
             Complete these questions to create a memorable and entertaining best man speech.
           </CardDescription>
         )}
-        <div className="w-full bg-indigo-200 h-1 mt-2 rounded-full overflow-hidden">
+        <div className="w-full bg-accent h-1 mt-2 rounded-full overflow-hidden">
           <div 
-            className="bg-indigo-600 h-full transition-all duration-300 ease-in-out"
+            className="bg-primary h-full transition-all duration-300 ease-in-out"
             style={{ width: `${(currentStep / (currentQuestions.length - 1)) * 100}%` }}
           ></div>
         </div>

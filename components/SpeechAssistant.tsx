@@ -46,39 +46,39 @@ const SpeechAssistant = () => {
   };
 
   return (
-    <Card className="bg-white shadow-xl overflow-hidden">
+    <Card className="bg-background shadow-xl overflow-hidden">
       <CardContent className="p-6">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Your Speech Assistant</h3>
+          <h3 className="text-lg font-semibold text-foreground">Your Speech Assistant</h3>
           <div className="flex space-x-2">
-            <PenTool className="w-6 h-6 text-indigo-600" />
-            <GlassesIcon className="w-6 h-6 text-indigo-600" />
-            <SmileIcon className="w-6 h-6 text-indigo-600" />
+            <PenTool className="w-6 h-6 text-primary" />
+            <GlassesIcon className="w-6 h-6 text-primary" />
+            <SmileIcon className="w-6 h-6 text-primary" />
           </div>
         </div>
         <div className="space-y-4 max-h-64 overflow-y-auto mb-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gray-100 p-4 rounded-lg"
+            className="bg-muted p-4 rounded-lg"
           >
-            <p className="text-sm text-gray-600">Tell me about the groom...</p>
+            <p className="text-sm text-muted-foreground">Tell me about the groom...</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-indigo-100 p-4 rounded-lg"
+            className="bg-muted p-4 rounded-lg"
           >
-            <p className="text-sm text-indigo-800">John and I have been best friends since college. He&apos;s always been the life of the party and has a heart of gold.</p>
+            <p className="text-sm text-foreground">John and I have been best friends since college. He&apos;s always been the life of the party and has a heart of gold.</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-gray-100 p-4 rounded-lg"
+            className="bg-muted p-4 rounded-lg"
           >
-            <p className="text-sm text-gray-600">Great! Now, let&apos;s add some humor. What&apos;s a funny story you could share?</p>
+            <p className="text-sm text-muted-foreground">Great! Now, let&apos;s add some humor. What&apos;s a funny story you could share?</p>
           </motion.div>
           <AnimatePresence>
             {showTypingIndicator && (
@@ -86,12 +86,12 @@ const SpeechAssistant = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="bg-gray-100 p-4 rounded-lg"
+                className="bg-muted p-4 rounded-lg"
               >
                 <div className="flex space-x-2">
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                 </div>
               </motion.div>
             )}
@@ -101,7 +101,7 @@ const SpeechAssistant = () => {
           <div className="relative">
             <input
               type="text"
-              className="w-full border-2 border-indigo-300 rounded-full py-3 px-4 pr-12 text-gray-700 focus:outline-none focus:border-indigo-500 transition-all duration-300"
+              className="w-full border-2 border-border rounded-full py-3 px-4 pr-12 text-foreground focus:outline-none focus:border-primary transition-all duration-300"
               value={inputValue}
               onChange={handleInputChange}
               onFocus={() => setIsTyping(true)}
@@ -114,7 +114,7 @@ const SpeechAssistant = () => {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="absolute left-4 top-0 transform -translate-y-1/2 text-gray-400 pointer-events-none flex items-center h-full"
+                className="absolute left-4 top-0 transform -translate-y-1/2 text-muted-foreground/70 pointer-events-none flex items-center h-full"
                 >
                 {inputValue === '' && placeholders[placeholderIndex]}
               </motion.span>
@@ -122,7 +122,7 @@ const SpeechAssistant = () => {
             <Link href="/creator">
               <Button 
                 size="sm" 
-                className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-all duration-300 ${isTyping ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-300 ${isTyping ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                 onClick={handleSend}
               >
                 <Send className="w-4 h-4" />

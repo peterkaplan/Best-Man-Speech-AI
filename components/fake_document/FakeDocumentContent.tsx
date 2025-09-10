@@ -19,7 +19,7 @@ export const DocumentContent: React.FC<{ displayedText: TypedText; isTyping: boo
       <motion.div
         animate={{ opacity: isTyping ? 1 : [1, 0] }}
         transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-        className="inline-block w-[1px] h-[1.2em] bg-black ml-[1px] align-middle"
+        className="inline-block w-[1px] h-[1.2em] bg-foreground ml-[1px] align-middle"
       />
     </div>
   </div>

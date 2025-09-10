@@ -51,7 +51,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
           <Input
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full border-2 border-indigo-300 focus:border-indigo-500 rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-indigo-200"
+            className="w-full border-2 border-border focus:border-primary rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-primary/20"
           />
         );
       case 'textarea':
@@ -59,7 +59,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
           <Textarea
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full border-2 border-indigo-300 focus:border-indigo-500 rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-indigo-200 resize-none"
+            className="w-full border-2 border-border focus:border-primary rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-primary/20 resize-none"
             rows={4}
           />
         );
@@ -70,20 +70,20 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
               <div key={index} className="relative">
                 <motion.label
                   htmlFor={`option-${index}`}
-                  className="flex items-center space-x-2 w-full cursor-pointer p-3 rounded-lg hover:bg-indigo-50 transition-colors duration-200"
+                  className="flex items-center space-x-2 w-full cursor-pointer p-3 rounded-lg hover:bg-muted transition-colors duration-200"
                   whileHover={{ scale: 1.005 }}
                   whileTap={{ scale: 0.995 }}
                 >
                   <RadioGroupItem
                     value={option}
                     id={`option-${index}`}
-                    className="text-indigo-600 focus:ring-indigo-500"
+                    className="text-primary focus:ring-primary"
                   />
-                  <span className="text-gray-700">{option}</span>
+                  <span className="text-foreground">{option}</span>
                 </motion.label>
                 <motion.div
                   className="absolute inset-0 rounded-lg pointer-events-none"
-                  whileHover={{ boxShadow: "0 0 0 2px rgba(79, 70, 229, 0.2)" }}
+                  whileHover={{ boxShadow: "0 0 0 2px hsl(var(--primary) / 0.2)" }}
                   transition={{ duration: 0.2 }}
                 />
               </div>
@@ -97,7 +97,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
               <div key={index} className="relative">
                 <motion.label
                   htmlFor={`option-${index}`}
-                  className="flex items-center space-x-2 w-full cursor-pointer p-3 rounded-lg hover:bg-indigo-50 transition-colors duration-200"
+                  className="flex items-center space-x-2 w-full cursor-pointer p-3 rounded-lg hover:bg-muted transition-colors duration-200"
                   whileHover={{ scale: 1.005 }}
                   whileTap={{ scale: 0.995 }}
                 >
@@ -111,13 +111,13 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
                         onChange((value as string[]).filter(item => item !== option));
                       }
                     }}
-                    className="text-indigo-600 focus:ring-indigo-500"
+                    className="text-primary focus:ring-primary"
                   />
-                  <span className="text-gray-700">{option}</span>
+                  <span className="text-foreground">{option}</span>
                 </motion.label>
                 <motion.div
                   className="absolute inset-0 rounded-lg pointer-events-none"
-                  whileHover={{ boxShadow: "0 0 0 2px rgba(79, 70, 229, 0.2)" }}
+                  whileHover={{ boxShadow: "0 0 0 2px hsl(var(--primary) / 0.2)" }}
                   transition={{ duration: 0.2 }}
                 />
               </div>
@@ -129,11 +129,11 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
                     value={customOption}
                     onChange={(e) => setCustomOption(e.target.value)}
                     placeholder="Add another"
-                    className="flex-grow border-2 border-indigo-300 focus:border-indigo-500 rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-indigo-200"
+                    className="flex-grow border-2 border-border focus:border-primary rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-primary/20"
                   />
                   <motion.button
                     onClick={handleCustomOptionAdd}
-                    className="p-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -164,7 +164,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
-            className="text-red-500 text-sm mt-1 flex items-center"
+            className="text-destructive text-sm mt-1 flex items-center"
           >
             <AlertCircle className="w-4 h-4 mr-1" />
             {error}

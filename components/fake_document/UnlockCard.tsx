@@ -27,13 +27,13 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
   };
 
   return (
-    <div className="w-full max-w-md p-4 rounded-lg shadow-lg border border-gray-200 relative bg-white/80 backdrop-blur-sm">
+    <div className="w-full max-w-md p-4 rounded-lg shadow-lg border relative bg-card/80 backdrop-blur-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
-          <Lock className="text-green-600 mr-2" size={20} />
-          <h2 className="text-xl font-bold text-gray-800">Unlock Full Speech</h2>
+          <Lock className="text-primary mr-2" size={20} />
+          <h2 className="text-xl font-bold text-card-foreground">Unlock Full Speech</h2>
         </div>
-        <div className="flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full">
+        <div className="flex items-center bg-accent text-accent-foreground px-3 py-1 rounded-full">
           <Tag className="mr-1" size={16} />
           <span className="text-sm font-semibold">Now Free!</span>
         </div>
@@ -42,8 +42,8 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
       <ul className="mb-4 space-y-2">
         {['Access the complete speech', 'Download as PDF', 'All premium features included'].map((benefit, index) => (
           <li key={index} className="flex items-center text-sm">
-            <Check className="text-green-500 mr-2" size={18} />
-            <span className="text-gray-600">{benefit}</span>
+            <Check className="text-primary mr-2" size={18} />
+            <span className="text-muted-foreground">{benefit}</span>
           </li>
         ))}
       </ul>
@@ -52,19 +52,19 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
         {options.map((option) => (
           <div 
             key={option.id}
-            className="border-2 border-gray-200 rounded-lg p-3"
+            className="border-2 border-border rounded-lg p-3"
           >
             <div className="flex justify-between items-center mb-2">
-              <span className="font-semibold text-gray-800">{option.name}</span>
+              <span className="font-semibold text-card-foreground">{option.name}</span>
               <div className="flex items-center">
-                <span className="text-gray-400 line-through text-sm mr-2">{option.oldPrice}</span>
-                <span className="font-bold text-green-600">FREE</span>
+                <span className="text-muted-foreground line-through text-sm mr-2">{option.oldPrice}</span>
+                <span className="font-bold text-primary">FREE</span>
               </div>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               {option.features.map((feature, index) => (
                 <div key={index} className="flex items-center">
-                  <Check className="text-green-500 mr-1" size={14} />
+                  <Check className="text-primary mr-1" size={14} />
                   <span>{feature}</span>
                 </div>
               ))}
@@ -75,7 +75,7 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
 
       <Button
         onClick={handleUnlock}
-        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition-colors text-md shadow-md"
+        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 rounded-lg transition-colors text-md shadow-md"
       >
         Access Now
       </Button>

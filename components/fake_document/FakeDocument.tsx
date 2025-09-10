@@ -46,7 +46,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, result
             <div className="absolute bottom-4 right-4">
               <TypingIndicator isTyping={isTyping} />
             </div>
-            <div className="absolute bottom-4 left-4 text-sm text-gray-400">
+            <div className="absolute bottom-4 left-4 text-sm text-muted-foreground">
               Words: {totalWords}
             </div>
           </>
@@ -55,7 +55,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, result
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg border border-gray-200">
+    <Card className="w-full max-w-4xl mx-auto bg-card shadow-lg border">
       <div className="flex flex-col lg:h-[800px]">
         <DocumentHeader />
         <div className="flex-grow md:overflow-hidden overflow-y-scroll">
@@ -65,7 +65,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, result
             </div>
           </div>
         </div>
-        <div className="h-6 bg-gray-100 border-t border-gray-200 flex items-center justify-between px-4 text-xs text-gray-500">
+        <div className="h-6 bg-muted border-t border-border flex items-center justify-between px-4 text-xs text-muted-foreground">
           <span>Page 1 of 1</span>
           <span>English (US)</span>
           <span><TextCursor size={12} className="inline mr-1" /> Editing</span>

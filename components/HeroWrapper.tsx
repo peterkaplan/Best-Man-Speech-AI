@@ -3,7 +3,7 @@ import Hero from "./Hero";
 
 const HeroWrapper: React.FC = () => {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-white via-indigo-100 to-indigo-200">
+      <div className="min-h-screen bg-background">
         <Hero />
         <FormPage />
       </div>

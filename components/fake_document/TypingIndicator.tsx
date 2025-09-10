@@ -13,7 +13,7 @@ export const TypingIndicator: React.FC<{ isTyping: boolean }> = ({ isTyping }) =
         key={i}
         animate={{ y: isTyping ? [0, -4, 0] : 0 }}
         transition={{ duration: 0.6, delay: i * 0.2, repeat: Infinity, repeatType: "loop" }}
-        className="w-1.5 h-1.5 bg-blue-500 rounded-full"
+        className="w-1.5 h-1.5 bg-primary rounded-full"
       />
     ))}
   </motion.div>

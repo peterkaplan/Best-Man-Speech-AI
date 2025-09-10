@@ -13,7 +13,7 @@ const QuestionText: React.FC<QuestionTextProps> = ({ text }) => {
 
   return (
     <motion.h3
-      className="text-xl font-semibold leading-7 text-indigo-900 mb-4"
+      className="text-xl font-semibold leading-7 text-foreground mb-4"
       initial="hidden"
       animate="visible"
       variants={textVariants}

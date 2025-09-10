@@ -51,7 +51,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
           onClick={onPrevious}
           disabled={isFirstStep}
           variant="outline"
-          className="flex items-center space-x-2 bg-white text-indigo-600 border-indigo-600 hover:bg-indigo-50 transition-colors duration-300"
+          className="flex items-center space-x-2 bg-background text-primary border-primary hover:bg-muted transition-colors duration-300"
         >
           <ArrowLeft size={16} />
           <span>Previous</span>
@@ -66,7 +66,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
       >
         <Button
           onClick={combinedClick}
-          className="flex items-center space-x-2 bg-indigo-600 text-white hover:bg-indigo-700 transition-colors duration-300"
+          className="flex items-center space-x-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-300"
         >
           {isLastStep ? (
             <>

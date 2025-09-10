@@ -71,18 +71,18 @@ const writingSteps = [
 
 export default function HowToWriteABestManSpeechPage(): JSX.Element {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            How to Write a <span className="text-blue-600">Great Best Man Speech</span>
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+            How to Write a <span className="text-primary">Great Best Man Speech</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
             Being asked to be the best man is a huge honor. Our guide will walk you through writing a speech that's funny,
             heartfelt, and unforgettable—for all the right reasons.
           </p>
-          <div className="flex items-center justify-center gap-6 text-sm text-gray-500 mb-8">
+          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-8">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
               <span>10 min read</span>
@@ -97,7 +97,7 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
             </div>
           </div>
           <Link href="/creator">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
               Try Our Best Man Speech Writer
             </Button>
           </Link>
@@ -280,7 +280,7 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
 
           {/* CTA Section */}
           <section className="text-center">
-            <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <Card className="bg-gradient-to-r from-primary to-secondary text-primary-foreground">
               <CardContent className="pt-8 pb-8">
                 <h2 className="text-3xl font-bold mb-4">Ready to Write Your Perfect Best Man Speech?</h2>
                 <p className="text-xl mb-8 opacity-90">

@@ -73,7 +73,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
         <motion.h1 
           initial={{ y: -20 }}
           animate={{ y: 0 }}
-          className="text-3xl font-bold mb-6 text-center text-gray-800"
+          className="text-3xl font-bold mb-6 text-center text-foreground"
         >
           Best Man Speech
         </motion.h1>
@@ -85,7 +85,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
             transition={{ duration: 0.5 }}
             className="w-full mb-6"
           >
-            <p className="text-green-600 font-semibold mb-4 text-center">
+            <p className="text-primary font-semibold mb-4 text-center">
               {selectedOption === 'single' ? 'You\'ve unlocked this speech! And two BONUS speeches.' : 'You\'ve unlocked 3 unique versions of this speech!'}
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -101,7 +101,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
                 <Button onClick={handlePrevSpeech} variant="outline" size="icon">
                   <ChevronLeft size={24} />
                 </Button>
-                <span className="text-gray-600 font-medium">
+                <span className="text-muted-foreground font-medium">
                   Speech {currentSpeechIndex + 1} of {speeches.length}
                 </span>
                 <Button onClick={handleNextSpeech} variant="outline" size="icon">
@@ -121,7 +121,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <p ref={contentRef} className={`whitespace-pre-wrap break-words text-gray-700 text-justify ${isUnlocked ? 'select-text' : 'select-none pointer-events-none'}`}>
+              <p ref={contentRef} className={`whitespace-pre-wrap break-words text-foreground text-justify ${isUnlocked ? 'select-text' : 'select-none pointer-events-none'}`}>
                 {words.map((word, index) => (
                   <React.Fragment key={index}>
                     {index > 0 && ' '}
@@ -146,7 +146,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
       {!isUnlocked && (
         <>
           <div className="fixed inset-x-0 bottom-0 flex items-center justify-center z-50 md:hidden mx-4">
-            <div className="bg-white rounded-t-lg shadow-lg p-6 w-full">
+            <div className="bg-background rounded-t-lg shadow-lg p-6 w-full">
               <UnlockCard onUnlock={handleUnlock} />
             </div>
           </div>

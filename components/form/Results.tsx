@@ -35,7 +35,7 @@ const Results: React.FC<ResultsProps> = ({ speech }) => {
   const previewText = speech.split(' ').slice(0, 30).join(' ') + '...';
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-2xl mx-auto p-6 bg-card rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-center">Your Best Man Speech</h2>
       <Card className="mb-6 overflow-hidden relative">
         <CardContent className="p-0">
@@ -67,7 +67,7 @@ const Results: React.FC<ResultsProps> = ({ speech }) => {
                 <animated.div style={buttonPulse}>
                   <Button
                     onClick={handleUnlock}
-                    className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+                    className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     <Lock size={18} />
                     Unlock Full Speech

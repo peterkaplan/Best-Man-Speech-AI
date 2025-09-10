@@ -44,7 +44,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
   return (
     <motion.div
-      className="md:bg-white md:shadow-lg md:rounded-xl md:px-8 md:py-6 md:mb-4 md:border md:border-indigo-100"
+      className="md:bg-card md:shadow-lg md:rounded-xl md:px-8 md:py-6 md:mb-4 md:border md:border-accent"
       initial="hidden"
       animate="visible"
       variants={cardVariants}

@@ -48,13 +48,13 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
   return (
     <motion.div 
       ref={containerRef}
-      className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg overflow-hidden w-full h-64"
+      className="relative flex flex-col items-center justify-center bg-card rounded-lg shadow-lg overflow-hidden w-full h-64"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
     >
       <motion.div 
-        className="absolute top-0 left-0 h-1 bg-gray-200"
+        className="absolute top-0 left-0 h-1 bg-muted"
         style={{ width: '100%' }}
       >
         <motion.div 
@@ -77,7 +77,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
           >
             <Loader2 className="w-12 h-12 mb-4 animate-spin" color={primaryColor} />
             <motion.p 
-              className="text-lg text-gray-600 text-center px-4"
+              className="text-lg text-muted-foreground text-center px-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -103,7 +103,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
             </div>
             
             <motion.p 
-              className="text-lg text-gray-600 mt-4" 
+              className="text-lg text-muted-foreground mt-4" 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -112,7 +112,7 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
               Best man speech ready!
             </motion.p>
             <motion.p 
-              className="text-sm text-gray-400 mt-2" 
+              className="text-sm text-muted-foreground/70 mt-2" 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

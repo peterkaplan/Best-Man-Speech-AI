@@ -18,7 +18,7 @@ const FormProgress: React.FC<FormProgressProps> = ({ currentStep, totalSteps }) 
       transition={{ duration: 0.3 }}
     >
       <Progress value={progress} className="flex-grow h-2" />
-      <span className="text-sm font-medium text-gray-600">
+      <span className="text-sm font-medium text-muted-foreground">
         {currentStep}/{totalSteps}
       </span>
     </motion.div>
