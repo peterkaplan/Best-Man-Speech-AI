@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { StarIcon, AwardIcon } from 'lucide-react';
+import { Users, TrendingUp, CheckCircle } from 'lucide-react';
+import { NumberTicker } from '@/components/ui/number-ticker';
 import { motion } from 'framer-motion';
 import { useScroll } from './form/ScrollContext';
 const Hero = () => {
@@ -17,20 +18,6 @@ const Hero = () => {
           transition={{ duration: 0.5 }}
           className="space-y-6"
         >
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full text-foreground text-sm font-semibold shadow-sm"
-          >
-            <AwardIcon className="w-4 h-4 mr-2" />
-            #1 Best Man Speech Writing Tool
-            <div className="ml-2 flex">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className="w-3 h-3 text-accent fill-current" />
-              ))}
-            </div>
-          </motion.div>
 
           <div className="space-y-4">
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground leading-tight">
@@ -39,7 +26,7 @@ const Hero = () => {
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            "Deliver the speech everyone talks about for years. Join hundreds of best men who had the room laughing, crying, and cheering with our easy-to-use speech writing tool.
+            Deliver the speech everyone talks about for years. Join thousands of best men who had the room laughing, crying, and cheering with our easy-to-use speech writing tool.
             </p>
           </div>
 
@@ -47,7 +34,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex justify-center items-center space-x-6"
+            className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
           >
             <Button 
               size="lg" 
@@ -56,6 +43,21 @@ const Hero = () => {
             >
               Create Your Speech Now for Free
             </Button>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="flex items-center bg-card/90 backdrop-blur-sm px-6 py-4 rounded-lg border border-border/50 shadow-lg h-12"
+            >
+              <Users className="w-5 h-5 text-primary mr-2" />
+              <div className="text-center">
+                <div className="flex items-center space-x-2">
+                  <NumberTicker value={12632} startValue={12101} className="text-xl font-bold text-foreground" />
+                  <span className="text-xs text-muted-foreground font-medium">Speeches Created</span>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>
