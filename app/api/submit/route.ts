@@ -14,6 +14,14 @@ export type ResponseData = {
   successCount: number;
 }
 
+// Distinct style directions so the 3 parallel generations read as genuinely
+// different speeches rather than 3 random samples of the same prompt.
+const STYLE_SUFFIXES = [
+  '',
+  'Write this version with a warm, heartfelt tone that leans into the emotional and sentimental side of the story.',
+  'Write this version with a witty, playful tone that leans into humor and comedic pacing.',
+];
+
 // Filter out any undefined keys to prevent errors
 const API_KEYS = [
   process.env.GEMINI_API_KEY_1,
@@ -23,6 +31,35 @@ const API_KEYS = [
 
 if (API_KEYS.length === 0) {
   console.error("CRITICAL: No Gemini API keys found. Please check your .env file and restart the server.");
+}
+
+// Per-IP sliding window limiter. This is in-memory, so it only limits requests
+// within a single serverless instance and resets on cold starts - it's a stopgap
+// against casual abuse, not a hard guarantee. A real fix needs shared state (e.g. Upstash Redis).
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+const requestLog = new Map<string, number[]>();
+
+function getClientIp(req: NextRequest): string {
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  if (forwardedFor) return forwardedFor.split(',')[0].trim();
+  return req.headers.get('x-real-ip') ?? 'unknown';
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const recentTimestamps = (requestLog.get(ip) ?? []).filter(
+    (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS
+  );
+
+  if (recentTimestamps.length >= RATE_LIMIT_MAX_REQUESTS) {
+    requestLog.set(ip, recentTimestamps);
+    return true;
+  }
+
+  recentTimestamps.push(now);
+  requestLog.set(ip, recentTimestamps);
+  return false;
 }
 
 function getRandomApiKey(): string {
@@ -38,49 +75,6 @@ function isRetryableError(error: any): boolean {
   }
   return false;
 }
-const handleModelResponses = (result1: string, result2: string, result3: string): ResponseData => {
-  const response: ResponseData = { 
-    message: 'Form processed successfully',
-    errors: [],
-    successCount: 0
-  };
-
-  // Track successful results
-  if (!result1.startsWith("Error:")) {
-    response.result1 = result1;
-    response.successCount++;
-  } else {
-    response.errors?.push(result1);
-  }
-
-  if (!result2.startsWith("Error:")) {
-    response.result2 = result2;
-    response.successCount++;
-  } else {
-    response.errors?.push(result2);
-  }
-
-  if (!result3.startsWith("Error:")) {
-    response.result3 = result3;
-    response.successCount++;
-  } else {
-    response.errors?.push(result3);
-  }
-
-  if (response.successCount > 0) {
-    if (response.errors?.length === 0) {
-      delete response.errors;
-    }
-    return response;
-  }
-
-  return {
-    message: 'All model calls failed',
-    errors: response.errors,
-    successCount: 0
-  };
-};
-
 async function callModelSafely(modelName: string, input: string): Promise<string> {
   if (API_KEYS.length === 0) {
     const errorMessage = "Error: Server is not configured with API keys. Please contact support.";
@@ -139,19 +133,58 @@ export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>
       );
     }
 
+    const clientIp = getClientIp(req);
+    if (isRateLimited(clientIp)) {
+      console.warn(`Rate limit exceeded for IP: ${clientIp}`);
+      return NextResponse.json(
+        { message: 'Too many requests. Please wait a while before trying again.', successCount: 0 },
+        { status: 429 }
+      );
+    }
+
     const formData = await req.json();
     const cleansedFormData = cleanseFormData(formData);
-    
-    // Make a single call instead of three parallel calls
-    const result1 = await callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData));
-    
-    // For now, we'll just return the single result
-    const response = {
+
+    const [result1, result2, result3] = await Promise.all(
+      STYLE_SUFFIXES.map((suffix) =>
+        callModelSafely("gemini-2.5-flash", mergeSpeechData(SpeechFormat, cleansedFormData, suffix))
+      )
+    );
+
+    const response: ResponseData = {
       message: 'Form processed successfully',
-      result1: result1.startsWith("Error:") ? undefined : result1,
-      errors: result1.startsWith("Error:") ? [result1] : undefined,
-      successCount: result1.startsWith("Error:") ? 0 : 1
+      successCount: 0,
     };
+    const errors: string[] = [];
+
+    if (!result1.startsWith("Error:")) {
+      response.result1 = result1;
+      response.successCount++;
+    } else {
+      errors.push(result1);
+    }
+
+    if (!result2.startsWith("Error:")) {
+      response.result2 = result2;
+      response.successCount++;
+    } else {
+      errors.push(result2);
+    }
+
+    if (!result3.startsWith("Error:")) {
+      response.result3 = result3;
+      response.successCount++;
+    } else {
+      errors.push(result3);
+    }
+
+    if (errors.length > 0) {
+      response.errors = errors;
+    }
+    if (response.successCount === 0) {
+      response.message = 'All model calls failed';
+    }
+
     console.log(`Request completed with ${response.successCount} successful generations`);
 
     return NextResponse.json(

@@ -5,14 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { CheckCircle, XCircle, Mic, Star, PartyPopper, Users, Clock, Trophy } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Bachelor Party Speech Guide: Funny Tips & Examples | SpeechWriter',
+  title: 'Bachelor Party Speech Guide: Funny Tips & Examples',
   description: 'Learn how to write a hilarious and memorable bachelor party speech or toast. Get tips for best men, funny one-liners, and examples that honor the groom.',
   keywords: 'bachelor party speech, bachelor party toast, write a bachelor party speech, funny bachelor party speech, best man bachelor party speech, speech for bachelor party',
   openGraph: {
-    title: 'How to Write a Killer Bachelor Party Speech | SpeechWriter',
+    title: 'How to Write a Killer Bachelor Party Speech',
     description: 'Your go-to guide for writing a funny, memorable bachelor party speech that perfectly roasts and toasts the groom-to-be.',
     type: 'article',
-    url: 'https://bestmanspeechai.com/bachelor-party-speech',
+    url: 'https://www.bestmanspeechai.com/bachelor-party-speech',
   },
   twitter: {
     card: 'summary_large_image',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: 'Nailing the bachelor party speech is easy with our tips, examples, and AI-powered speech writing tool.',
   },
   alternates: {
-    canonical: 'https://bestmanspeechai.com/bachelor-party-speech',
+    canonical: 'https://www.bestmanspeechai.com/bachelor-party-speech',
   },
 };
 
@@ -70,20 +70,20 @@ const writingSteps = [
 
 export default function BachelorPartySpeechPage(): JSX.Element {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-24">
         {/* Header Section */}
         <div className="text-center mb-20">
-          <PartyPopper className="w-16 h-16 text-indigo-600 mx-auto mb-6" />
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            How to Write a <span className="text-indigo-600">Killer Bachelor Party Speech</span>
+          <PartyPopper className="w-16 h-16 text-primary mx-auto mb-6" />
+          <h1 className="font-display text-4xl md:text-6xl font-medium text-foreground mb-6 glow-text">
+            How to Write a <span className="text-primary">Killer Bachelor Party Speech</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
-            The perfect bachelor party speech is a mix of a loving roast and a heartfelt toast. 
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-8">
+            The perfect bachelor party speech is a mix of a loving roast and a heartfelt toast.
             This guide will help you find that sweet spot between hilarious and heartfelt.
           </p>
-          
-          <div className="flex items-center justify-center gap-8 text-sm text-gray-500 mb-10">
+
+          <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground mb-10">
             <div className="flex items-center gap-2">
               <Clock className="w-5 h-5" />
               <span>5 min read</span>
@@ -99,7 +99,7 @@ export default function BachelorPartySpeechPage(): JSX.Element {
           </div>
 
           <Link href="/creator">
-            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
               Use Our Speech Writer Tool
             </Button>
           </Link>
@@ -110,42 +110,42 @@ export default function BachelorPartySpeechPage(): JSX.Element {
 
           {/* Do's and Don'ts Section */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+            <h2 className="font-display text-3xl font-medium text-center text-foreground mb-12">
               The Golden Rules of the Bachelor Party Toast
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="border-green-200 shadow-lg">
-                <CardHeader className="bg-green-50">
-                  <CardTitle className="text-2xl text-green-700 flex items-center gap-3">
+              <Card className="bg-card border-primary/30">
+                <CardHeader className="bg-primary/10">
+                  <CardTitle className="font-display text-2xl font-medium text-primary flex items-center gap-3">
                     <CheckCircle className="w-6 h-6" />
-                    The Do's
+                    The Do&apos;s
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
                   <ul className="space-y-4">
                     {speechTips.dos.map((tip, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <tip.icon className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{tip.text}</span>
+                        <tip.icon className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-muted-foreground">{tip.text}</span>
                       </li>
                     ))}
                   </ul>
                 </CardContent>
               </Card>
-              
-              <Card className="border-red-200 shadow-lg">
-                <CardHeader className="bg-red-50">
-                  <CardTitle className="text-2xl text-red-700 flex items-center gap-3">
+
+              <Card className="bg-card border-destructive/30">
+                <CardHeader className="bg-destructive/10">
+                  <CardTitle className="font-display text-2xl font-medium text-destructive flex items-center gap-3">
                     <XCircle className="w-6 h-6" />
-                    The Don'ts
+                    The Don&apos;ts
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
                   <ul className="space-y-4">
                     {speechTips.donts.map((tip, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <tip.icon className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{tip.text}</span>
+                        <tip.icon className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
+                        <span className="text-muted-foreground">{tip.text}</span>
                       </li>
                     ))}
                   </ul>
@@ -153,26 +153,26 @@ export default function BachelorPartySpeechPage(): JSX.Element {
               </Card>
             </div>
           </section>
-          
+
           {/* Step-by-Step Guide */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+            <h2 className="font-display text-3xl font-medium text-center text-foreground mb-12">
               Your 4-Step Plan to a Legendary Toast
             </h2>
-            <div className="space-y-8">
-              {writingSteps.map((step, index) => (
-                <Card key={step.step} className="shadow-lg hover:shadow-xl transition-shadow">
+            <div className="space-y-6">
+              {writingSteps.map((step) => (
+                <Card key={step.step} className="bg-card border-border/60 hover:border-primary/40 transition-colors">
                   <CardHeader>
                     <div className="flex items-start gap-4">
-                      <div className="flex flex-col items-center">
-                        <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                      <div className="flex flex-col items-center flex-shrink-0">
+                        <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg">
                           {step.step}
                         </div>
-                        <step.icon className="w-6 h-6 text-indigo-600 mt-2" />
+                        <step.icon className="w-6 h-6 text-primary mt-2" />
                       </div>
                       <div className="flex-1">
-                        <CardTitle className="text-2xl mb-2 text-gray-900">{step.title}</CardTitle>
-                        <CardDescription className="text-lg text-gray-600">{step.description}</CardDescription>
+                        <CardTitle className="font-display text-2xl font-medium mb-2 text-foreground">{step.title}</CardTitle>
+                        <CardDescription className="text-lg text-muted-foreground">{step.description}</CardDescription>
                       </div>
                     </div>
                   </CardHeader>
@@ -183,37 +183,37 @@ export default function BachelorPartySpeechPage(): JSX.Element {
 
           {/* Connection to Best Man Speech */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+            <h2 className="font-display text-3xl font-medium text-center text-foreground mb-8">
               From Bachelor Party Toast to Best Man Speech
             </h2>
-            <Card className="bg-indigo-50 border-indigo-200 shadow-lg">
+            <Card className="bg-primary/10 border-primary/30">
               <CardContent className="pt-8 pb-8">
                 <div className="text-center mb-6">
                   <div className="flex justify-center items-center gap-4 mb-4">
-                    <PartyPopper className="w-10 h-10 text-indigo-600" />
-                    <span className="text-2xl text-gray-400">→</span>
-                    <Users className="w-10 h-10 text-indigo-600" />
+                    <PartyPopper className="w-10 h-10 text-primary" />
+                    <span className="text-2xl text-muted-foreground">→</span>
+                    <Users className="w-10 h-10 text-primary" />
                   </div>
                 </div>
-                <p className="text-lg text-gray-700 mb-6 text-center">
+                <p className="text-lg text-foreground mb-6 text-center">
                   Think of the bachelor party speech as the <strong>warm-up act</strong> for your official best man speech at the wedding.
                 </p>
-                <p className="text-gray-600 mb-8 text-center">
-                  It's your chance to share the funnier, more casual stories that might not fit into the formal setting of the wedding reception.
+                <p className="text-muted-foreground mb-8 text-center">
+                  It&apos;s your chance to share the funnier, more casual stories that might not fit into the formal setting of the wedding reception.
                 </p>
-                <div className="bg-white rounded-lg p-6 mb-8 border border-indigo-200">
-                  <p className="text-lg text-gray-700 text-center">
+                <div className="bg-card rounded-lg p-6 mb-8 border border-primary/30">
+                  <p className="text-lg text-foreground text-center">
                     Our tool can help you with <strong>both</strong>! Generate a hilarious roast for the bachelor party, then create a more heartfelt, polished speech for the big day.
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href="/creator">
-                    <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
                       Create Your Bachelor Party Speech
                     </Button>
                   </Link>
                   <Link href="/how-to-write-a-speech">
-                    <Button size="lg" variant="outline" className="border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white">
+                    <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-full">
                       Plan Your Wedding Speech
                     </Button>
                   </Link>
@@ -224,15 +224,15 @@ export default function BachelorPartySpeechPage(): JSX.Element {
 
           {/* CTA Section */}
           <section className="text-center">
-            <Card className="bg-indigo-600 text-white shadow-xl">
+            <Card className="bg-primary text-primary-foreground border-primary stage-ring">
               <CardContent className="pt-8 pb-8">
-                <Trophy className="w-12 h-12 mx-auto mb-4 text-indigo-200" />
-                <h2 className="text-3xl font-bold mb-4">Ready to Give an Unforgettable Toast?</h2>
-                <p className="text-xl mb-8 text-indigo-100 max-w-2xl mx-auto">
+                <Trophy className="w-12 h-12 mx-auto mb-4" />
+                <h2 className="font-display text-3xl font-medium mb-4">Ready to Give an Unforgettable Toast?</h2>
+                <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
                   Let our AI do the heavy lifting. Get a personalized, funny, and perfectly crafted bachelor party speech in minutes.
                 </p>
                 <Link href="/creator">
-                  <Button size="lg" variant="secondary" className="bg-white text-indigo-600 hover:bg-gray-100">
+                  <Button size="lg" variant="secondary" className="bg-background text-primary hover:bg-background/90 rounded-full">
                     Get Started for Free
                   </Button>
                 </Link>
@@ -243,4 +243,4 @@ export default function BachelorPartySpeechPage(): JSX.Element {
       </div>
     </div>
   );
-} 
+}

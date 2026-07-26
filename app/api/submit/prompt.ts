@@ -96,9 +96,9 @@ export function mergeSpeechData(
   - Funny story: ${getAnswer('6')}
   - Biggest accomplishment: ${getAnswer('7')}
   - How ${groomName} changed since meeting partner: ${getAnswer('8')}
-  - What's admirable about their relationship: ${getAnswer('8')}
-  - Marriage advice: ${getAnswer('9')}
-  ${getAnswer('9', '') ? `- Additional notes: ${getAnswer('10')}` : ''}
+  - What's admirable about their relationship: ${getAnswer('9')}
+  - Marriage advice: ${getAnswer('10')}
+  ${getAnswer('11', '') ? `- Additional notes: ${getAnswer('11')}` : ''}
   `.trim();
   
     // Replace the [FACTSANDSTORIES] placeholder with the actual stories and facts

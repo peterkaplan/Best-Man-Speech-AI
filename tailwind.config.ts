@@ -58,6 +58,13 @@ const config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        display: ["var(--font-display)"],
+        sans: ["var(--font-sans)"],
+      },
+      boxShadow: {
+        glow: "var(--shadow-glow)",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

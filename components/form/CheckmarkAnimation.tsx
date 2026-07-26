@@ -19,8 +19,8 @@ const CheckmarkAnimation: React.FC<CheckmarkAnimationProps> = ({
     'Finalizing your best man speech...'
   ],
   stepDuration = 1000,
-  primaryColor = '#3498db',
-  secondaryColor = '#4CAF50',
+  primaryColor = 'rgb(var(--primary))',
+  secondaryColor = 'rgb(var(--primary))',
   onComplete,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);

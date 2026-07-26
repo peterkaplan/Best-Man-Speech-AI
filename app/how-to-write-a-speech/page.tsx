@@ -5,14 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { CheckCircle, Clock, Users, Lightbulb, Heart, Award, Mic } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'How to Write a Great Best Man Speech: The Ultimate Guide | SpeechWriter',
+  title: 'How to Write a Great Best Man Speech: The Ultimate Guide',
   description: 'Learn how to write a funny, heartfelt, and memorable best man speech with our complete guide. Get tips, structure, examples, and a step-by-step process.',
   keywords: 'how to write a best man speech, best man speech tips, best man speech examples, best man speech structure, funny best man speech, public speaking',
   openGraph: {
-    title: 'How to Write a Great Best Man Speech: The Ultimate Guide | SpeechWriter',
+    title: 'How to Write a Great Best Man Speech: The Ultimate Guide',
     description: 'Master the art of the best man speech with our step-by-step guide. Perfect for any best man looking to deliver an unforgettable speech.',
     type: 'article',
-    url: 'https://speechwriter.com/how-to-write-a-best-man-speech',
+    url: 'https://www.bestmanspeechai.com/how-to-write-a-speech',
   },
   twitter: {
     card: 'summary_large_image',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: 'Your complete guide to writing a memorable best man speech for your best friend\'s wedding.',
   },
   alternates: {
-    canonical: 'https://speechwriter.com/how-to-write-a-best-man-speech',
+    canonical: 'https://www.bestmanspeechai.com/how-to-write-a-speech',
   },
 };
 
@@ -75,11 +75,11 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
       <div className="container mx-auto px-4 py-16">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+          <h1 className="font-display text-4xl md:text-6xl font-medium text-foreground mb-6 glow-text">
             How to Write a <span className="text-primary">Great Best Man Speech</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Being asked to be the best man is a huge honor. Our guide will walk you through writing a speech that's funny,
+            Being asked to be the best man is a huge honor. Our guide will walk you through writing a speech that&apos;s funny,
             heartfelt, and unforgettable—for all the right reasons.
           </p>
           <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-8">
@@ -97,7 +97,7 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
             </div>
           </div>
           <Link href="/creator">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
               Try Our Best Man Speech Writer
             </Button>
           </Link>
@@ -105,14 +105,14 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
 
         {/* Key Elements Section */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-12">Key Elements of a Memorable Best Man Speech</h2>
+          <h2 className="font-display text-3xl font-medium text-center mb-12 text-foreground">Key Elements of a Memorable Best Man Speech</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {speechElements.map((element, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+              <Card key={index} className="text-center bg-card border-border/60 hover:border-primary/40 transition-colors">
                 <CardHeader>
-                  <element.icon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                  <CardTitle className="text-xl">{element.title}</CardTitle>
-                  <CardDescription>{element.description}</CardDescription>
+                  <element.icon className="w-12 h-12 text-primary mx-auto mb-4" />
+                  <CardTitle className="font-display text-xl font-medium">{element.title}</CardTitle>
+                  <CardDescription className="text-muted-foreground">{element.description}</CardDescription>
                 </CardHeader>
               </Card>
             ))}
@@ -123,30 +123,30 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
         <div className="max-w-4xl mx-auto">
           {/* Quick Tips Section */}
           <section className="mb-16">
-            <Card className="bg-blue-50 border-blue-200">
+            <Card className="bg-primary/10 border-primary/30">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Lightbulb className="w-6 h-6 text-blue-600" />
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Lightbulb className="w-6 h-6 text-primary" />
                   Quick Best Man Speech Tips
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="grid md:grid-cols-2 gap-4">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>Start by introducing yourself and how you know the groom.</span>
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-muted-foreground">Start by introducing yourself and how you know the groom.</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>Share a short, funny, and appropriate story about the groom.</span>
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-muted-foreground">Share a short, funny, and appropriate story about the groom.</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>Keep it under 5 minutes – short and sweet is best.</span>
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-muted-foreground">Keep it under 5 minutes – short and sweet is best.</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>End with a heartfelt toast to the happy couple.</span>
+                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-muted-foreground">End with a heartfelt toast to the happy couple.</span>
                   </li>
                 </ul>
               </CardContent>
@@ -155,18 +155,18 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
 
           {/* Step-by-Step Guide */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-12">The 4-Step Best Man Speech Process</h2>
-            <div className="space-y-8">
+            <h2 className="font-display text-3xl font-medium text-center mb-12 text-foreground">The 4-Step Best Man Speech Process</h2>
+            <div className="space-y-6">
               {writingSteps.map((step, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow">
+                <Card key={index} className="bg-card border-border/60 hover:border-primary/40 transition-colors">
                   <CardHeader>
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                      <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0">
                         {step.step}
                       </div>
                       <div>
-                        <CardTitle className="text-2xl mb-2">{step.title}</CardTitle>
-                        <CardDescription className="text-lg">{step.description}</CardDescription>
+                        <CardTitle className="font-display text-2xl font-medium mb-2">{step.title}</CardTitle>
+                        <CardDescription className="text-lg text-muted-foreground">{step.description}</CardDescription>
                       </div>
                     </div>
                   </CardHeader>
@@ -174,8 +174,8 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
                     <ul className="space-y-2">
                       {step.tips.map((tip, tipIndex) => (
                         <li key={tipIndex} className="flex items-start gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
-                          <span>{tip}</span>
+                          <CheckCircle className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                          <span className="text-muted-foreground">{tip}</span>
                         </li>
                       ))}
                     </ul>
@@ -186,42 +186,42 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
           </section>
 
           {/* Detailed Sections */}
-          <section className="mb-16 prose prose-lg max-w-none">
-            <h2 className="text-3xl font-bold mb-8">Writing Your Speech: The In-Depth Guide</h2>
-            
+          <section className="mb-16 max-w-none">
+            <h2 className="font-display text-3xl font-medium mb-8 text-foreground">Writing Your Speech: The In-Depth Guide</h2>
+
             <div className="space-y-12">
               <div>
-                <h3 className="text-2xl font-bold mb-4">1. The Perfect Opening</h3>
-                <p className="text-gray-700 mb-4">
-                  Start by grabbing everyone's attention and introducing yourself. You're the best man, so let them know how you fit into the groom's life.
+                <h3 className="font-display text-2xl font-medium mb-4 text-foreground">1. The Perfect Opening</h3>
+                <p className="text-muted-foreground mb-4">
+                  Start by grabbing everyone&apos;s attention and introducing yourself. You&apos;re the best man, so let them know how you fit into the groom&apos;s life.
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li><strong>State your name:</strong> "Good evening everyone, for those who don't know me, my name is [Your Name]."</li>
-                  <li><strong>Explain your relationship:</strong> "...and I've had the honor of being [Groom's Name]'s best friend for the past 10 years."</li>
-                  <li><strong>Thank the guests:</strong> "It's wonderful to see so many people here to celebrate [Groom] and [Partner]."</li>
+                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                  <li><strong className="text-foreground">State your name:</strong> &quot;Good evening everyone, for those who don&apos;t know me, my name is [Your Name].&quot;</li>
+                  <li><strong className="text-foreground">Explain your relationship:</strong> &quot;...and I&apos;ve had the honor of being [Groom&apos;s Name]&apos;s best friend for the past 10 years.&quot;</li>
+                  <li><strong className="text-foreground">Thank the guests:</strong> &quot;It&apos;s wonderful to see so many people here to celebrate [Groom] and [Partner].&quot;</li>
                 </ul>
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold mb-4">2. Tell a Great Story (or Two)</h3>
-                <p className="text-gray-700 mb-4">
-                  This is the heart of your speech. Tell a story that highlights the groom's great qualities. It should be personal, positive, and preferably a little funny.
+                <h3 className="font-display text-2xl font-medium mb-4 text-foreground">2. Tell a Great Story (or Two)</h3>
+                <p className="text-muted-foreground mb-4">
+                  This is the heart of your speech. Tell a story that highlights the groom&apos;s great qualities. It should be personal, positive, and preferably a little funny.
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li><strong>Focus on a positive trait:</strong> Is he loyal, funny, generous? Tell a story that shows it.</li>
-                  <li><strong>Keep it appropriate:</strong> This is a wedding, not a roast. Avoid stories about exes, illegal activities, or anything truly embarrassing.</li>
-                  <li><strong>Connect it to the couple:</strong> Transition from your story about the groom to how you've seen him grow with his new partner. For example, "I always knew he was [trait], but seeing him with [Partner's Name] has brought out a whole new level of..."</li>
+                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                  <li><strong className="text-foreground">Focus on a positive trait:</strong> Is he loyal, funny, generous? Tell a story that shows it.</li>
+                  <li><strong className="text-foreground">Keep it appropriate:</strong> This is a wedding, not a roast. Avoid stories about exes, illegal activities, or anything truly embarrassing.</li>
+                  <li><strong className="text-foreground">Connect it to the couple:</strong> Transition from your story about the groom to how you&apos;ve seen him grow with his new partner. For example, &quot;I always knew he was [trait], but seeing him with [Partner&apos;s Name] has brought out a whole new level of...&quot;</li>
                 </ul>
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold mb-4">3. Acknowledge the Partner</h3>
-                <p className="text-gray-700 mb-4">
-                  A great best man speech is about the couple, not just the groom. Make sure to talk about the groom's partner and your happiness for them as a couple.
+                <h3 className="font-display text-2xl font-medium mb-4 text-foreground">3. Acknowledge the Partner</h3>
+                <p className="text-muted-foreground mb-4">
+                  A great best man speech is about the couple, not just the groom. Make sure to talk about the groom&apos;s partner and your happiness for them as a couple.
                 </p>
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <ul className="space-y-3">
-                    <li>Speak about the partner's wonderful qualities.</li>
+                <div className="bg-muted p-6 rounded-lg">
+                  <ul className="space-y-3 text-muted-foreground">
+                    <li>Speak about the partner&apos;s wonderful qualities.</li>
                     <li>Mention how happy they make your friend.</li>
                     <li>Welcome them to the family on behalf of the friends.</li>
                   </ul>
@@ -229,15 +229,15 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold mb-4">4. End with a Powerful Toast</h3>
-                <p className="text-gray-700 mb-4">
-                  Your conclusion should be clear, heartfelt, and lead into the toast. Don't let the speech just fizzle out.
+                <h3 className="font-display text-2xl font-medium mb-4 text-foreground">4. End with a Powerful Toast</h3>
+                <p className="text-muted-foreground mb-4">
+                  Your conclusion should be clear, heartfelt, and lead into the toast. Don&apos;t let the speech just fizzle out.
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
+                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
                   <li>Share a heartfelt wish for their future.</li>
                   <li>Offer a piece of advice (if it feels right).</li>
-                  <li>Clearly ask guests to join you: "Now, if you'll all please raise your glasses..."</li>
-                  <li>Deliver the toast: "To the happy couple, [Groom] and [Partner]! Wishing you a lifetime of love and happiness."</li>
+                  <li>Clearly ask guests to join you: &quot;Now, if you&apos;ll all please raise your glasses...&quot;</li>
+                  <li>Deliver the toast: &quot;To the happy couple, [Groom] and [Partner]! Wishing you a lifetime of love and happiness.&quot;</li>
                 </ul>
               </div>
             </div>
@@ -245,32 +245,32 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
 
           {/* Common Mistakes Section */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Common Best Man Speech Mistakes to Avoid</h2>
-            <Card className="bg-red-50 border-red-200">
+            <h2 className="font-display text-3xl font-medium mb-8 text-foreground">Common Best Man Speech Mistakes to Avoid</h2>
+            <Card className="bg-destructive/10 border-destructive/30">
               <CardContent className="pt-6">
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <strong>Too many inside jokes:</strong> A few are okay, but the whole room should be able to enjoy the speech.
+                    <div className="w-2 h-2 bg-destructive rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="text-muted-foreground">
+                      <strong className="text-foreground">Too many inside jokes:</strong> A few are okay, but the whole room should be able to enjoy the speech.
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <strong>Forgetting the partner:</strong> The speech is for the couple, not just your buddy.
+                    <div className="w-2 h-2 bg-destructive rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="text-muted-foreground">
+                      <strong className="text-foreground">Forgetting the partner:</strong> The speech is for the couple, not just your buddy.
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <strong>Making it too long:</strong> Keep it under 5 minutes. No one has ever complained about a short speech.
+                    <div className="w-2 h-2 bg-destructive rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="text-muted-foreground">
+                      <strong className="text-foreground">Making it too long:</strong> Keep it under 5 minutes. No one has ever complained about a short speech.
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <strong>Telling inappropriate stories:</strong> Avoid anything about ex-partners, past mistakes, or embarrassing moments.
+                    <div className="w-2 h-2 bg-destructive rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="text-muted-foreground">
+                      <strong className="text-foreground">Telling inappropriate stories:</strong> Avoid anything about ex-partners, past mistakes, or embarrassing moments.
                     </div>
                   </li>
                 </ul>
@@ -280,20 +280,20 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
 
           {/* CTA Section */}
           <section className="text-center">
-            <Card className="bg-gradient-to-r from-primary to-secondary text-primary-foreground">
+            <Card className="bg-primary text-primary-foreground border-primary stage-ring">
               <CardContent className="pt-8 pb-8">
-                <h2 className="text-3xl font-bold mb-4">Ready to Write Your Perfect Best Man Speech?</h2>
+                <h2 className="font-display text-3xl font-medium mb-4">Ready to Write Your Perfect Best Man Speech?</h2>
                 <p className="text-xl mb-8 opacity-90">
                   Use our AI-powered speech writer to create a personalized, funny, and heartfelt best man speech in minutes.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href="/creator">
-                    <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+                    <Button size="lg" variant="secondary" className="bg-background text-primary hover:bg-background/90 rounded-full">
                       Start Writing Your Speech
                     </Button>
                   </Link>
                   <Link href="/tips">
-                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                    <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary rounded-full">
                       More Best Man Speech Tips
                     </Button>
                   </Link>
@@ -305,4 +305,4 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
       </div>
     </div>
   );
-} 
+}

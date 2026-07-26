@@ -4,10 +4,15 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { POST } from './route';
 import { SpeechFormat, mergeSpeechData, cleanseFormData } from "./prompt";
 
-// Mock environment variables
-vi.stubEnv('GEMINI_API_KEY_1', 'test-key-1');
-vi.stubEnv('GEMINI_API_KEY_2', 'test-key-2');
-vi.stubEnv('GEMINI_API_KEY_3', 'test-key-3');
+// route.ts reads process.env.GEMINI_API_KEY_* into a module-level constant at
+// import time, so the env vars must be set before the `import './route'` below
+// runs. vi.hoisted() is guaranteed to execute before all imports; vi.stubEnv()
+// here would run too late since import statements evaluate first.
+vi.hoisted(() => {
+  process.env.GEMINI_API_KEY_1 = 'test-key-1';
+  process.env.GEMINI_API_KEY_2 = 'test-key-2';
+  process.env.GEMINI_API_KEY_3 = 'test-key-3';
+});
 
 // Mock the GoogleGenerativeAI module
 vi.mock("@google/generative-ai", () => ({
@@ -39,11 +44,25 @@ describe('POST Route Handler', () => {
     getGenerativeModel: Mock;
   };
 
+  // Each request makes 3 parallel calls (one per style variation), each with a
+  // unique client IP so the rate limiter (5 req / 15 min per IP) doesn't
+  // interfere between tests.
+  let ipCounter = 0;
+  const makeRequest = (body: unknown, method: string = 'POST') => {
+    ipCounter++;
+    return new NextRequest('http://localhost', {
+      method,
+      headers: { 'x-forwarded-for': `10.0.0.${ipCounter}` },
+      body: method === 'POST' ? JSON.stringify(body) : undefined
+    });
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset console mocks for each test
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Setup the mock response
     mockGenerateContent = vi.fn();
@@ -55,19 +74,15 @@ describe('POST Route Handler', () => {
     (GoogleGenerativeAI as Mock).mockImplementation(() => genAIInstance);
   });
 
-  test('handles successful responses from all models', async () => {
+  test('handles successful responses from all 3 style variations', async () => {
     const mockText = 'Generated Speech';
-    const mockResponse = { text: mockText };
 
     mockGenerateContent
-      .mockResolvedValueOnce({ response: mockResponse })
-      .mockResolvedValueOnce({ response: mockResponse })
-      .mockResolvedValueOnce({ response: mockResponse });
+      .mockResolvedValueOnce({ response: { text: () => mockText } })
+      .mockResolvedValueOnce({ response: { text: () => mockText } })
+      .mockResolvedValueOnce({ response: { text: () => mockText } });
 
-    const request = new NextRequest('http://localhost', {
-      method: 'POST',
-      body: JSON.stringify(mockFormData)
-    });
+    const request = makeRequest(mockFormData);
 
     const response = await POST(request);
     const data = await response.json();
@@ -80,7 +95,7 @@ describe('POST Route Handler', () => {
     expect(data.errors).toBeUndefined();
   });
 
-  test('handles partial success (2 out of 3 models)', async () => {
+  test('handles partial success (2 out of 3 variations)', async () => {
     const mockText1 = 'Speech 1';
     const mockText2 = 'Speech 2';
     mockGenerateContent
@@ -88,10 +103,7 @@ describe('POST Route Handler', () => {
       .mockResolvedValueOnce({ response: { text: () => mockText2 } })
       .mockRejectedValueOnce(new Error('Model overloaded'));
 
-    const request = new NextRequest('http://localhost', {
-      method: 'POST',
-      body: JSON.stringify(mockFormData)
-    });
+    const request = makeRequest(mockFormData);
 
     const response = await POST(request);
     const data = await response.json();
@@ -103,17 +115,14 @@ describe('POST Route Handler', () => {
     expect(data.errors).toHaveLength(1);
   });
 
-  test('handles complete failure (all models fail)', async () => {
+  test('handles complete failure (all 3 variations fail)', async () => {
     const error = new Error('Model overloaded');
     mockGenerateContent
       .mockRejectedValueOnce(error)
       .mockRejectedValueOnce(error)
       .mockRejectedValueOnce(error);
 
-    const request = new NextRequest('http://localhost', {
-      method: 'POST',
-      body: JSON.stringify(mockFormData)
-    });
+    const request = makeRequest(mockFormData);
 
     const response = await POST(request);
     const data = await response.json();
@@ -126,9 +135,7 @@ describe('POST Route Handler', () => {
   });
 
   test('handles method not allowed', async () => {
-    const request = new NextRequest('http://localhost', {
-      method: 'GET'
-    });
+    const request = makeRequest(undefined, 'GET');
 
     const response = await POST(request);
     const data = await response.json();
@@ -138,19 +145,38 @@ describe('POST Route Handler', () => {
     expect(data.successCount).toBe(0);
   });
 
+  test('rate limits repeated requests from the same IP', async () => {
+    const mockText = 'Generated Speech';
+    mockGenerateContent.mockResolvedValue({ response: { text: () => mockText } });
+
+    const sameIpRequest = () =>
+      new NextRequest('http://localhost', {
+        method: 'POST',
+        headers: { 'x-forwarded-for': '203.0.113.5' },
+        body: JSON.stringify(mockFormData)
+      });
+
+    for (let i = 0; i < 5; i++) {
+      const response = await POST(sameIpRequest());
+      expect(response.status).toBe(200);
+    }
+
+    const limitedResponse = await POST(sameIpRequest());
+    const data = await limitedResponse.json();
+
+    expect(limitedResponse.status).toBe(429);
+    expect(data.successCount).toBe(0);
+  });
+
   test('logs request completion with success count', async () => {
     const mockText = 'Generated Speech';
-    const mockResponse = { text: mockText };
 
     mockGenerateContent
-      .mockResolvedValueOnce({ response: mockResponse })
-      .mockResolvedValueOnce({ response: mockResponse })
-      .mockResolvedValueOnce({ response: mockResponse });
+      .mockResolvedValueOnce({ response: { text: () => mockText } })
+      .mockResolvedValueOnce({ response: { text: () => mockText } })
+      .mockResolvedValueOnce({ response: { text: () => mockText } });
 
-    const request = new NextRequest('http://localhost', {
-      method: 'POST',
-      body: JSON.stringify(mockFormData)
-    });
+    const request = makeRequest(mockFormData);
 
     await POST(request);
 

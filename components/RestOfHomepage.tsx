@@ -101,62 +101,77 @@ const RestOfHomepage = () => {
   }
   
   const PricingTier: React.FC<PricingTierProps> = ({ title, originalPrice, features, buttonText, highlighted = false }) => (
-    <div className={`bg-background p-6 rounded-lg shadow-lg flex-1 ${highlighted ? 'border-2 border-accent' : ''}`}>
+    <div className={`bg-card p-6 rounded-2xl flex-1 border ${highlighted ? 'border-primary/50 stage-ring' : 'border-border/60'}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold">{title}</h3>
-        <div className="flex items-center bg-accent/20 text-accent px-3 py-1 rounded-full">
+        <h3 className="font-display text-xl font-medium">{title}</h3>
+        <div className="flex items-center bg-primary/15 text-primary px-3 py-1 rounded-full">
           <span className="text-sm font-semibold">Now Free!</span>
         </div>
       </div>
       <div className="flex items-center justify-center mb-4">
         <span className="text-muted-foreground/70 line-through text-lg mr-2">{originalPrice}</span>
-        <span className="text-3xl font-bold text-accent">$0</span>
+        <span className="font-display text-3xl font-medium text-primary">$0</span>
       </div>
       <ul className="mb-6 space-y-2">
         {features.map((feature, index) => (
           <li key={index} className="flex items-center text-sm">
             {feature.included ? (
-              <CheckCircle className="w-4 h-4 text-accent mr-2 flex-shrink-0" />
+              <CheckCircle className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
             ) : (
-              <X className="w-4 h-4 text-destructive mr-2 flex-shrink-0" />
+              <X className="w-4 h-4 text-muted-foreground/50 mr-2 flex-shrink-0" />
             )}
-            <span>{feature.text}</span>
+            <span className={feature.included ? '' : 'text-muted-foreground/60'}>{feature.text}</span>
           </li>
         ))}
       </ul>
       <a href="/creator">
-        <Button size="sm" className={`w-full ${highlighted ? 'bg-accent hover:bg-accent/90 text-accent-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'} transition-all duration-300`}>
+        <Button size="sm" className={`w-full transition-all duration-300 ${highlighted ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}>
           {buttonText}
         </Button>
       </a>
     </div>
   );
+
+  const SectionEyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <span className="block text-center text-xs font-semibold uppercase tracking-[0.25em] text-primary mb-3">
+      {children}
+    </span>
+  );
   
   
+  const acts = ["Act One", "Act Two", "Act Three"];
+
   return (
     <div className="bg-background">
       {/* How It Works Section */}
-      <section id="how-it-works" ref={howItWorksRef} className="bg-background py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-extrabold text-foreground text-center mb-12">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section id="how-it-works" ref={howItWorksRef} className="py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionEyebrow>The Playbill</SectionEyebrow>
+          <h2 className="font-display text-3xl sm:text-4xl font-medium text-foreground text-center mb-16">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {howItWorks.map((step, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="bg-muted p-6 rounded-lg shadow-md"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                className="relative bg-card border border-border/60 rounded-2xl p-8 overflow-hidden"
               >
-                <div className="text-3xl font-bold text-primary mb-4">Step {step.step}</div>
-                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                <p className="text-muted-foreground">{step.description}</p>
+                <span className="absolute -top-4 -right-2 font-display text-8xl font-medium text-primary/10 select-none">
+                  {step.step}
+                </span>
+                <div className="relative">
+                  <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-4">{acts[index]}</div>
+                  <h3 className="font-display text-xl font-medium mb-2">{step.title}</h3>
+                  <p className="text-muted-foreground">{step.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
-          <div className="text-center mt-12">
+          <div className="text-center mt-16">
             <a href="/creator">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 transform hover:scale-105">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground stage-ring rounded-full px-8 transition-all duration-300 hover:scale-105">
                 Try It Free
               </Button>
             </a>
@@ -165,21 +180,24 @@ const RestOfHomepage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" ref={testimonialsRef} className="py-20 bg-muted">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-extrabold text-foreground text-center mb-12">What Best Men Are Saying</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <section id="testimonials" ref={testimonialsRef} className="py-24 bg-card/40 border-y border-border/60">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionEyebrow>Reviews From The Wings</SectionEyebrow>
+          <h2 className="font-display text-3xl sm:text-4xl font-medium text-foreground text-center mb-16">What Best Men Are Saying</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="bg-background p-6 rounded-lg shadow"
+                className="relative bg-card border border-border/60 rounded-2xl p-8"
               >
-                <p className="text-lg mb-4">&ldquo;{testimonial.quote}&rdquo;</p>
+                <span className="font-display text-6xl text-primary/25 leading-none">&ldquo;</span>
+                <p className="text-lg -mt-4 mb-6 text-foreground">{testimonial.quote}</p>
                 <div className="font-semibold">{testimonial.name}</div>
-                <div className="text-primary">{testimonial.role}</div>
+                <div className="text-primary text-sm">{testimonial.role}</div>
               </motion.div>
             ))}
           </div>
@@ -187,21 +205,25 @@ const RestOfHomepage = () => {
       </section>
 
       {/* Benefits Section */}
-      <section id="tips" ref={tipsRef} className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-extrabold text-foreground text-center mb-12">Why Choose BestManAI?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <section id="tips" ref={tipsRef} className="py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionEyebrow>Why This, Not ChatGPT</SectionEyebrow>
+          <h2 className="font-display text-3xl sm:text-4xl font-medium text-foreground text-center mb-16">Why Choose BestManAI?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-muted p-6 rounded-lg shadow"
+                className="bg-card border border-border/60 rounded-2xl p-6 hover:border-primary/40 transition-colors"
               >
-                <div className="mb-4">{benefit.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{benefit.title}</h3>
-                <p className="text-muted-foreground">{benefit.description}</p>
+                <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10">
+                  {benefit.icon}
+                </div>
+                <h3 className="font-display text-lg font-medium mb-2">{benefit.title}</h3>
+                <p className="text-muted-foreground text-sm">{benefit.description}</p>
               </motion.div>
             ))}
           </div>
@@ -209,18 +231,21 @@ const RestOfHomepage = () => {
       </section>
 
       {/* Sample Output Section */}
-      <section className="py-20 bg-muted">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-extrabold text-foreground text-center mb-12">See BestManAI in Action</h2>
-          <div className="bg-background p-6 rounded-lg shadow-inner">
-            <h3 className="text-xl font-semibold mb-4">Example Speech Intro:</h3>
-            <p className="text-foreground italic">
+      <section className="py-24 bg-card/40 border-y border-border/60">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionEyebrow>A Line From The Cue Card</SectionEyebrow>
+          <h2 className="font-display text-3xl sm:text-4xl font-medium text-foreground text-center mb-16">See BestManAI in Action</h2>
+          <div className="relative bg-card border border-border/60 rounded-2xl p-8 stage-ring">
+            <div className="absolute top-0 left-8 -translate-y-1/2 bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-[0.15em] px-4 py-1 rounded-full">
+              Example Speech Intro
+            </div>
+            <p className="text-foreground italic leading-relaxed">
               &ldquo;Good evening everyone! I can’t believe this night is finally here.<br /> <br /> My name is Michael, and while Jake and I have no brothers I like to consider us unofficial ones.<br /> <br />I’m also an amateur fortune teller. Years ago, I predicted that Jake would marry someone way out of his league. Emily, thank you for proving me correct...&rdquo;
             </p>
           </div>
-          <div className="text-center mt-8">
+          <div className="text-center mt-10">
             <a href="/creator">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 transform hover:scale-105">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground stage-ring rounded-full px-8 transition-all duration-300 hover:scale-105">
                 Generate Your Custom Intro Now For Free
               </Button>
             </a>
@@ -230,52 +255,55 @@ const RestOfHomepage = () => {
 
 
       {/* Pricing Section */}
-      <section className="py-20 bg-muted">
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl font-extrabold text-foreground text-center mb-12">Simple, Transparent Pricing</h2>
-      <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch">
-        <PricingTier
-          title="Basic Speech"
-          originalPrice="$2.99"
-          features={[
-            { included: true, text: "1 personalized speech" },
-            { included: true, text: "PDF download" },
-            { included: true, text: "Use high quality AI model" },
-            { included: false, text: "Multiple speech options" },
-          ]}
-          buttonText="Get Started"
-        />
-        <PricingTier
-          title="Premium Speech Pack"
-          originalPrice="$4.99"
-          features={[
-            { included: true, text: "3 personalized speeches" },
-            { included: true, text: "PDF download" },
-            { included: true, text: "Use highest quality AI model" },
-            { included: true, text: "Multiple speech options" },
-          ]}
-          buttonText="Get Premium"
-          highlighted={true}
-        />
-      </div>
-    </div>
-  </section>
+      <section className="py-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionEyebrow>Box Office</SectionEyebrow>
+          <h2 className="font-display text-3xl sm:text-4xl font-medium text-foreground text-center mb-16">Simple, Transparent Pricing</h2>
+          <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch">
+            <PricingTier
+              title="Basic Speech"
+              originalPrice="$2.99"
+              features={[
+                { included: true, text: "1 personalized speech" },
+                { included: true, text: "PDF download" },
+                { included: true, text: "Use high quality AI model" },
+                { included: false, text: "Multiple speech options" },
+              ]}
+              buttonText="Get Started"
+            />
+            <PricingTier
+              title="Premium Speech Pack"
+              originalPrice="$4.99"
+              features={[
+                { included: true, text: "3 personalized speeches" },
+                { included: true, text: "PDF download" },
+                { included: true, text: "Use highest quality AI model" },
+                { included: true, text: "Multiple speech options" },
+              ]}
+              buttonText="Get Premium"
+              highlighted={true}
+            />
+          </div>
+        </div>
+      </section>
 
 
       {/* FAQ Section */}
-      <section className="bg-muted py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-extrabold text-foreground text-center mb-12">Frequently Asked Questions</h2>
-          <div className="space-y-8">
+      <section className="py-24 bg-card/40 border-y border-border/60">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionEyebrow>Before The Curtain Rises</SectionEyebrow>
+          <h2 className="font-display text-3xl sm:text-4xl font-medium text-foreground text-center mb-16">Frequently Asked Questions</h2>
+          <div className="space-y-4">
             {faqs.map((faq, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-background p-6 rounded-lg shadow-md"
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.06 }}
+                className="bg-card border border-border/60 rounded-xl p-6"
               >
-                <h3 className="text-xl font-semibold mb-2">{faq.question}</h3>
+                <h3 className="font-display text-lg font-medium mb-2 text-foreground">{faq.question}</h3>
                 <p className="text-muted-foreground">{faq.answer}</p>
               </motion.div>
             ))}
@@ -284,12 +312,12 @@ const RestOfHomepage = () => {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 bg-primary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-extrabold text-primary-foreground mb-4">Ready to Craft Your Legendary Speech?</h2>
-          <p className="text-xl text-primary-foreground/80 mb-8">Join other best men who have delivered unforgettable speeches with BestManSpeechAI.</p>
+      <section className="relative py-28 stage-spotlight overflow-hidden">
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-3xl sm:text-4xl font-medium text-foreground mb-4 glow-text">Ready to Craft Your Legendary Speech?</h2>
+          <p className="text-lg text-muted-foreground mb-8">Join other best men who have delivered unforgettable speeches with BestManSpeechAI.</p>
           <a href="/creator">
-            <Button size="lg" className="bg-background text-primary hover:bg-background/90 transition-all duration-300 transform hover:scale-105">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground stage-ring rounded-full px-8 transition-all duration-300 hover:scale-105">
               Start Your Speech Now
             </Button>
           </a>

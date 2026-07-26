@@ -23,9 +23,9 @@ const FormPage: React.FC = () => {
     />
   ), [documentProgress, formStage, results, handleAnimationComplete]);
   return (
-    <div 
+    <div
       ref={formRef}
-      className="pb-12 py-12 px-4 sm:px-6 lg:px-8"
+      className="pb-12 pt-2 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-4 h-full relative">
@@ -36,7 +36,7 @@ const FormPage: React.FC = () => {
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
-                className="flex-1 lg:w-1/2"
+                className="flex-1 lg:w-1/2 relative"
               >
                 <Card className="bg-card/90 backdrop-blur-sm shadow-xl border border-border/50 rounded-lg overflow-hidden flex flex-col min-h-[400px] lg:h-auto">
                   <CardContent className="p-6 flex-grow overflow-y-auto">
