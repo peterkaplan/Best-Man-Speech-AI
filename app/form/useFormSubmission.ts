@@ -55,10 +55,6 @@ export const useFormSubmission = () => {
         );
       }
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Network response was not ok');
-      }
-      
       let hasSafetyError = false;
       let hasModelOverloadError = false;
 
@@ -66,53 +62,36 @@ export const useFormSubmission = () => {
         data.errors.forEach((error: string) => {
           if (error.includes("Candidate was blocked due to SAFETY")) {
             hasSafetyError = true;
-            setSafetyError("One or more responses were blocked due to safety concerns. Please review your input and try again.");
-          } else if (error.includes("The model is overloaded. Please try again later.")) {
+            setSafetyError("Your response was blocked due to safety concerns. Please review your input and try again.");
+          } else if (error.includes("overloaded")) {
             hasModelOverloadError = true;
             setModelOverloadError("The AI model is currently overloaded. Please try again in a few minutes.");
           }
         });
       }
 
+      if (!response.ok) {
+        if (hasSafetyError) {
+          throw new Error("Your response was blocked due to safety concerns. Please review your input and try again.");
+        }
+        if (hasModelOverloadError) {
+          throw new Error("The AI model is currently overloaded. Please try again in a few minutes.");
+        }
+        throw new Error(data.message || 'Network response was not ok');
+      }
+
       setApiResponse({
         message: data.message,
         result1: data.result1,
-        result2: data.result2,
-        result3: data.result3,
         errors: data.errors,
         successCount: data.successCount
       });
-      
 
-      // Handle different scenarios with appropriate toast messages
-      if (hasSafetyError) {
-        toast({
-          title: "Safety Concern",
-          description: "One or more responses were blocked due to safety concerns. Please review your input and try again.",
-          duration: 10000,
-          variant: "destructive",
-        });
-      } 
-      else if (data.errors && data.errors.length > 0) {
-        toast({
-          title: "Partial Success",
-          description: `Generated ${data.successCount} out of 3 responses successfully. Please check the results.`,
-          variant: "destructive",
-        });
-      }else if (hasModelOverloadError) {
-        toast({
-          title: "Model Overloaded",
-          description: "The AI model is currently overloaded. Please try again in a few minutes.",
-          duration: 10000,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Submission Successful",
-          description: "Your form has been submitted successfully.",
-          variant: "default",
-        });
-      }
+      toast({
+        title: "Submission Successful",
+        description: "Your form has been submitted successfully.",
+        variant: "default",
+      });
     } catch (error) {
       console.error('Error:', error);
       toast({

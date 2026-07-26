@@ -79,9 +79,7 @@ export const useFormState = () => {
     if (apiResponse) {
       return {
         message: apiResponse.message || '',
-        result1: apiResponse.result1 || '',
-        result2: apiResponse.result2 || '',
-        result3: apiResponse.result3 || ''
+        result1: apiResponse.result1 || ''
       };
     }
     return null;

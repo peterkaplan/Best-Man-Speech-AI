@@ -7,23 +7,8 @@ interface UnlockCardProps {
 }
 
 const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
-  const options = [
-    { 
-      id: 'single', 
-      name: 'Just this speech', 
-      oldPrice: '$2.99',
-      features: ['Basic version']
-    },
-    { 
-      id: 'multiple', 
-      name: '3 unique versions', 
-      oldPrice: '$4.99',
-      features: ['Multiple variations']
-    },
-  ];
-
   const handleUnlock = () => {
-    onUnlock('all'); // Now gives access to everything
+    onUnlock('all');
   };
 
   return (
@@ -48,29 +33,12 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
         ))}
       </ul>
 
-      <div className="space-y-3 mb-4">
-        {options.map((option) => (
-          <div 
-            key={option.id}
-            className="border-2 border-border rounded-lg p-3"
-          >
-            <div className="flex justify-between items-center mb-2">
-              <span className="font-semibold text-card-foreground">{option.name}</span>
-              <div className="flex items-center">
-                <span className="text-muted-foreground line-through text-sm mr-2">{option.oldPrice}</span>
-                <span className="font-bold text-primary">FREE</span>
-              </div>
-            </div>
-            <div className="text-sm text-muted-foreground">
-              {option.features.map((feature, index) => (
-                <div key={index} className="flex items-center">
-                  <Check className="text-primary mr-1" size={14} />
-                  <span>{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="flex items-center justify-between mb-4 border-2 border-border rounded-lg p-3">
+        <span className="font-semibold text-card-foreground">Full speech</span>
+        <div className="flex items-center">
+          <span className="text-muted-foreground line-through text-sm mr-2">$2.99</span>
+          <span className="font-bold text-primary">FREE</span>
+        </div>
       </div>
 
       <Button

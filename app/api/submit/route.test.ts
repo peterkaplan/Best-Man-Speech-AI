@@ -2,7 +2,6 @@ import { expect, test, describe, vi, beforeEach, Mock, afterEach } from 'vitest'
 import { NextRequest } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { POST } from './route';
-import { SpeechFormat, mergeSpeechData, cleanseFormData } from "./prompt";
 
 // route.ts reads process.env.GEMINI_API_KEY_* into a module-level constant at
 // import time, so the env vars must be set before the `import './route'` below
@@ -22,7 +21,7 @@ vi.mock("@google/generative-ai", () => ({
 // Mock the prompt module
 vi.mock("./prompt", () => ({
   SpeechFormat: "mock speech format",
-  mergeSpeechData: vi.fn((format, data, suffix) => `mock merged data ${suffix || ''}`),
+  mergeSpeechData: vi.fn((format, data) => `mock merged data`),
   cleanseFormData: vi.fn(data => data),
   safetySettings: [
     {
@@ -44,9 +43,8 @@ describe('POST Route Handler', () => {
     getGenerativeModel: Mock;
   };
 
-  // Each request makes 3 parallel calls (one per style variation), each with a
-  // unique client IP so the rate limiter (5 req / 15 min per IP) doesn't
-  // interfere between tests.
+  // Each request uses a unique client IP so the rate limiter (5 req / 15 min
+  // per IP) doesn't interfere between tests.
   let ipCounter = 0;
   const makeRequest = (body: unknown, method: string = 'POST') => {
     ipCounter++;
@@ -59,12 +57,10 @@ describe('POST Route Handler', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset console mocks for each test
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    // Setup the mock response
     mockGenerateContent = vi.fn();
     genAIInstance = {
       getGenerativeModel: vi.fn().mockReturnValue({
@@ -74,70 +70,65 @@ describe('POST Route Handler', () => {
     (GoogleGenerativeAI as Mock).mockImplementation(() => genAIInstance);
   });
 
-  test('handles successful responses from all 3 style variations', async () => {
+  test('handles a successful generation', async () => {
     const mockText = 'Generated Speech';
+    mockGenerateContent.mockResolvedValueOnce({ response: { text: () => mockText } });
 
+    const response = await POST(makeRequest(mockFormData));
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.successCount).toBe(1);
+    expect(data.result1).toBe(mockText);
+    expect(data.errors).toBeUndefined();
+    expect(mockGenerateContent).toHaveBeenCalledTimes(1);
+  });
+
+  test('retries on a retryable error and succeeds on the second attempt', async () => {
+    const mockText = 'Generated Speech';
     mockGenerateContent
-      .mockResolvedValueOnce({ response: { text: () => mockText } })
-      .mockResolvedValueOnce({ response: { text: () => mockText } })
+      .mockRejectedValueOnce(new Error('Quota exhausted for this key'))
       .mockResolvedValueOnce({ response: { text: () => mockText } });
 
-    const request = makeRequest(mockFormData);
-
-    const response = await POST(request);
+    const response = await POST(makeRequest(mockFormData));
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.successCount).toBe(3);
+    expect(data.successCount).toBe(1);
     expect(data.result1).toBe(mockText);
-    expect(data.result2).toBe(mockText);
-    expect(data.result3).toBe(mockText);
-    expect(data.errors).toBeUndefined();
-  });
+    expect(mockGenerateContent).toHaveBeenCalledTimes(2);
+  }, 10000);
 
-  test('handles partial success (2 out of 3 variations)', async () => {
-    const mockText1 = 'Speech 1';
-    const mockText2 = 'Speech 2';
-    mockGenerateContent
-      .mockResolvedValueOnce({ response: { text: () => mockText1 } })
-      .mockResolvedValueOnce({ response: { text: () => mockText2 } })
-      .mockRejectedValueOnce(new Error('Model overloaded'));
+  test('does not retry a non-retryable error', async () => {
+    mockGenerateContent.mockRejectedValueOnce(new Error('Candidate was blocked due to SAFETY'));
 
-    const request = makeRequest(mockFormData);
-
-    const response = await POST(request);
+    const response = await POST(makeRequest(mockFormData));
     const data = await response.json();
 
-    expect(response.status).toBe(200);
-    expect(data.successCount).toBe(2);
-    expect(data.result1).toBe(mockText1);
-    expect(data.result2).toBe(mockText2);
-    expect(data.errors).toHaveLength(1);
+    expect(response.status).toBe(500);
+    expect(data.successCount).toBe(0);
+    expect(mockGenerateContent).toHaveBeenCalledTimes(1);
   });
 
-  test('handles complete failure (all 3 variations fail)', async () => {
-    const error = new Error('Model overloaded');
+  test('gives up after exhausting all retry attempts', async () => {
+    const error = new Error('Quota exhausted for this key');
     mockGenerateContent
       .mockRejectedValueOnce(error)
       .mockRejectedValueOnce(error)
       .mockRejectedValueOnce(error);
 
-    const request = makeRequest(mockFormData);
-
-    const response = await POST(request);
+    const response = await POST(makeRequest(mockFormData));
     const data = await response.json();
 
     expect(response.status).toBe(500);
-    expect(data.message).toBe('All model calls failed');
+    expect(data.message).toBe('Speech generation failed');
     expect(data.successCount).toBe(0);
-    expect(data.errors).toBeDefined();
-    expect(data.errors).toHaveLength(3);
-  });
+    expect(data.errors).toHaveLength(1);
+    expect(mockGenerateContent).toHaveBeenCalledTimes(3);
+  }, 10000);
 
   test('handles method not allowed', async () => {
-    const request = makeRequest(undefined, 'GET');
-
-    const response = await POST(request);
+    const response = await POST(makeRequest(undefined, 'GET'));
     const data = await response.json();
 
     expect(response.status).toBe(405);
@@ -170,18 +161,12 @@ describe('POST Route Handler', () => {
 
   test('logs request completion with success count', async () => {
     const mockText = 'Generated Speech';
+    mockGenerateContent.mockResolvedValueOnce({ response: { text: () => mockText } });
 
-    mockGenerateContent
-      .mockResolvedValueOnce({ response: { text: () => mockText } })
-      .mockResolvedValueOnce({ response: { text: () => mockText } })
-      .mockResolvedValueOnce({ response: { text: () => mockText } });
-
-    const request = makeRequest(mockFormData);
-
-    await POST(request);
+    await POST(makeRequest(mockFormData));
 
     expect(console.log).toHaveBeenCalledWith(
-      expect.stringContaining('Request completed with 3 successful generations')
+      expect.stringContaining('Request completed with 1 successful generations')
     );
   });
 

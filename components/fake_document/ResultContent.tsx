@@ -1,44 +1,38 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import UnlockCard from './UnlockCard'; // Changed to default import
+import UnlockCard from './UnlockCard';
 import { Button } from "@/components/ui/button";
-import { Download, Copy, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Download, Copy, CheckCircle } from 'lucide-react';
 import { usePdfGenerator } from './PdfGenerator';
 
 interface ResultContentProps {
   results: {
     message: string;
     result1: string;
-    result2: string;
-    result3: string;
   } | null;
 }
 
 export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
   const [isUnlocked, setIsUnlocked] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
-  const [currentSpeechIndex, setCurrentSpeechIndex] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
-  
-  const speeches = results ? [results.result1, results.result2, results.result3] : [];
-  const currentSpeech = speeches[currentSpeechIndex] || '';
-  const { generatePdf, PdfContent } = usePdfGenerator(speeches);
+
+  const speech = results?.result1 || '';
+  const { generatePdf, PdfContent } = usePdfGenerator(speech);
 
   if (!results) return null;
 
-  const words = currentSpeech.split(' ');
+  const words = speech.split(' ');
   const visibleWordCount = isUnlocked ? words.length : 35;
 
-  const handleUnlock = (option: string) => {
+  const handleUnlock = () => {
     setIsUnlocked(true);
-    setSelectedOption(option);
     console.log('Content unlocked');
   };
-  
+
   const handleCopy = () => {
     if (isUnlocked) {
-      navigator.clipboard.writeText(currentSpeech)
+      navigator.clipboard.writeText(speech)
         .then(() => {
           setIsCopied(true);
           setTimeout(() => setIsCopied(false), 2000);
@@ -54,39 +48,31 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
     }
   };
 
-  const handlePrevSpeech = () => {
-    setCurrentSpeechIndex((prevIndex) => (prevIndex - 1 + speeches.length) % speeches.length);
-  };
-
-  const handleNextSpeech = () => {
-    setCurrentSpeechIndex((prevIndex) => (prevIndex + 1) % speeches.length);
-  };
-
   return (
     <div className="font-sans text-base leading-relaxed min-h-screen flex flex-col">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         className="flex-grow flex flex-col items-center max-w-2xl mx-auto p-8 pb-24 overflow-y-auto"
       >
-        <motion.h1 
+        <motion.h1
           initial={{ y: -20 }}
           animate={{ y: 0 }}
           className="text-3xl font-bold mb-6 text-center text-foreground"
         >
           Best Man Speech
         </motion.h1>
-        
+
         {isUnlocked && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="w-full mb-6"
           >
             <p className="text-primary font-semibold mb-4 text-center">
-              {selectedOption === 'single' ? 'You\'ve unlocked this speech! And two BONUS speeches.' : 'You\'ve unlocked 3 unique versions of this speech!'}
+              You&apos;ve unlocked your full speech!
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Button onClick={handleCopy} className="flex items-center w-full sm:w-auto">
@@ -97,25 +83,13 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
                 <Download className="mr-2" size={16} />
                 Download PDF
               </Button>
-              <div className="flex items-center space-x-2 w-full sm:w-auto justify-center">
-                <Button onClick={handlePrevSpeech} variant="outline" size="icon">
-                  <ChevronLeft size={24} />
-                </Button>
-                <span className="text-muted-foreground font-medium">
-                  Speech {currentSpeechIndex + 1} of {speeches.length}
-                </span>
-                <Button onClick={handleNextSpeech} variant="outline" size="icon">
-                  <ChevronRight size={24} />
-                </Button>
-              </div>
             </div>
           </motion.div>
         )}
-        
+
         <div className="w-full mb-8">
           <AnimatePresence mode="wait">
             <motion.div
-              key={currentSpeechIndex}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -139,7 +113,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
             </motion.div>
           </AnimatePresence>
         </div>
-        
+
         <PdfContent />
       </motion.div>
 

@@ -14,8 +14,6 @@ interface FakeDocumentProps {
   results: {
     message: string;
     result1: string;
-    result2: string;
-    result3: string;
   } | null;
   onAnimationComplete: () => void;
 }

@@ -51,7 +51,7 @@ const RestOfHomepage = () => {
     { 
       step: 2, 
       title: "Our AI Crafts Your Speeches", 
-      description: "Sit back while our AI churns out multiple personalized speech drafts. It's like having a team of pro speechwriters, minus the hefty bar tab."
+      description: "Sit back while our AI churns out a personalized speech draft. It's like having a pro speechwriter, minus the hefty bar tab."
     },
     { 
       step: 3, 
@@ -84,7 +84,7 @@ const RestOfHomepage = () => {
     },
     {
       question: "How long does it take to get my speech?",
-      answer: "The entire process is quick and efficient. You'll spend about 5-10 minutes answering our tailored questions. Then, our AI will generate multiple speech options for you in just a few seconds. So, you can have a polished, personalized speech ready in less than 10 minutes!"
+      answer: "The entire process is quick and efficient. You'll spend about 5-10 minutes answering our tailored questions. Then, our AI will generate your speech for you in just a few seconds. So, you can have a polished, personalized speech ready in less than 10 minutes!"
     }
   ];
   interface Feature {
@@ -259,30 +259,21 @@ const RestOfHomepage = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionEyebrow>Box Office</SectionEyebrow>
           <h2 className="font-display text-3xl sm:text-4xl font-medium text-foreground text-center mb-16">Simple, Transparent Pricing</h2>
-          <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch">
-            <PricingTier
-              title="Basic Speech"
-              originalPrice="$2.99"
-              features={[
-                { included: true, text: "1 personalized speech" },
-                { included: true, text: "PDF download" },
-                { included: true, text: "Use high quality AI model" },
-                { included: false, text: "Multiple speech options" },
-              ]}
-              buttonText="Get Started"
-            />
-            <PricingTier
-              title="Premium Speech Pack"
-              originalPrice="$4.99"
-              features={[
-                { included: true, text: "3 personalized speeches" },
-                { included: true, text: "PDF download" },
-                { included: true, text: "Use highest quality AI model" },
-                { included: true, text: "Multiple speech options" },
-              ]}
-              buttonText="Get Premium"
-              highlighted={true}
-            />
+          <div className="flex justify-center">
+            <div className="w-full max-w-sm">
+              <PricingTier
+                title="Best Man Speech"
+                originalPrice="$4.99"
+                features={[
+                  { included: true, text: "1 personalized speech" },
+                  { included: true, text: "PDF download" },
+                  { included: true, text: "Use our highest quality AI model" },
+                  { included: true, text: "Ready in under a minute" },
+                ]}
+                buttonText="Get Started"
+                highlighted={true}
+              />
+            </div>
           </div>
         </div>
       </section>
