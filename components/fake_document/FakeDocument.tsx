@@ -4,13 +4,14 @@ import { DocumentHeader } from './FakeDocumentHeader';
 import { DocumentContent } from './FakeDocumentContent';
 import { ResultContent } from './ResultContent';
 import { TypingIndicator, useTypingEffect } from './TypingIndicator';
-import { TextCursor } from "lucide-react";
+import { TextCursor, Lock } from "lucide-react";
 import { FormStage } from '@/app/form/useFormState';
 import CheckmarkAnimation from '../form/CheckmarkAnimation';
 
 interface FakeDocumentProps {
   progress: number;
   formStage: FormStage;
+  questionsRemaining: number;
   results: {
     message: string;
     result1: string;
@@ -18,7 +19,7 @@ interface FakeDocumentProps {
   onAnimationComplete: () => void;
 }
 
-const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, results, onAnimationComplete }) => {
+const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, questionsRemaining, results, onAnimationComplete }) => {
   const { displayedText, isTyping } = useTypingEffect(progress);
 
   const totalWords = useMemo(() => {
@@ -54,7 +55,7 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, result
 
   return (
     <Card className="w-full max-w-4xl mx-auto bg-card shadow-xl border border-border/60 stage-ring overflow-hidden">
-      <div className="flex flex-col lg:h-[800px]">
+      <div className="flex flex-col lg:h-[800px] relative">
         <DocumentHeader />
         <div className="flex-grow md:overflow-hidden overflow-y-scroll">
           <div className="h-full flex">
@@ -63,6 +64,21 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, result
             </div>
           </div>
         </div>
+        {formStage === 'form' && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-6">
+            <div className="max-w-xs rounded-xl border border-border/60 bg-card/95 px-6 py-5 text-center shadow-lg backdrop-blur-sm">
+              <Lock size={20} className="mx-auto mb-3 text-primary" />
+              <p className="font-display text-lg font-medium text-foreground">
+                {questionsRemaining > 0
+                  ? `Answer ${questionsRemaining} more ${questionsRemaining === 1 ? 'question' : 'questions'} to reveal your speech`
+                  : 'Your speech is ready to write'}
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                It&apos;s being written as you go.
+              </p>
+            </div>
+          </div>
+        )}
         <div className="h-6 bg-muted border-t border-border flex items-center justify-between px-4 text-xs text-muted-foreground">
           <span>Page 1 of 1</span>
           <span>English (US)</span>
@@ -76,5 +92,6 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, result
 export default memo(FakeDocument, (prevProps, nextProps) => {
   return prevProps.progress === nextProps.progress &&
     prevProps.formStage === nextProps.formStage &&
+    prevProps.questionsRemaining === nextProps.questionsRemaining &&
     prevProps.results === nextProps.results;
 });

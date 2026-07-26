@@ -10,7 +10,7 @@ import { useScroll } from './ScrollContext';
 
 const FormPage: React.FC = () => {
   const formState = useFormState();
-  const { formStage, documentProgress, handleAnimationComplete, getResults } = formState;
+  const { formStage, documentProgress, questionsRemaining, handleAnimationComplete, getResults } = formState;
   const results = getResults();
   const { formRef } = useScroll();
 
@@ -18,10 +18,11 @@ const FormPage: React.FC = () => {
     <FakeDocument
       formStage={formStage}
       progress={documentProgress}
+      questionsRemaining={questionsRemaining}
       results={results}
       onAnimationComplete={handleAnimationComplete}
     />
-  ), [documentProgress, formStage, results, handleAnimationComplete]);
+  ), [documentProgress, formStage, questionsRemaining, results, handleAnimationComplete]);
   return (
     <div
       ref={formRef}

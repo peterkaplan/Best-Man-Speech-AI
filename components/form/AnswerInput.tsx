@@ -16,17 +16,21 @@ interface AnswerInputProps {
   required?: boolean;
   error?: string;
   allowCustom?: boolean;
+  placeholder?: string;
+  textareaRef?: React.RefObject<HTMLTextAreaElement>;
 }
 
-const AnswerInput: React.FC<AnswerInputProps> = ({ 
-  type, 
-  options, 
-  value, 
-  onChange, 
-  label, 
-  required = false, 
+const AnswerInput: React.FC<AnswerInputProps> = ({
+  type,
+  options,
+  value,
+  onChange,
+  label,
+  required = false,
   error,
-  allowCustom = false
+  allowCustom = false,
+  placeholder,
+  textareaRef
 }) => {
   const [customOption, setCustomOption] = useState('');
   const [customOptions, setCustomOptions] = useState<string[]>([]);
@@ -51,14 +55,17 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
           <Input
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
             className="w-full border-2 border-border focus:border-primary rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-primary/20"
           />
         );
       case 'textarea':
         return (
           <Textarea
+            ref={textareaRef}
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
             className="w-full border-2 border-border focus:border-primary rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-primary/20 resize-none"
             rows={4}
           />

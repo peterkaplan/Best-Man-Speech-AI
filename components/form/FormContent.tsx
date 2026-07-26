@@ -12,8 +12,10 @@ interface FormContentProps {
   onAnswerChange: (answer: string | string[]) => void;
   onPrevious: () => void;
   onNext: () => void;
+  onSkip: () => void;
   isFirstStep: boolean;
   isLastStep: boolean;
+  isSubmitting: boolean;
 }
 
 const FormContent: React.FC<FormContentProps> = ({
@@ -24,8 +26,10 @@ const FormContent: React.FC<FormContentProps> = ({
   onAnswerChange,
   onPrevious,
   onNext,
+  onSkip,
   isFirstStep,
-  isLastStep
+  isLastStep,
+  isSubmitting
 }) => {
   return (
     <>
@@ -37,8 +41,10 @@ const FormContent: React.FC<FormContentProps> = ({
         totalSteps={totalSteps}
         onPrevious={onPrevious}
         onNext={onNext}
+        onSkip={onSkip}
         isFirstStep={isFirstStep}
         isLastStep={isLastStep}
+        isSubmitting={isSubmitting}
       />
     </>
   );

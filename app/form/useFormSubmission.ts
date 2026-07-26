@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { questions } from './questions';
 import { ResponseData } from "@/app/api/submit/route";
 
 export const useFormSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Tracked in a ref as well as state: two clicks in the same tick both read
+  // the pre-render value of `isSubmitting`, so only a ref can stop a
+  // double-click from firing two generations.
+  const submitInFlight = useRef(false);
   const [apiResponse, setApiResponse] = useState<ResponseData | null>(null);
   const [safetyError, setSafetyError] = useState<string | null>(null);
   const [modelOverloadError, setModelOverloadError] = useState<string | null>(null);
@@ -24,15 +28,22 @@ export const useFormSubmission = () => {
   };
 
   const submitForm = async (answers: Record<number, string | string[]>) => {
+    if (submitInFlight.current) return;
+    submitInFlight.current = true;
+
     setIsSubmitting(true);
     setSafetyError(null);
     setModelOverloadError(null);
     setApiResponse(null);
 
     try {
-      const formData = Object.entries(answers).map(([key, value]) => ({
-        shortName: questions[Number(key)].shortName,
-        answer: value
+      // Built from `questions` rather than from the answers that happen to
+      // exist: the prompt reads this payload positionally, so a skipped or
+      // unanswered question must still occupy its slot or every later answer
+      // shifts onto the wrong field.
+      const formData = questions.map((question, index) => ({
+        shortName: question.shortName,
+        answer: answers[index] ?? ''
       }));
 
       const response = await fetch('/api/submit', {
@@ -101,6 +112,7 @@ export const useFormSubmission = () => {
         duration: 5000,
       });
     } finally {
+      submitInFlight.current = false;
       setIsSubmitting(false);
     }
   };

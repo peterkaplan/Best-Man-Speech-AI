@@ -75,30 +75,46 @@ export function mergeSpeechData(
     // Replace {name} and {partner name} in the speech format
     let mergedSpeech = speechFormat.replace(/{name}/g, groomName).replace(/{partner name}/g, partnerName);
   
-    // Helper function to safely get answer or return a default value
-    const getAnswer = (index: string, defaultValue: string = 'N/A') => {
-      return cleansedFormData[index]?.answer || defaultValue;
+    // Helper function to safely get an answer, flattening checkbox arrays.
+    // Returns '' when the question was skipped or left blank.
+    const getAnswer = (index: string): string => {
+      const answer = cleansedFormData[index]?.answer;
+      if (Array.isArray(answer)) return answer.join(", ");
+      return typeof answer === 'string' ? answer.trim() : '';
     };
-  
+
+    // Skipped questions are omitted entirely rather than sent as "N/A" - a
+    // labelled blank invites the model to invent a story or narrate the gap.
+    const detail = (label: string, index: string) => {
+      const answer = getAnswer(index);
+      return answer ? `  - ${label}: ${answer}` : null;
+    };
+
+    const details = [
+      detail(`Known ${groomName} for`, '3'),
+      `  - The groom's partners name is ${partnerName}`,
+      detail('How they met', '4'),
+      detail(`${groomName}'s best qualities`, '5'),
+      // The form no longer asks for a *funny* story - it asks for a memory and
+      // leaves the comedy to the model, so don't mislabel the answer here.
+      detail(`A story about ${groomName} the best man still brings up`, '6'),
+      detail('Biggest accomplishment', '7'),
+      detail(`How ${groomName} changed since meeting partner`, '8'),
+      detail("What's admirable about their relationship", '9'),
+      detail('Marriage advice', '10'),
+      detail('Additional notes', '11'),
+    ].filter(Boolean).join('\n');
+
     // Create the stories and facts section
     let storiesAndFacts = `
   Names:
   - The Grooms name is:  "${groomName}"
   - The bride or partner's name is "${partnerName}"
   - Your name is "${yourName}"
-  
-  ONLY USE THE NAMES ${groomName}, ${partnerName}, ${yourName} DURING THE SPEECH. 
+
+  ONLY USE THE NAMES ${groomName}, ${partnerName}, ${yourName} DURING THE SPEECH.
   Here are details about ${groomName} and stories:
-  - Known ${groomName} for: ${getAnswer('3')}
-  - The groom's partners name is ${partnerName}
-  - How they met: ${getAnswer('4')}
-  - ${groomName}'s best qualities: ${Array.isArray(getAnswer('5')) ? (getAnswer('5') as string[]).join(", ") : getAnswer('5')}
-  - Funny story: ${getAnswer('6')}
-  - Biggest accomplishment: ${getAnswer('7')}
-  - How ${groomName} changed since meeting partner: ${getAnswer('8')}
-  - What's admirable about their relationship: ${getAnswer('9')}
-  - Marriage advice: ${getAnswer('10')}
-  ${getAnswer('11', '') ? `- Additional notes: ${getAnswer('11')}` : ''}
+${details}
   `.trim();
   
     // Replace the [FACTSANDSTORIES] placeholder with the actual stories and facts

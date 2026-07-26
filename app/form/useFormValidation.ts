@@ -1,4 +1,4 @@
-import { Question } from './questions';
+import { CORE_QUESTION_COUNT, Question } from './questions';
 
 export const useFormValidation = (questions: Question[], answers: Record<number, string | string[]>) => {
   const isAnswerValid = (step: number): boolean => {
@@ -15,8 +15,13 @@ export const useFormValidation = (questions: Question[], answers: Record<number,
     return true;
   };
 
+  // Only the core, non-skippable questions block submission: the bonus round is
+  // opt-in, and skippable questions are allowed through empty.
   const areAllQuestionsAnswered = (): boolean => {
-    return questions.every((_, index) => isAnswerValid(index));
+    return questions.every(
+      (question, index) =>
+        index >= CORE_QUESTION_COUNT || question.skippable || isAnswerValid(index)
+    );
   };
 
   return { isAnswerValid, areAllQuestionsAnswered };

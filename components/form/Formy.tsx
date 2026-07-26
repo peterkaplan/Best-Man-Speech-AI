@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import FormContent from './FormContent';
 import CheckmarkAnimation from './CheckmarkAnimation';
+import CheckpointCard from './CheckpointCard';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { HelpCircle, ChevronRight } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -18,9 +19,16 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
     currentStep,
     answers,
     formStage,
+    isSubmitting,
+    totalSteps,
+    isAtCheckpoint,
+    bonusQuestionCount,
     handleAnswerChange,
     handleNext,
+    handleSkip,
     handlePrevious,
+    handleFinishNow,
+    handleAddMoreDetail,
     questions,
     handleAnimationComplete
   } = formState;
@@ -36,9 +44,13 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
   }, []);
 
   const replaceNameInQuestions = (questions: any[], name: string) => {
+    const fill = (text?: string) => text?.replace(/\[name\]/g, name);
     return questions.map(question => ({
       ...question,
-      text: question.text.replace(/\[name\]/g, name)
+      text: fill(question.text),
+      hint: fill(question.hint),
+      placeholder: fill(question.placeholder),
+      prompts: question.prompts?.map(fill)
     }));
   };
 
@@ -80,7 +92,7 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
         <div className="w-full bg-accent h-1 mt-2 rounded-full overflow-hidden">
           <div 
             className="bg-primary h-full transition-all duration-300 ease-in-out"
-            style={{ width: `${(currentStep / (currentQuestions.length - 1)) * 100}%` }}
+            style={{ width: `${isAtCheckpoint ? 100 : Math.min(100, (currentStep / (totalSteps - 1)) * 100)}%` }}
           ></div>
         </div>
       </CardHeader>
@@ -89,17 +101,30 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
           ? '' 
           : 'sm:p-6 sm:flex-grow sm:flex sm:flex-col sm:overflow-y-auto'}`}
       >
-        {formStage === 'form' && (
+        {formStage === 'form' && isAtCheckpoint && (
+          <CheckpointCard
+            bonusQuestionCount={bonusQuestionCount}
+            onFinishNow={handleFinishNow}
+            onAddMoreDetail={handleAddMoreDetail}
+            onPrevious={handlePrevious}
+            isSubmitting={isSubmitting}
+          />
+        )}
+        {formStage === 'form' && !isAtCheckpoint && (
           <FormContent
             currentStep={currentStep}
-            totalSteps={currentQuestions.length}
+            totalSteps={totalSteps}
             question={currentQuestions[currentStep]}
             answer={answers[currentStep] || (currentQuestions[currentStep].type === 'checkbox' ? [] : '')}
             onAnswerChange={handleAnswerChange}
             onPrevious={handlePrevious}
             onNext={handleNext}
+            onSkip={handleSkip}
             isFirstStep={currentStep === 0}
-            isLastStep={currentStep === currentQuestions.length - 1}
+            // Only the true final question submits; the last core question
+            // leads to the checkpoint, so it stays a "Next".
+            isLastStep={currentStep === questions.length - 1}
+            isSubmitting={isSubmitting}
           />
         )}
         {formStage === 'animation' && (
