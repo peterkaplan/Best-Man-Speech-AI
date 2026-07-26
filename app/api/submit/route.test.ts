@@ -67,7 +67,12 @@ describe('POST Route Handler', () => {
         generateContent: mockGenerateContent
       })
     };
-    (GoogleGenerativeAI as Mock).mockImplementation(() => genAIInstance);
+    // Must be a function expression, not an arrow: route.ts calls
+    // `new GoogleGenerativeAI(...)`, and as of Vitest 4 the mock implementation
+    // is invoked directly, so an arrow function throws "is not a constructor".
+    (GoogleGenerativeAI as Mock).mockImplementation(function () {
+      return genAIInstance;
+    });
   });
 
   test('handles a successful generation', async () => {
