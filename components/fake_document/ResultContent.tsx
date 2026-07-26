@@ -4,6 +4,7 @@ import UnlockCard from './UnlockCard';
 import { Button } from "@/components/ui/button";
 import { Download, Copy, CheckCircle } from 'lucide-react';
 import { usePdfGenerator } from './PdfGenerator';
+import posthog from 'posthog-js';
 
 interface ResultContentProps {
   results: {
@@ -26,24 +27,27 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
   const visibleWordCount = isUnlocked ? words.length : 35;
 
   const handleUnlock = () => {
+    posthog.capture('speech_unlocked');
     setIsUnlocked(true);
-    console.log('Content unlocked');
   };
 
   const handleCopy = () => {
     if (isUnlocked) {
       navigator.clipboard.writeText(speech)
         .then(() => {
+          posthog.capture('speech_copied');
           setIsCopied(true);
           setTimeout(() => setIsCopied(false), 2000);
-          console.log('Content copied to clipboard');
         })
-        .catch(err => console.error('Failed to copy text: ', err));
+        .catch(err => {
+          posthog.captureException(err);
+          console.error('Failed to copy text: ', err);
+        });
     }
   };
   const handleDownloadPDF = () => {
     if (isUnlocked) {
-      console.log('Initiating PDF download');
+      posthog.capture('speech_pdf_downloaded');
       generatePdf();
     }
   };

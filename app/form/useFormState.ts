@@ -1,8 +1,10 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { useFormValidation } from '@/app/form/useFormValidation';
 import { useFormSubmission } from '@/app/form/useFormSubmission';
 import { CORE_QUESTION_COUNT, questions } from '@/app/form/questions';
+import { answeredCount, answerProperties, questionProperties } from '@/app/form/formAnalytics';
+import posthog from 'posthog-js';
 
 export type FormStage = 'form' | 'animation' | 'results';
 
@@ -18,7 +20,35 @@ export const useFormState = () => {
   const { isAnswerValid, areAllQuestionsAnswered } = useFormValidation(questions, answers);
   const { isSubmitting, apiResponse, submitForm } = useFormSubmission();
   const [documentProgress, setDocumentProgress] = useState(0);
-  
+
+  // Analytics bookkeeping. All refs: nothing here renders, and timing a form
+  // shouldn't cost a re-render per keystroke.
+  const formStartedAt = useRef<number | null>(null);
+  const stepStartedAt = useRef<number>(Date.now());
+  const hasStarted = useRef(false);
+  const hasSubmitted = useRef(false);
+  const hasTrackedResults = useRef(false);
+  const skippedQuestions = useRef<string[]>([]);
+  // Read by the page-hide listener, which must not re-subscribe per keystroke.
+  const answersRef = useRef(answers);
+  answersRef.current = answers;
+
+  const timeInForm = () =>
+    formStartedAt.current === null ? undefined : Date.now() - formStartedAt.current;
+
+  // How many questions are in play right now: the core set, or everything once
+  // the user has opted into the bonus round.
+  const totalSteps = wantsBonusQuestions ? questions.length : CORE_QUESTION_COUNT;
+
+  // The transition from "landed on the page" to "is actually filling this in".
+  // Fires once, on the first real interaction.
+  const markStarted = useCallback(() => {
+    if (hasStarted.current) return;
+    hasStarted.current = true;
+    formStartedAt.current = Date.now();
+    posthog.capture('form_started', questionProperties(currentStep));
+  }, [currentStep]);
+
   useEffect(() => {
     if (isSubmitting) {
       setFormStage('animation');
@@ -29,26 +59,82 @@ export const useFormState = () => {
     }
   }, [isSubmitting, apiResponse, isAnimationComplete]);
 
+  // One event per question the user actually lands on. The whole drop-off
+  // funnel is this event, counted by question_short_name.
+  useEffect(() => {
+    if (formStage !== 'form' || isAtCheckpoint) return;
+    stepStartedAt.current = Date.now();
+    posthog.capture('question_viewed', {
+      ...questionProperties(currentStep),
+      total_steps: totalSteps,
+    });
+    // Re-fires if the user navigates back to a question. That's intentional -
+    // count unique users, not events, when reading the drop-off curve.
+  }, [currentStep, formStage, isAtCheckpoint, totalSteps]);
+
+  // The bottom of the funnel: the speech is on screen and readable.
+  useEffect(() => {
+    if (formStage !== 'results' || hasTrackedResults.current) return;
+    hasTrackedResults.current = true;
+    posthog.capture('speech_ready_viewed', {
+      included_bonus_questions: wantsBonusQuestions,
+      questions_answered: answeredCount(answersRef.current),
+      time_to_speech_ms: timeInForm(),
+    });
+  }, [formStage, wantsBonusQuestions]);
+
+  // Someone who closes the tab mid-form never reports back any other way, so
+  // catch them on the way out and record the question they died on. sendBeacon
+  // because the page is already going away.
+  useEffect(() => {
+    const handlePageHide = () => {
+      if (!hasStarted.current || hasSubmitted.current) return;
+      posthog.capture(
+        'form_abandoned',
+        {
+          ...questionProperties(currentStep),
+          at_checkpoint: isAtCheckpoint,
+          questions_answered: answeredCount(answersRef.current),
+          questions_skipped: skippedQuestions.current.length,
+          time_in_form_ms: timeInForm(),
+        },
+        { transport: 'sendBeacon' }
+      );
+    };
+
+    window.addEventListener('pagehide', handlePageHide);
+    return () => window.removeEventListener('pagehide', handlePageHide);
+  }, [currentStep, isAtCheckpoint]);
+
   const handleAnswerChange = useCallback((answer: string | string[]) => {
+    markStarted();
     setAnswers(prev => ({ ...prev, [currentStep]: answer }));
-  }, [currentStep]);
+  }, [currentStep, markStarted]);
 
   const handleSubmit = useCallback(() => {
     if (areAllQuestionsAnswered()) {
-      submitForm(answers);
+      hasSubmitted.current = true;
+      submitForm(answers, {
+        included_bonus_questions: wantsBonusQuestions,
+        questions_answered: answeredCount(answers),
+        questions_skipped: skippedQuestions.current.length,
+        skipped_questions: [...skippedQuestions.current],
+        time_in_form_ms: timeInForm(),
+      });
       setDocumentProgress(prev => prev + 1);
     } else {
+      // Reaching the end and being bounced back is a distinct failure from
+      // giving up mid-form - it means validation, not motivation, lost them.
+      posthog.capture('form_submit_blocked', {
+        questions_answered: answeredCount(answers),
+      });
       toast({
         title: "Form Incomplete",
         description: "Please answer all required questions before submitting.",
         variant: "destructive",
       });
     }
-  }, [areAllQuestionsAnswered, answers, submitForm, toast]);
-
-  // How many questions are in play right now: the core set, or everything once
-  // the user has opted into the bonus round.
-  const totalSteps = wantsBonusQuestions ? questions.length : CORE_QUESTION_COUNT;
+  }, [areAllQuestionsAnswered, answers, submitForm, toast, wantsBonusQuestions]);
 
   const advance = useCallback(() => {
     if (currentStep < totalSteps - 1) {
@@ -56,6 +142,11 @@ export const useFormState = () => {
       setDocumentProgress(prev => prev + 1);
     } else if (!wantsBonusQuestions) {
       // End of the core questions - offer to finish now or go deeper.
+      posthog.capture('checkpoint_reached', {
+        questions_answered: answeredCount(answersRef.current),
+        questions_skipped: skippedQuestions.current.length,
+        time_in_form_ms: timeInForm(),
+      });
       setIsAtCheckpoint(true);
       setDocumentProgress(prev => prev + 1);
     } else {
@@ -64,11 +155,13 @@ export const useFormState = () => {
   }, [currentStep, handleSubmit, totalSteps, wantsBonusQuestions]);
 
   const handleFinishNow = useCallback(() => {
+    posthog.capture('checkpoint_finish_now_selected');
     setIsAtCheckpoint(false);
     handleSubmit();
   }, [handleSubmit]);
 
   const handleAddMoreDetail = useCallback(() => {
+    posthog.capture('checkpoint_add_more_detail_selected');
     setWantsBonusQuestions(true);
     setIsAtCheckpoint(false);
     setCurrentStep(CORE_QUESTION_COUNT);
@@ -77,6 +170,9 @@ export const useFormState = () => {
 
   const handleNext = useCallback(() => {
     if (!isAnswerValid(currentStep)) {
+      // A wall people hit right before they leave. Worth separating from a
+      // clean abandon: this one we can design our way out of.
+      posthog.capture('question_validation_failed', questionProperties(currentStep));
       toast({
         title: "Please answer the question",
         description: "This question is required before you can proceed.",
@@ -85,13 +181,29 @@ export const useFormState = () => {
       return;
     }
 
+    posthog.capture('question_answered', {
+      ...questionProperties(currentStep),
+      ...answerProperties(answers[currentStep]),
+      time_on_question_ms: Date.now() - stepStartedAt.current,
+    });
+
     advance();
-  }, [advance, currentStep, isAnswerValid, toast]);
+  }, [advance, answers, currentStep, isAnswerValid, toast]);
 
   // Moves past a skippable question without an answer, clearing anything
   // partially typed so the prompt doesn't receive a half-finished thought.
   const handleSkip = useCallback(() => {
     if (!questions[currentStep]?.skippable) return;
+
+    markStarted();
+    const shortName = questions[currentStep].shortName;
+    if (!skippedQuestions.current.includes(shortName)) {
+      skippedQuestions.current.push(shortName);
+    }
+    posthog.capture('question_skipped', {
+      ...questionProperties(currentStep),
+      time_on_question_ms: Date.now() - stepStartedAt.current,
+    });
 
     setAnswers(prev => {
       const next = { ...prev };
@@ -99,9 +211,16 @@ export const useFormState = () => {
       return next;
     });
     advance();
-  }, [advance, currentStep, questions]);
+  }, [advance, currentStep, markStarted, questions]);
 
   const handlePrevious = useCallback(() => {
+    // Backtracking is a friction signal - people re-read a question they
+    // couldn't answer before they quit on it.
+    posthog.capture('question_back', {
+      ...questionProperties(currentStep),
+      from_checkpoint: isAtCheckpoint,
+    });
+
     if (isAtCheckpoint) {
       setIsAtCheckpoint(false);
       setDocumentProgress(prev => prev - 1);

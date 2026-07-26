@@ -6,6 +6,7 @@ import { Toaster } from "@/components/form/Toaster"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { CSPostHogProvider } from './providers'
+import PostHogPageView from '@/components/PostHogPageView'
 import Footer from "@/components/Footer";
 import { GoogleAnalytics } from '@next/third-parties/google'
 
@@ -41,6 +42,7 @@ export default function RootLayout({
       <body>
         <Navbar />
         <CSPostHogProvider>
+          <PostHogPageView />
           {children}
         </CSPostHogProvider>
         <Footer />

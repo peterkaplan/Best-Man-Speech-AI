@@ -35,6 +35,7 @@
     "next": "^15.5.22",
     "next-images": "^1.8.5",
     "posthog-js": "^1.160.0",
+    "posthog-node": "^5.46.1",
     "react": "^18",
     "react-dom": "^18",
     "react-to-pdf": "^3.2.2",

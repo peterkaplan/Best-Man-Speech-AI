@@ -6,6 +6,7 @@ import { Users } from 'lucide-react';
 import { NumberTicker } from '@/components/ui/number-ticker';
 import { motion } from 'framer-motion';
 import { useScroll } from './form/ScrollContext';
+import posthog from 'posthog-js';
 
 const Hero = () => {
   const { scrollToForm } = useScroll();
@@ -46,7 +47,10 @@ const Hero = () => {
         >
           <Button
             size="lg"
-            onClick={scrollToForm}
+            onClick={() => {
+              posthog.capture('cta_clicked', { location: 'hero' });
+              scrollToForm();
+            }}
             className="bg-primary hover:bg-primary/90 text-primary-foreground stage-ring transition-all duration-300 hover:scale-[1.03] font-semibold px-8 py-6 text-base rounded-full"
           >
             Write my speech

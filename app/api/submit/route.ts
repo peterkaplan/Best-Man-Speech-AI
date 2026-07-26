@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { SpeechFormat, mergeSpeechData, cleanseFormData, safetySettings } from "./prompt";
+import { getPostHogClient } from '@/lib/posthog-server';
 
 export const maxDuration = 60; // This function can run for a maximum of 60 seconds
 export const dynamic = 'force-dynamic';
@@ -134,6 +135,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>
       );
     }
 
+    const distinctId = req.headers.get('X-POSTHOG-DISTINCT-ID') ?? 'anonymous';
     const formData = await req.json();
     const cleansedFormData = cleanseFormData(formData);
 
@@ -146,6 +148,30 @@ export async function POST(req: NextRequest): Promise<NextResponse<ResponseData>
       errors: generationFailed ? [result1] : undefined,
       successCount: generationFailed ? 0 : 1
     };
+
+    const posthog = getPostHogClient();
+    if (posthog) {
+      if (!generationFailed) {
+        posthog.capture({
+          distinctId,
+          event: 'speech_generation_completed',
+          properties: {
+            model: 'gemini-2.5-flash',
+            char_count: result1.length,
+          },
+        });
+      } else {
+        posthog.capture({
+          distinctId,
+          event: 'speech_generation_failed',
+          properties: {
+            model: 'gemini-2.5-flash',
+            error: result1,
+          },
+        });
+      }
+      await posthog.flush();
+    }
 
     console.log(`Request completed with ${response.successCount} successful generations`);
 
