@@ -35,3 +35,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env.local
+
+# local tooling
+.claude/
+.playwright-mcp/
+
+# SEO audit output
+*-audit/
