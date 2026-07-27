@@ -111,10 +111,14 @@ const Navbar = () => {
     }
   };
 
+  // Destinations must match their labels. The homepage-only sections are
+  // absolute-anchored so they still resolve from /creator, and /tips is a real
+  // page that works from anywhere — previously all three collapsed to "/",
+  // which left links named "Tips" and "Testimonials" pointing at the homepage.
   const navigationLinks = [
-    { href: isOnCreatorPage ? "/" : "/#how-it-works", label: "How it works" },
-    { href: isOnCreatorPage ? "/" : "/tips", label: "Tips" },
-    { href: isOnCreatorPage ? "/" : "/#testimonials", label: "Testimonials" },
+    { href: "/#how-it-works", label: "How it works" },
+    { href: "/tips", label: "Tips" },
+    { href: "/#testimonials", label: "Testimonials" },
   ];
 
   return (

@@ -4,6 +4,7 @@ import { Check, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import JsonLd from '@/components/JsonLd';
 import FaqSection from '@/components/FaqSection';
+import ArticleDates from '@/components/ArticleDates';
 import { breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { tipsFaqs } from '@/lib/faqs';
 
@@ -42,7 +43,10 @@ const BestManSpeechTips = () => {
       />
       <JsonLd data={faqSchema(tipsFaqs, '/tips')} />
       <div className="max-w-4xl mx-auto">
-        <h1 className="font-display text-4xl sm:text-5xl font-medium text-foreground mb-10 text-center glow-text">Best Man Speech Tips</h1>
+        <h1 className="font-display text-4xl sm:text-5xl font-medium text-foreground mb-4 text-center glow-text">Best Man Speech Tips</h1>
+        <div className="text-center mb-10">
+          <ArticleDates path="/tips" />
+        </div>
 
         <div className="bg-card border border-border/60 rounded-2xl overflow-hidden mb-8">
           <div className="px-6 py-8">
@@ -99,6 +103,55 @@ const BestManSpeechTips = () => {
               </Button>
             </Link>
           </div>
+        </div>
+
+        {/* Tables are disproportionately extracted by AI search engines, and
+            the site previously had none. This is genuinely useful reference
+            data rather than a table for its own sake. */}
+        <div className="bg-card border border-border/60 rounded-2xl px-6 py-8 mt-8">
+          <h2 className="font-display text-2xl font-medium text-foreground mb-4">How long should each wedding speech be?</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left border-collapse">
+              <thead>
+                <tr className="border-b border-border">
+                  <th scope="col" className="py-3 pr-4 font-semibold text-foreground">Speech</th>
+                  <th scope="col" className="py-3 pr-4 font-semibold text-foreground">Length</th>
+                  <th scope="col" className="py-3 pr-4 font-semibold text-foreground">Spoken words</th>
+                  <th scope="col" className="py-3 font-semibold text-foreground">When</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted-foreground">
+                <tr className="border-b border-border/60">
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Best man</th>
+                  <td className="py-3 pr-4">3–5 min</td>
+                  <td className="py-3 pr-4">500–750</td>
+                  <td className="py-3">Reception, after the meal</td>
+                </tr>
+                <tr className="border-b border-border/60">
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Bachelor party toast</th>
+                  <td className="py-3 pr-4">1–2 min</td>
+                  <td className="py-3 pr-4">150–300</td>
+                  <td className="py-3">Early evening, over dinner</td>
+                </tr>
+                <tr className="border-b border-border/60">
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Father of the bride</th>
+                  <td className="py-3 pr-4">3–5 min</td>
+                  <td className="py-3 pr-4">500–750</td>
+                  <td className="py-3">Usually first of the speeches</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="py-3 pr-4 font-medium text-foreground">Groom</th>
+                  <td className="py-3 pr-4">3–5 min</td>
+                  <td className="py-3 pr-4">500–750</td>
+                  <td className="py-3">Before the best man</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Time yourself out loud rather than estimating from the page — most people read roughly 40% faster
+            silently than they speak.
+          </p>
         </div>
 
         <FaqSection items={tipsFaqs} title="Best Man Speech Questions" />

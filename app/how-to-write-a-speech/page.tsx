@@ -5,8 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { CheckCircle, Clock, Users, Lightbulb, Heart, Award, Mic } from 'lucide-react';
 import JsonLd from '@/components/JsonLd';
 import FaqSection from '@/components/FaqSection';
+import ArticleDates from '@/components/ArticleDates';
 import { howToSchema, articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { howToFaqs } from '@/lib/faqs';
+import { contentDates } from '@/lib/content-dates';
 
 export const metadata: Metadata = {
   title: 'How to Write a Great Best Man Speech: The Ultimate Guide',
@@ -93,7 +95,8 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
           description:
             'Learn how to write a funny, heartfelt, and memorable best man speech with our complete guide. Get tips, structure, examples, and a step-by-step process.',
           path: '/how-to-write-a-speech',
-          datePublished: '2025-07-25',
+          datePublished: contentDates['/how-to-write-a-speech'].published,
+          dateModified: contentDates['/how-to-write-a-speech'].updated,
         })}
       />
       <JsonLd
@@ -109,10 +112,31 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
           <h1 className="font-display text-4xl md:text-6xl font-medium text-foreground mb-6 glow-text">
             How to Write a <span className="text-primary">Great Best Man Speech</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
             Being asked to be the best man is a huge honor. Our guide will walk you through writing a speech that&apos;s funny,
             heartfelt, and unforgettable—for all the right reasons.
           </p>
+
+          {/* Front-loaded, self-contained answer. ~44% of AI citations come
+              from the first 30% of a page, and the citable passage band is
+              134-167 words — so the direct answer leads, before the cards. */}
+          <div className="max-w-3xl mx-auto mb-6 text-left bg-card border border-border/60 rounded-2xl px-6 py-6">
+            <p className="text-muted-foreground leading-relaxed">
+              A best man speech is a short toast, traditionally given at the wedding reception, in which the
+              groom&apos;s closest friend or brother introduces himself, tells one or two stories about the groom,
+              acknowledges the couple, and raises a glass to their marriage. A good one runs{' '}
+              <strong className="text-foreground">three to five minutes</strong> — roughly 500 to 750 spoken words —
+              and follows four steps: brainstorm your material and pick a theme, structure it into a clear arc,
+              draft and cut it back, then rehearse until it sounds like speech rather than writing. The humour
+              exists to earn the sincerity at the end, so two or three jokes that genuinely land beat eight that
+              half-work. Start three to four weeks before the wedding, leave the draft alone for a few days, then
+              edit it once with fresh eyes. Always close on a toast, and keep the final line short.
+            </p>
+          </div>
+
+          <div className="mb-8">
+            <ArticleDates path="/how-to-write-a-speech" />
+          </div>
           <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-8">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />

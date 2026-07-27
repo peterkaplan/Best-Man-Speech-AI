@@ -5,8 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { CheckCircle, XCircle, Mic, Star, PartyPopper, Users, Clock, Trophy } from 'lucide-react';
 import JsonLd from '@/components/JsonLd';
 import FaqSection from '@/components/FaqSection';
+import ArticleDates from '@/components/ArticleDates';
 import { howToSchema, articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { bachelorFaqs } from '@/lib/faqs';
+import { contentDates } from '@/lib/content-dates';
 
 export const metadata: Metadata = {
   title: 'Bachelor Party Speech Guide: Funny Tips & Examples',
@@ -92,7 +94,8 @@ export default function BachelorPartySpeechPage(): JSX.Element {
           description:
             'Learn how to write a hilarious and memorable bachelor party speech or toast. Get tips for best men, funny one-liners, and examples that honor the groom.',
           path: '/bachelor-party-speech',
-          datePublished: '2025-07-25',
+          datePublished: contentDates['/bachelor-party-speech'].published,
+          dateModified: contentDates['/bachelor-party-speech'].updated,
         })}
       />
       <JsonLd
@@ -109,10 +112,29 @@ export default function BachelorPartySpeechPage(): JSX.Element {
           <h1 className="font-display text-4xl md:text-6xl font-medium text-foreground mb-6 glow-text">
             How to Write a <span className="text-primary">Killer Bachelor Party Speech</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-8">
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-6">
             The perfect bachelor party speech is a mix of a loving roast and a heartfelt toast.
             This guide will help you find that sweet spot between hilarious and heartfelt.
           </p>
+
+          {/* Front-loaded, self-contained answer — see the note on the
+              how-to-write-a-speech page for why this leads. */}
+          <div className="max-w-3xl mx-auto mb-6 text-left bg-card border border-border/60 rounded-2xl px-6 py-6">
+            <p className="text-muted-foreground leading-relaxed">
+              A bachelor party speech is a short toast given to the groom and his friends before the wedding,
+              usually over dinner early in the evening while everyone is still coherent. It runs{' '}
+              <strong className="text-foreground">one to two minutes</strong> — far shorter than the wedding
+              speech — and follows four steps: pick one angle about the groom, choose a single funny story that
+              illustrates it, structure it as intro, story, a beat of sincerity, then toast. Because there are no
+              grandparents in the room you can roast harder than at the wedding, but the test still holds: would
+              the groom be happy for this story to be repeated tomorrow? Leave out exes, anything genuinely
+              humiliating, and anything told to you in confidence. End by raising a glass and naming him clearly.
+            </p>
+          </div>
+
+          <div className="mb-8">
+            <ArticleDates path="/bachelor-party-speech" />
+          </div>
 
           <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground mb-10">
             <div className="flex items-center gap-2">

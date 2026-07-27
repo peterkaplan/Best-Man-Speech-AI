@@ -35,6 +35,17 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   const [customOption, setCustomOption] = useState('');
   const [customOptions, setCustomOptions] = useState<string[]>([]);
 
+  // The question text is the only accessible name these controls have — the
+  // visible question is a sibling heading, not a <label>. Without this the
+  // inputs are anonymous to screen readers and browsing agents.
+  const errorId = 'answer-error';
+  const a11y = {
+    'aria-label': label,
+    'aria-required': required,
+    'aria-invalid': Boolean(error),
+    'aria-describedby': error ? errorId : undefined,
+  };
+
   const inputVariants = {
     hidden: { opacity: 0, y: 5 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.2 } }
@@ -53,6 +64,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
       case 'text':
         return (
           <Input
+            {...a11y}
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
@@ -62,6 +74,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
       case 'textarea':
         return (
           <Textarea
+            {...a11y}
             ref={textareaRef}
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
@@ -72,7 +85,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         );
       case 'radio':
         return (
-          <RadioGroup value={value as string} onValueChange={onChange} className="space-y-2">
+          <RadioGroup aria-label={label} value={value as string} onValueChange={onChange} className="space-y-2">
             {options?.map((option, index) => (
               <div key={index} className="relative">
                 <motion.label
@@ -99,7 +112,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         );
       case 'checkbox':
         return (
-          <div className="space-y-2">
+          <div className="space-y-2" role="group" aria-label={label}>
             {options?.concat(customOptions).map((option, index) => (
               <div key={index} className="relative">
                 <motion.label
@@ -133,12 +146,15 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
               <div className="mt-2">
                 <div className="flex items-center space-x-2">
                   <Input
+                    aria-label="Add another option"
                     value={customOption}
                     onChange={(e) => setCustomOption(e.target.value)}
                     placeholder="Add another"
                     className="flex-grow border-2 border-border focus:border-primary rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-primary/20"
                   />
                   <motion.button
+                    type="button"
+                    aria-label="Add option"
                     onClick={handleCustomOptionAdd}
                     className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     whileHover={{ scale: 1.05 }}
@@ -168,6 +184,8 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
       <AnimatePresence>
         {error && (
           <motion.p
+            id={errorId}
+            role="alert"
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}

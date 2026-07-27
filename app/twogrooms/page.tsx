@@ -4,6 +4,7 @@ import { Check, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import JsonLd from '@/components/JsonLd';
 import FaqSection from '@/components/FaqSection';
+import ArticleDates from '@/components/ArticleDates';
 import { breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { twoGroomsFaqs } from '@/lib/faqs';
 
@@ -45,7 +46,10 @@ const BestManSpeechTipsTwoGrooms = () => {
       />
       <JsonLd data={faqSchema(twoGroomsFaqs, '/twogrooms')} />
       <div className="max-w-4xl mx-auto">
-        <h1 className="font-display text-4xl sm:text-5xl font-medium text-foreground mb-10 text-center glow-text">Best Man Speech for Two Grooms</h1>
+        <h1 className="font-display text-4xl sm:text-5xl font-medium text-foreground mb-4 text-center glow-text">Best Man Speech for Two Grooms</h1>
+        <div className="text-center mb-10">
+          <ArticleDates path="/twogrooms" />
+        </div>
 
         <div className="bg-card border border-border/60 rounded-2xl overflow-hidden mb-8">
           <div className="px-6 py-8">

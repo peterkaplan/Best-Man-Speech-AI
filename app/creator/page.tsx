@@ -46,6 +46,10 @@ const Creator = () => {
           </p>
         </div>
       </div>
+      {/* The form's own card title is an h3 from the shared Card component, so
+          the page jumped h1 -> h3. This restores the level without adding
+          visual noise the design does not want. */}
+      <h2 className='sr-only'>Answer the speech questions</h2>
       <FormPage />
     </ScrollProvider>
   );
