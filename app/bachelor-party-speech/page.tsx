@@ -128,7 +128,9 @@ export default function BachelorPartySpeechPage(): JSX.Element {
               illustrates it, structure it as intro, story, a beat of sincerity, then toast. Because there are no
               grandparents in the room you can roast harder than at the wedding, but the test still holds: would
               the groom be happy for this story to be repeated tomorrow? Leave out exes, anything genuinely
-              humiliating, and anything told to you in confidence. End by raising a glass and naming him clearly.
+              humiliating, and anything told to you in confidence. Give it early in the evening, over dinner,
+              while everyone is still coherent — leave it late and half the group has wandered off. End by
+              raising a glass and naming him clearly so the room knows to join in.
             </p>
           </div>
 
@@ -273,6 +275,53 @@ export default function BachelorPartySpeechPage(): JSX.Element {
                 </div>
               </CardContent>
             </Card>
+          </section>
+
+          {/* Worked example */}
+          <section className="mb-16">
+            <h2 className="font-display text-3xl font-medium text-center text-foreground mb-4">
+              A Bachelor Party Speech Example
+            </h2>
+            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-8">
+              Around 190 words — roughly ninety seconds out loud. Short enough to hold a room that is
+              standing up and drinking.
+            </p>
+            <Card className="bg-card border-border/60 max-w-3xl mx-auto">
+              <CardContent className="pt-6 space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  &quot;Right — everyone grab a drink, this&apos;ll take ninety seconds.&quot;
+                </p>
+                <p>
+                  &quot;I&apos;ve known Jack for twenty years, and in that time I have never once seen him
+                  admit he&apos;s lost. Not once. We spent an hour and a half walking around Lisbon last
+                  summer while he insisted the restaurant was &apos;basically right here.&apos; We ended up
+                  eating at a petrol station. He described it as &apos;a find.&apos;&quot;
+                </p>
+                <p>
+                  &quot;And genuinely, that&apos;s the man. Absolutely certain, frequently wrong, and
+                  somehow you still end up having a good night. Which, now I say it out loud, is the best
+                  possible description of every trip we&apos;ve ever taken with him.&quot;
+                </p>
+                <p>
+                  &quot;Sarah knows exactly what she&apos;s signing up for, and she&apos;s marrying him
+                  anyway, which tells you everything about how good he is to be around.&quot;
+                </p>
+                <p>
+                  &quot;So — to Jack. May his married life be as fun as this weekend, and may he never
+                  once admit he took a wrong turn. To Jack!&quot;
+                </p>
+              </CardContent>
+            </Card>
+            <div className="mt-6 bg-muted p-6 rounded-lg max-w-3xl mx-auto">
+              <h3 className="font-display text-xl font-medium mb-3 text-foreground">What makes it land</h3>
+              <ul className="space-y-2 text-muted-foreground list-disc list-inside">
+                <li>It signals the length up front, so nobody is checking their watch.</li>
+                <li>One angle — he never admits he&apos;s lost — and one story that proves it.</li>
+                <li>The roast is about a harmless flaw, not anything genuinely embarrassing.</li>
+                <li>It turns sincere for exactly one sentence, which is all this setting needs.</li>
+                <li>The callback in the final line ties the toast back to the joke.</li>
+              </ul>
+            </div>
           </section>
 
           <FaqSection items={bachelorFaqs} title="Bachelor Party Speech FAQs" />

@@ -47,8 +47,25 @@ const BestManSpeechTipsTwoGrooms = () => {
       <JsonLd data={faqSchema(twoGroomsFaqs, '/twogrooms')} />
       <div className="max-w-4xl mx-auto">
         <h1 className="font-display text-4xl sm:text-5xl font-medium text-foreground mb-4 text-center glow-text">Best Man Speech for Two Grooms</h1>
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <ArticleDates path="/twogrooms" />
+        </div>
+
+        {/* Front-loaded, self-contained answer — see the note on the
+            how-to-write-a-speech page for why this leads. */}
+        <div className="bg-card border border-border/60 rounded-2xl px-6 py-6 mb-8">
+          <p className="text-muted-foreground leading-relaxed">
+            A best man speech at a two-groom wedding follows the same shape as any other: introduce
+            yourself, tell a story about the groom you know, turn toward the couple, and raise a toast.
+            What changes is the assumptions baked into the stock material. Bride jokes, &quot;ball and
+            chain&quot; lines, and anything about who wears the trousers all have to go — and so does
+            making the couple&apos;s sexuality the theme of the speech. They are getting married, not
+            being congratulated for who they are. Ask the couple early who is actually speaking, since
+            some two-groom weddings have a best man for each groom, some have one shared best person,
+            and some skip the role entirely. If you only know one groom well, say so honestly, then spend
+            real time on what you have seen in the relationship. The failure mode to avoid is a speech
+            that treats one groom as a guest at his own wedding.
+          </p>
         </div>
 
         <div className="bg-card border border-border/60 rounded-2xl overflow-hidden mb-8">

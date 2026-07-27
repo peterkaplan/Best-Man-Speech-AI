@@ -298,6 +298,120 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
             </div>
           </section>
 
+          {/* Worked example — the single most-searched thing for this term,
+              and the most citable block on the page. */}
+          <section className="mb-16">
+            <h2 className="font-display text-3xl font-medium mb-4 text-foreground">A Complete Best Man Speech Example</h2>
+            <p className="text-muted-foreground mb-6">
+              Here is a full speech, start to finish, at roughly 420 words — about three minutes spoken.
+              Names are placeholders. Read it for shape rather than wording: the structure is what transfers,
+              the stories have to be yours.
+            </p>
+            <Card className="bg-card border-border/60">
+              <CardContent className="pt-6 space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  &quot;Evening everyone. For those who don&apos;t know me, I&apos;m Tom — Jack&apos;s best man,
+                  and the person responsible for making sure he actually turned up today. You&apos;re welcome.&quot;
+                </p>
+                <p>
+                  &quot;Jack and I met when we were eleven, on the first day of secondary school. He was the
+                  kid who&apos;d brought a full pencil case with a spare compass, in case anyone needed a spare
+                  compass. Nobody ever needed a spare compass. But that&apos;s Jack — twenty years later,
+                  he&apos;s still the person who turns up prepared for a problem you didn&apos;t know you had.&quot;
+                </p>
+                <p>
+                  &quot;When my car broke down at two in the morning about four hours from home, I called
+                  Jack. He didn&apos;t ask why I was there. He didn&apos;t ask why I hadn&apos;t called anyone
+                  closer. He just said &apos;give me three hours&apos; and hung up. He arrived with jump
+                  leads, a flask of tea, and a spare jumper, because — and I quote — &apos;you never bring a
+                  jumper.&apos; He was right. I never bring a jumper.&quot;
+                </p>
+                <p>
+                  &quot;That&apos;s the thing about Jack. He shows up. Quietly, without making it a thing,
+                  every single time.&quot;
+                </p>
+                <p>
+                  &quot;And then he met Sarah. I noticed it before he said anything — he started laughing
+                  more. Not politely. Properly, the ugly laugh he&apos;s spent his whole life trying to
+                  suppress. Sarah, you got the real one within about a month, which took the rest of us
+                  the better part of a decade.&quot;
+                </p>
+                <p>
+                  &quot;Sarah, you are unbelievably kind, you are much funnier than he is, and you have made
+                  my oldest friend into a more relaxed and considerably happier man. I&apos;m not going to
+                  pretend I know what makes a marriage work. But I know what I&apos;ve watched for the last
+                  three years, and it looks a lot like two people who are genuinely better together than
+                  apart.&quot;
+                </p>
+                <p>
+                  &quot;So — if everyone could please raise a glass. To Jack and Sarah.&quot;
+                </p>
+              </CardContent>
+            </Card>
+            <div className="mt-6 bg-muted p-6 rounded-lg">
+              <h3 className="font-display text-xl font-medium mb-3 text-foreground">Why this one works</h3>
+              <ul className="space-y-2 text-muted-foreground list-disc list-inside">
+                <li>It introduces the speaker in a single line and gets to a story within twenty words.</li>
+                <li>The humour is specific — a spare compass, a jumper — not generic wedding-joke material.</li>
+                <li>One story carries the whole speech, rather than four half-told ones.</li>
+                <li>The funny opening earns the sincere turn; the sincerity does not arrive cold.</li>
+                <li>The partner gets real, specific praise rather than one polite sentence.</li>
+                <li>The final line is six words long.</li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Opening lines */}
+          <section className="mb-16">
+            <h2 className="font-display text-3xl font-medium mb-4 text-foreground">Best Man Speech Opening Lines That Work</h2>
+            <p className="text-muted-foreground mb-6">
+              The opening exists to introduce you and buy goodwill in about fifteen seconds. These four
+              patterns cover almost every speech. Avoid opening with how nervous you are — it lowers the
+              room&apos;s confidence in you before you&apos;ve said anything.
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Card className="bg-card border-border/60">
+                <CardContent className="pt-6">
+                  <h3 className="font-display text-lg font-medium mb-2 text-foreground">The straight introduction</h3>
+                  <p className="text-muted-foreground text-sm">
+                    &quot;For those who don&apos;t know me, I&apos;m Tom, and I&apos;ve been Jack&apos;s best
+                    friend since we were eleven.&quot; Safe, clear, works in any room. Follow it immediately
+                    with a story.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="bg-card border-border/60">
+                <CardContent className="pt-6">
+                  <h3 className="font-display text-lg font-medium mb-2 text-foreground">The self-deprecating open</h3>
+                  <p className="text-muted-foreground text-sm">
+                    &quot;Jack asked me to keep this short, tasteful, and free of any story involving
+                    Barcelona. So this&apos;ll be about ninety seconds.&quot; Gets a laugh without a joke at
+                    anyone else&apos;s expense.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="bg-card border-border/60">
+                <CardContent className="pt-6">
+                  <h3 className="font-display text-lg font-medium mb-2 text-foreground">The cold open</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Start mid-story — &quot;It&apos;s two in the morning and my car has died on a motorway
+                    four hours from home&quot; — then introduce yourself once the room is listening. High
+                    risk, high reward.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="bg-card border-border/60">
+                <CardContent className="pt-6">
+                  <h3 className="font-display text-lg font-medium mb-2 text-foreground">The honest open</h3>
+                  <p className="text-muted-foreground text-sm">
+                    &quot;I&apos;ve known Jack for twenty years and I still had no idea how to start
+                    this.&quot; Works well if the speech is going to lean sincere rather than funny.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+
           {/* Common Mistakes Section */}
           <section className="mb-16">
             <h2 className="font-display text-3xl font-medium mb-8 text-foreground">Common Best Man Speech Mistakes to Avoid</h2>
