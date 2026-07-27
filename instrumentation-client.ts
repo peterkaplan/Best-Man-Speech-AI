@@ -1,13 +1,12 @@
 import posthog from 'posthog-js';
+import { POSTHOG_TOKEN, POSTHOG_TOKEN_MISSING_MESSAGE } from '@/lib/posthog-token';
 
-if (!process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN) {
-  if (process.env.NODE_ENV !== 'production') {
-    console.error(
-      'NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN is configured'
-    );
-  }
+if (!POSTHOG_TOKEN) {
+  // Logged in production too, deliberately. A missing token disables analytics
+  // entirely, and the last time this was dev-only the breakage went unnoticed.
+  console.error(POSTHOG_TOKEN_MISSING_MESSAGE);
 } else {
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN, {
+  posthog.init(POSTHOG_TOKEN, {
     api_host: '/ingest',
     ui_host: 'https://us.posthog.com',
     debug: process.env.NODE_ENV === 'development',
