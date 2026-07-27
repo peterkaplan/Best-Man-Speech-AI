@@ -33,6 +33,14 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
     onSkip();
   }
 
+  // Tapping a button normally blurs the answer field, which on mobile
+  // collapses the keyboard between every question. Suppressing the default
+  // mousedown focus behaviour means focus never leaves the input, so the
+  // keyboard stays up. Click still fires, and Tab focus is unaffected.
+  const keepFocusInField = (event: React.MouseEvent) => {
+    event.preventDefault();
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
@@ -76,6 +84,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
         <div className="flex justify-center">
           <Button
             onClick={skipClick}
+            onMouseDown={keepFocusInField}
             disabled={isSubmitting}
             variant="ghost"
             className="text-sm text-muted-foreground hover:text-foreground underline underline-offset-4 decoration-dotted"
@@ -88,6 +97,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
         <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
           <Button
             onClick={onPrevious}
+            onMouseDown={keepFocusInField}
             disabled={isFirstStep}
             variant="outline"
             className="flex items-center space-x-2 bg-background text-primary border-primary hover:bg-muted transition-colors duration-300"
@@ -105,6 +115,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
         >
           <Button
             onClick={combinedClick}
+            onMouseDown={keepFocusInField}
             disabled={isSubmitting}
             className="flex items-center space-x-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-300"
           >

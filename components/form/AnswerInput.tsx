@@ -17,7 +17,7 @@ interface AnswerInputProps {
   error?: string;
   allowCustom?: boolean;
   placeholder?: string;
-  textareaRef?: React.RefObject<HTMLTextAreaElement>;
+  fieldRef?: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>;
 }
 
 const AnswerInput: React.FC<AnswerInputProps> = ({
@@ -30,7 +30,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   error,
   allowCustom = false,
   placeholder,
-  textareaRef
+  fieldRef
 }) => {
   const [customOption, setCustomOption] = useState('');
   const [customOptions, setCustomOptions] = useState<string[]>([]);
@@ -65,6 +65,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         return (
           <Input
             {...a11y}
+            ref={fieldRef as React.RefObject<HTMLInputElement>}
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
@@ -75,7 +76,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         return (
           <Textarea
             {...a11y}
-            ref={textareaRef}
+            ref={fieldRef as React.RefObject<HTMLTextAreaElement>}
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}

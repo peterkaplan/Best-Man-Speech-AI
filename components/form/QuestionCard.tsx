@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import QuestionText from './QuestionText';
 import QuestionPrompts from './QuestionPrompts';
 import AnswerInput from './AnswerInput';
@@ -34,7 +34,44 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   isLastStep,
   isSubmitting
 }) => {
-  const answerRef = useRef<HTMLTextAreaElement>(null);
+  const answerRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+
+  const isTypedField = question.type === 'text' || question.type === 'textarea';
+
+  // Keep the caret in the answer box as you move between questions, so the
+  // mobile keyboard never collapses mid-form. NavigationButtons also blocks
+  // the focus steal on mousedown; this handles the case where the field
+  // actually remounts (text <-> textarea) and keyboard/Enter navigation.
+  useEffect(() => {
+    // Don't grab focus on first paint — that would pop the keyboard open (and
+    // scroll the page) the moment someone lands on the form.
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const id = requestAnimationFrame(() => {
+      // preventScroll throughout, because scrollToForm() already positions the
+      // card; letting focus scroll as well makes the view fight itself.
+      if (isTypedField) {
+        const field = answerRef.current;
+        if (!field) return;
+        field.focus({ preventScroll: true });
+        const end = field.value.length;
+        field.setSelectionRange(end, end);
+        return;
+      }
+
+      // Radio/checkbox questions: deliberately don't focus a control, which
+      // would pop the mobile keyboard for no reason. Focus the card instead so
+      // focus doesn't fall back to <body> and strand keyboard users at the top
+      // of the document.
+      cardRef.current?.focus({ preventScroll: true });
+    });
+
+    return () => cancelAnimationFrame(id);
+  }, [currentStep, isTypedField]);
 
   // Drops the prompt in as a lead-in and leaves the caret after it. Appends
   // rather than replaces so someone can stack a couple of memories.
@@ -66,7 +103,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
   return (
     <motion.div
-      className="md:bg-card md:shadow-lg md:rounded-xl md:px-8 md:py-6 md:mb-4 md:border md:border-accent"
+      ref={cardRef}
+      tabIndex={-1}
+      className="md:bg-card md:shadow-lg md:rounded-xl md:px-8 md:py-6 md:mb-4 md:border md:border-accent focus:outline-none"
       initial="hidden"
       animate="visible"
       variants={cardVariants}
@@ -81,7 +120,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           required={question.required}
           allowCustom={question.allowCustom}
           placeholder={question.placeholder}
-          textareaRef={answerRef}
+          fieldRef={answerRef}
         />
       {question.prompts && (
         <QuestionPrompts prompts={question.prompts} onSelect={handlePromptSelect} />

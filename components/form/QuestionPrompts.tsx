@@ -29,6 +29,9 @@ const QuestionPrompts: React.FC<QuestionPromptsProps> = ({ prompts, onSelect }) 
           <motion.button
             type="button"
             onClick={() => onSelect(prompt)}
+            // Keep the caret in the answer box so the mobile keyboard does
+            // not collapse when a prompt is tapped.
+            onMouseDown={(event) => event.preventDefault()}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="rounded-full border border-border bg-muted/40 px-2.5 py-1 text-xs text-muted-foreground transition-colors duration-200 hover:border-primary hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
