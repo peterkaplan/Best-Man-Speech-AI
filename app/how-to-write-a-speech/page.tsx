@@ -3,6 +3,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Clock, Users, Lightbulb, Heart, Award, Mic } from 'lucide-react';
+import JsonLd from '@/components/JsonLd';
+import FaqSection from '@/components/FaqSection';
+import { howToSchema, articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
+import { howToFaqs } from '@/lib/faqs';
 
 export const metadata: Metadata = {
   title: 'How to Write a Great Best Man Speech: The Ultimate Guide',
@@ -72,6 +76,33 @@ const writingSteps = [
 export default function HowToWriteABestManSpeechPage(): JSX.Element {
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd
+        data={howToSchema({
+          name: 'How to Write a Great Best Man Speech',
+          description:
+            'A four-step process for writing a funny, heartfelt, and memorable best man speech — from brainstorming to delivery.',
+          path: '/how-to-write-a-speech',
+          totalTime: 'PT2H',
+          // Derived from writingSteps so the markup cannot drift from the page.
+          steps: writingSteps.map(({ title, description }) => ({ title, description })),
+        })}
+      />
+      <JsonLd
+        data={articleSchema({
+          headline: 'How to Write a Great Best Man Speech: The Ultimate Guide',
+          description:
+            'Learn how to write a funny, heartfelt, and memorable best man speech with our complete guide. Get tips, structure, examples, and a step-by-step process.',
+          path: '/how-to-write-a-speech',
+          datePublished: '2025-07-25',
+        })}
+      />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'How to Write a Best Man Speech', path: '/how-to-write-a-speech' },
+        ])}
+      />
+      <JsonLd data={faqSchema(howToFaqs, '/how-to-write-a-speech')} />
       <div className="container mx-auto px-4 py-16">
         {/* Header Section */}
         <div className="text-center mb-16">
@@ -158,7 +189,7 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
             <h2 className="font-display text-3xl font-medium text-center mb-12 text-foreground">The 4-Step Best Man Speech Process</h2>
             <div className="space-y-6">
               {writingSteps.map((step, index) => (
-                <Card key={index} className="bg-card border-border/60 hover:border-primary/40 transition-colors">
+                <Card key={index} id={`step-${index + 1}`} className="bg-card border-border/60 hover:border-primary/40 transition-colors scroll-mt-20">
                   <CardHeader>
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0">
@@ -277,6 +308,8 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
               </CardContent>
             </Card>
           </section>
+
+          <FaqSection items={howToFaqs} title="Best Man Speech FAQs" />
 
           {/* CTA Section */}
           <section className="text-center">

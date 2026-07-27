@@ -9,6 +9,14 @@ import { CSPostHogProvider } from './providers'
 import PostHogPageView from '@/components/PostHogPageView'
 import Footer from "@/components/Footer";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import JsonLd from '@/components/JsonLd'
+import {
+  organizationSchema,
+  webSiteSchema,
+  SITE_URL,
+  SITE_NAME,
+  SITE_DESCRIPTION,
+} from '@/lib/schema'
 
 const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -21,14 +29,29 @@ const instrumentSans = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.bestmanspeechai.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Best Man Speech AI — Write Your Speech in Minutes",
-    template: "%s | Best Man Speech AI",
+    template: `%s | ${SITE_NAME}`,
   },
-  description: "Craft an unforgettable best man speech in minutes. Answer a few questions and let our AI turn your stories into a speech worth applauding.",
-  icons: {
-    icon: "/favicon.webp",
+  description: SITE_DESCRIPTION,
+  // "./" resolves to the current route against metadataBase, so every page gets
+  // a self-referential canonical unless it declares its own.
+  alternates: {
+    canonical: "./",
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    url: SITE_URL,
+    title: "Best Man Speech AI — Write Your Speech in Minutes",
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Best Man Speech AI — Write Your Speech in Minutes",
+    description: SITE_DESCRIPTION,
   },
 };
 
@@ -40,6 +63,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${bricolageGrotesque.variable} ${instrumentSans.variable}`}>
       <body>
+        <JsonLd data={organizationSchema()} />
+        <JsonLd data={webSiteSchema()} />
         <Navbar />
         <CSPostHogProvider>
           <PostHogPageView />

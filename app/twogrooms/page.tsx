@@ -2,10 +2,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Check, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import JsonLd from '@/components/JsonLd';
+import FaqSection from '@/components/FaqSection';
+import { breadcrumbSchema, faqSchema } from '@/lib/schema';
+import { twoGroomsFaqs } from '@/lib/faqs';
 
+// Title and description deliberately lead on "two grooms" and "same-sex
+// wedding" rather than "best man speech tips", which /tips already targets.
 export const metadata: Metadata = {
-  title: 'Best Man Speech Tips for Two Grooms',
-  description: 'Tips for crafting the perfect best man speech for a wedding with two grooms.',
+  title: 'Best Man Speech for Two Grooms: A Same-Sex Wedding Guide',
+  description: 'How to write and deliver a best man speech at a two-groom wedding — who speaks, how to honour both grooms, and which traditional jokes to drop.',
 };
 
 const BestManSpeechTipsTwoGrooms = () => {
@@ -31,8 +37,15 @@ const BestManSpeechTipsTwoGrooms = () => {
 
   return (
     <div className="min-h-screen bg-background py-24 px-4 sm:px-6 lg:px-8">
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Best Man Speech for Two Grooms', path: '/twogrooms' },
+        ])}
+      />
+      <JsonLd data={faqSchema(twoGroomsFaqs, '/twogrooms')} />
       <div className="max-w-4xl mx-auto">
-        <h1 className="font-display text-4xl sm:text-5xl font-medium text-foreground mb-10 text-center glow-text">Best Man Speech Tips for Two Grooms</h1>
+        <h1 className="font-display text-4xl sm:text-5xl font-medium text-foreground mb-10 text-center glow-text">Best Man Speech for Two Grooms</h1>
 
         <div className="bg-card border border-border/60 rounded-2xl overflow-hidden mb-8">
           <div className="px-6 py-8">
@@ -89,6 +102,28 @@ const BestManSpeechTipsTwoGrooms = () => {
               </Button>
             </Link>
           </div>
+        </div>
+
+        <FaqSection items={twoGroomsFaqs} title="Two-Groom Wedding Speech Questions" />
+
+        <div className="bg-card border border-border/60 rounded-2xl px-6 py-8">
+          <h2 className="font-display text-2xl font-medium text-foreground mb-4">Keep reading</h2>
+          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+            <li>
+              The fundamentals apply to any wedding — our{' '}
+              <Link href="/how-to-write-a-speech" className="text-primary hover:underline">
+                complete guide to writing a best man speech
+              </Link>{' '}
+              covers structure, openings, and delivery.
+            </li>
+            <li>
+              For the general do&apos;s and don&apos;ts, see our{' '}
+              <Link href="/tips" className="text-primary hover:underline">
+                best man speech tips
+              </Link>
+              .
+            </li>
+          </ul>
         </div>
       </div>
     </div>

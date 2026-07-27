@@ -2,10 +2,14 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Check, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import JsonLd from '@/components/JsonLd';
+import FaqSection from '@/components/FaqSection';
+import { breadcrumbSchema, faqSchema } from '@/lib/schema';
+import { tipsFaqs } from '@/lib/faqs';
 
 export const metadata: Metadata = {
-  title: 'Best Man Speech Tips',
-  description: 'Tips for crafting the perfect best man speech.',
+  title: 'Best Man Speech Tips: What to Do and What to Avoid',
+  description: 'Practical best man speech tips — what to include, what to leave out, how long to speak, and how to open and close. Plus answers to the questions best men actually ask.',
 };
 
 const BestManSpeechTips = () => {
@@ -30,6 +34,13 @@ const BestManSpeechTips = () => {
 
   return (
     <div className="min-h-screen bg-background py-24 px-4 sm:px-6 lg:px-8">
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Best Man Speech Tips', path: '/tips' },
+        ])}
+      />
+      <JsonLd data={faqSchema(tipsFaqs, '/tips')} />
       <div className="max-w-4xl mx-auto">
         <h1 className="font-display text-4xl sm:text-5xl font-medium text-foreground mb-10 text-center glow-text">Best Man Speech Tips</h1>
 
@@ -88,6 +99,35 @@ const BestManSpeechTips = () => {
               </Button>
             </Link>
           </div>
+        </div>
+
+        <FaqSection items={tipsFaqs} title="Best Man Speech Questions" />
+
+        <div className="bg-card border border-border/60 rounded-2xl px-6 py-8">
+          <h2 className="font-display text-2xl font-medium text-foreground mb-4">Keep reading</h2>
+          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+            <li>
+              Want the full process rather than a checklist? Read our{' '}
+              <Link href="/how-to-write-a-speech" className="text-primary hover:underline">
+                complete guide to writing a best man speech
+              </Link>
+              , covering structure, openings, and delivery.
+            </li>
+            <li>
+              Speaking at the bachelor party too? The{' '}
+              <Link href="/bachelor-party-speech" className="text-primary hover:underline">
+                bachelor party speech guide
+              </Link>{' '}
+              covers the shorter, looser toast.
+            </li>
+            <li>
+              Two grooms? See our{' '}
+              <Link href="/twogrooms" className="text-primary hover:underline">
+                tips for speeches at two-groom weddings
+              </Link>
+              .
+            </li>
+          </ul>
         </div>
       </div>
     </div>

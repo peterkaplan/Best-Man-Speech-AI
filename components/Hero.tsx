@@ -30,7 +30,7 @@ const Hero = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium leading-[1.05] tracking-tight text-foreground glow-text">
-            Craft an Unforgettable
+            Craft an Unforgettable{' '}
             <span className="block text-primary">Best Man Speech</span>
           </h1>
 

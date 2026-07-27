@@ -3,6 +3,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, XCircle, Mic, Star, PartyPopper, Users, Clock, Trophy } from 'lucide-react';
+import JsonLd from '@/components/JsonLd';
+import FaqSection from '@/components/FaqSection';
+import { howToSchema, articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
+import { bachelorFaqs } from '@/lib/faqs';
 
 export const metadata: Metadata = {
   title: 'Bachelor Party Speech Guide: Funny Tips & Examples',
@@ -71,6 +75,33 @@ const writingSteps = [
 export default function BachelorPartySpeechPage(): JSX.Element {
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd
+        data={howToSchema({
+          name: 'How to Write a Killer Bachelor Party Speech',
+          description:
+            'A four-step plan for writing a funny, memorable bachelor party toast that roasts and honours the groom-to-be.',
+          path: '/bachelor-party-speech',
+          totalTime: 'PT1H',
+          // Derived from writingSteps so the markup cannot drift from the page.
+          steps: writingSteps.map(({ title, description }) => ({ title, description })),
+        })}
+      />
+      <JsonLd
+        data={articleSchema({
+          headline: 'Bachelor Party Speech Guide: Funny Tips & Examples',
+          description:
+            'Learn how to write a hilarious and memorable bachelor party speech or toast. Get tips for best men, funny one-liners, and examples that honor the groom.',
+          path: '/bachelor-party-speech',
+          datePublished: '2025-07-25',
+        })}
+      />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Bachelor Party Speech Guide', path: '/bachelor-party-speech' },
+        ])}
+      />
+      <JsonLd data={faqSchema(bachelorFaqs, '/bachelor-party-speech')} />
       <div className="container mx-auto px-4 py-24">
         {/* Header Section */}
         <div className="text-center mb-20">
@@ -160,8 +191,8 @@ export default function BachelorPartySpeechPage(): JSX.Element {
               Your 4-Step Plan to a Legendary Toast
             </h2>
             <div className="space-y-6">
-              {writingSteps.map((step) => (
-                <Card key={step.step} className="bg-card border-border/60 hover:border-primary/40 transition-colors">
+              {writingSteps.map((step, index) => (
+                <Card key={step.step} id={`step-${index + 1}`} className="bg-card border-border/60 hover:border-primary/40 transition-colors scroll-mt-20">
                   <CardHeader>
                     <div className="flex items-start gap-4">
                       <div className="flex flex-col items-center flex-shrink-0">
@@ -221,6 +252,8 @@ export default function BachelorPartySpeechPage(): JSX.Element {
               </CardContent>
             </Card>
           </section>
+
+          <FaqSection items={bachelorFaqs} title="Bachelor Party Speech FAQs" />
 
           {/* CTA Section */}
           <section className="text-center">
