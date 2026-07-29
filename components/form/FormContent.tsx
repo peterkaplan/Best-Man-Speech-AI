@@ -16,6 +16,7 @@ interface FormContentProps {
   isFirstStep: boolean;
   isLastStep: boolean;
   isSubmitting: boolean;
+  error?: string | null;
 }
 
 const FormContent: React.FC<FormContentProps> = ({
@@ -29,7 +30,8 @@ const FormContent: React.FC<FormContentProps> = ({
   onSkip,
   isFirstStep,
   isLastStep,
-  isSubmitting
+  isSubmitting,
+  error
 }) => {
   return (
     <>
@@ -45,6 +47,7 @@ const FormContent: React.FC<FormContentProps> = ({
         isFirstStep={isFirstStep}
         isLastStep={isLastStep}
         isSubmitting={isSubmitting}
+        error={error}
       />
     </>
   );

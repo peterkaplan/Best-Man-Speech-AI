@@ -16,9 +16,13 @@ export const useFormState = () => {
   // Set once the user opts into the bonus questions at the checkpoint.
   const [wantsBonusQuestions, setWantsBonusQuestions] = useState(false);
   const [isAtCheckpoint, setIsAtCheckpoint] = useState(false);
+  // Shown under the field rather than as a toast: a red banner at the top of
+  // the viewport is both alarming and, on a phone, nowhere near the thing the
+  // user needs to fix.
+  const [validationError, setValidationError] = useState<string | null>(null);
   const { toast } = useToast();
   const { isAnswerValid, areAllQuestionsAnswered } = useFormValidation(questions, answers);
-  const { isSubmitting, apiResponse, submitForm } = useFormSubmission();
+  const { isSubmitting, apiResponse, submissionError, submitForm } = useFormSubmission();
   const [documentProgress, setDocumentProgress] = useState(0);
 
   // Analytics bookkeeping. All refs: nothing here renders, and timing a form
@@ -108,6 +112,7 @@ export const useFormState = () => {
 
   const handleAnswerChange = useCallback((answer: string | string[]) => {
     markStarted();
+    setValidationError(null);
     setAnswers(prev => ({ ...prev, [currentStep]: answer }));
   }, [currentStep, markStarted]);
 
@@ -137,6 +142,7 @@ export const useFormState = () => {
   }, [areAllQuestionsAnswered, answers, submitForm, toast, wantsBonusQuestions]);
 
   const advance = useCallback(() => {
+    setValidationError(null);
     if (currentStep < totalSteps - 1) {
       setCurrentStep(prev => prev + 1);
       setDocumentProgress(prev => prev + 1);
@@ -173,14 +179,15 @@ export const useFormState = () => {
       // A wall people hit right before they leave. Worth separating from a
       // clean abandon: this one we can design our way out of.
       posthog.capture('question_validation_failed', questionProperties(currentStep));
-      toast({
-        title: "Please answer the question",
-        description: "This question is required before you can proceed.",
-        variant: "destructive",
-      });
+      setValidationError(
+        questions[currentStep]?.type === 'checkbox'
+          ? 'Pick at least one to continue.'
+          : 'Add an answer to continue.'
+      );
       return;
     }
 
+    setValidationError(null);
     posthog.capture('question_answered', {
       ...questionProperties(currentStep),
       ...answerProperties(answers[currentStep]),
@@ -188,7 +195,7 @@ export const useFormState = () => {
     });
 
     advance();
-  }, [advance, answers, currentStep, isAnswerValid, toast]);
+  }, [advance, answers, currentStep, isAnswerValid]);
 
   // Moves past a skippable question without an answer, clearing anything
   // partially typed so the prompt doesn't receive a half-finished thought.
@@ -214,6 +221,7 @@ export const useFormState = () => {
   }, [advance, currentStep, markStarted, questions]);
 
   const handlePrevious = useCallback(() => {
+    setValidationError(null);
     // Backtracking is a friction signal - people re-read a question they
     // couldn't answer before they quit on it.
     posthog.capture('question_back', {
@@ -232,6 +240,14 @@ export const useFormState = () => {
       setDocumentProgress(prev => prev - 1);
     }
   }, [currentStep, isAtCheckpoint]);
+
+  // A failed generation leaves every answer in state, so retrying is just
+  // submitting the same payload again - the user shouldn't have to walk back
+  // through the form to find the button.
+  const handleRetrySubmit = useCallback(() => {
+    posthog.capture('speech_generation_retried');
+    handleSubmit();
+  }, [handleSubmit]);
 
   const handleAnimationComplete = useCallback(() => {
     setIsAnimationComplete(true);
@@ -264,6 +280,9 @@ export const useFormState = () => {
     isSubmitting,
     totalSteps,
     isAtCheckpoint,
+    validationError,
+    submissionError,
+    handleRetrySubmit,
     bonusQuestionCount: questions.length - CORE_QUESTION_COUNT,
     questionsRemaining: isAtCheckpoint ? 0 : totalSteps - currentStep,
     handleAnswerChange,

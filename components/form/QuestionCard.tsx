@@ -19,6 +19,7 @@ interface QuestionCardProps {
   isFirstStep: boolean;
   isLastStep: boolean;
   isSubmitting: boolean;
+  error?: string | null;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -32,7 +33,8 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   onSkip,
   isFirstStep,
   isLastStep,
-  isSubmitting
+  isSubmitting,
+  error
 }) => {
   const answerRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -121,6 +123,10 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           allowCustom={question.allowCustom}
           placeholder={question.placeholder}
           fieldRef={answerRef}
+          autoCapitalize={question.autoCapitalize}
+          autoComplete={question.autoComplete}
+          isLastStep={isLastStep}
+          error={error ?? undefined}
         />
       {question.prompts && (
         <QuestionPrompts prompts={question.prompts} onSelect={handlePromptSelect} />

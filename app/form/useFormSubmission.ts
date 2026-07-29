@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { useToast } from "@/components/ui/use-toast";
 import { questions } from './questions';
 import { ResponseData } from "@/app/api/submit/route";
 import posthog from 'posthog-js';
@@ -25,7 +24,10 @@ export const useFormSubmission = () => {
   const [apiResponse, setApiResponse] = useState<ResponseData | null>(null);
   const [safetyError, setSafetyError] = useState<string | null>(null);
   const [modelOverloadError, setModelOverloadError] = useState<string | null>(null);
-  const { toast } = useToast();
+  // Survives long enough for the user to act on it. A toast alone left people
+  // back on their last question with no idea what happened and no way to retry
+  // except guessing their way forward through the form again.
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
 
   const parseResponse = async (response: Response) => {
     const contentType = response.headers.get("content-type");
@@ -52,6 +54,7 @@ export const useFormSubmission = () => {
     setIsSubmitting(true);
     setSafetyError(null);
     setModelOverloadError(null);
+    setSubmissionError(null);
     setApiResponse(null);
 
     try {
@@ -129,11 +132,8 @@ export const useFormSubmission = () => {
         speech_char_count: data.result1?.length ?? 0,
       });
 
-      toast({
-        title: "Submission Successful",
-        description: "Your form has been submitted successfully.",
-        variant: "default",
-      });
+      // No success toast: the speech itself appearing is the confirmation, and
+      // a banner over it at that exact moment is pure interruption.
     } catch (error) {
       console.error('Error:', error);
       const message = error instanceof Error ? error.message : String(error);
@@ -150,17 +150,21 @@ export const useFormSubmission = () => {
             : 'other',
         error_message: message,
       });
-      toast({
-        title: "Submission Error",
-        description: error instanceof Error ? error.message : "There was an error submitting your form. Please try again.",
-        variant: "destructive",
-        duration: 5000,
-      });
+      // Answers are all still in state, so the only thing standing between the
+      // user and their speech is one more attempt. Say that, rather than
+      // surfacing the raw failure.
+      setSubmissionError(
+        message.includes('safety')
+          ? "Something in your answers tripped our content filter. Try rewording the last couple of answers."
+          : message.includes('overloaded')
+            ? "Our writer is busy right now. Give it a few seconds and try again."
+            : "We couldn't finish writing your speech. Your answers are safe - try again."
+      );
     } finally {
       submitInFlight.current = false;
       setIsSubmitting(false);
     }
   };
 
-  return { isSubmitting, apiResponse, safetyError, modelOverloadError, submitForm };
+  return { isSubmitting, apiResponse, safetyError, modelOverloadError, submissionError, submitForm };
 };

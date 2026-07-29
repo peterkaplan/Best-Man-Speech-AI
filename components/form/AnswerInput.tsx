@@ -18,6 +18,9 @@ interface AnswerInputProps {
   allowCustom?: boolean;
   placeholder?: string;
   fieldRef?: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>;
+  autoCapitalize?: 'none' | 'sentences' | 'words';
+  autoComplete?: string;
+  isLastStep?: boolean;
 }
 
 const AnswerInput: React.FC<AnswerInputProps> = ({
@@ -30,7 +33,10 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   error,
   allowCustom = false,
   placeholder,
-  fieldRef
+  fieldRef,
+  autoCapitalize,
+  autoComplete,
+  isLastStep = false
 }) => {
   const [customOption, setCustomOption] = useState('');
   const [customOptions, setCustomOptions] = useState<string[]>([]);
@@ -69,6 +75,12 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
+            autoCapitalize={autoCapitalize}
+            autoComplete={autoComplete}
+            autoCorrect="off"
+            // Labels the phone's return key "next"/"go" instead of a generic
+            // newline arrow. The window-level Enter handler does the advancing.
+            enterKeyHint={isLastStep ? 'go' : 'next'}
             className="w-full border-2 border-border focus:border-primary rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-primary/20"
           />
         );
@@ -80,6 +92,9 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
+            autoCapitalize={autoCapitalize ?? 'sentences'}
+            // No enterKeyHint here: Enter has to stay a newline in a textarea,
+            // and promising "next" on the key would be a lie.
             className="w-full border-2 border-border focus:border-primary rounded-lg px-4 py-2 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-primary/20 resize-none"
             rows={4}
           />

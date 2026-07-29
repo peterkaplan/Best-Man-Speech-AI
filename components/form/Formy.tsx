@@ -22,6 +22,9 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
     isSubmitting,
     totalSteps,
     isAtCheckpoint,
+    validationError,
+    submissionError,
+    handleRetrySubmit,
     bonusQuestionCount,
     handleAnswerChange,
     handleNext,
@@ -101,6 +104,21 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
           ? '' 
           : 'sm:p-6 sm:flex-grow sm:flex sm:flex-col sm:overflow-y-auto'}`}
       >
+        {formStage === 'form' && submissionError && (
+          <div
+            role="alert"
+            className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 p-4"
+          >
+            <p className="text-sm text-foreground">{submissionError}</p>
+            <Button
+              onClick={handleRetrySubmit}
+              disabled={isSubmitting}
+              className="mt-3 w-full sm:w-auto"
+            >
+              {isSubmitting ? 'Writing...' : 'Try again'}
+            </Button>
+          </div>
+        )}
         {formStage === 'form' && isAtCheckpoint && (
           <CheckpointCard
             bonusQuestionCount={bonusQuestionCount}
@@ -125,6 +143,7 @@ const Formy: React.FC<FormyProps> = ({ formState }) => {
             // leads to the checkpoint, so it stays a "Next".
             isLastStep={currentStep === questions.length - 1}
             isSubmitting={isSubmitting}
+            error={validationError}
           />
         )}
         {formStage === 'animation' && (

@@ -16,6 +16,15 @@ export interface Question {
   /** Memory-joggers shown as chips, for questions that stare back blankly. */
   prompts?: string[];
   placeholder?: string;
+  /**
+   * Mobile keyboard behaviour. Without these a phone offers a lowercase
+   * keyboard with a generic return key for questions that are plainly asking
+   * for a name, which costs the user a shift press per field and a trip to the
+   * Next button. `autoComplete` is off for the other people's names - browser
+   * autofill would suggest the user's own.
+   */
+  autoCapitalize?: 'none' | 'sentences' | 'words';
+  autoComplete?: string;
 }
 
 /**
@@ -29,10 +38,10 @@ export interface Question {
 export const CORE_QUESTION_COUNT = 7;
 
 export const questions: Question[] = [
-  { text: "What's the name of the groom?", type: "text", required: true, shortName: "groomName" },
-  { text: "What's the name of the groom's partner?", type: "text", required: true, shortName: "partnerName" },
-  { text: "What is your name?", type: "text", required: true, shortName: "yourName" },
-  { text: "How long have you known [name]?", type: "text", required: true, shortName: "knownDuration" },
+  { text: "What's the name of the groom?", type: "text", required: true, shortName: "groomName", autoCapitalize: "words", autoComplete: "off", placeholder: "First name is fine" },
+  { text: "What's the name of the groom's partner?", type: "text", required: true, shortName: "partnerName", autoCapitalize: "words", autoComplete: "off", placeholder: "First name is fine" },
+  { text: "What is your name?", type: "text", required: true, shortName: "yourName", autoCapitalize: "words", autoComplete: "given-name" },
+  { text: "How long have you known [name]?", type: "text", required: true, shortName: "knownDuration", autoCapitalize: "sentences", autoComplete: "off", placeholder: "e.g. about 12 years" },
   { text: "How did you and [name] meet?", type: "textarea", required: true, shortName: "howMet", skippable: true },
   {
     text: "What are [name]'s best qualities?",

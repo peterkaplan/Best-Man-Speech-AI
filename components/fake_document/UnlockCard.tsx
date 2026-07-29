@@ -43,7 +43,7 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
 
       <Button
         onClick={handleUnlock}
-        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 rounded-lg transition-colors text-md shadow-md"
+        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-colors text-base shadow-md"
       >
         Access Now
       </Button>

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import UnlockCard from './UnlockCard';
 import { Button } from "@/components/ui/button";
 import { Download, Copy, CheckCircle } from 'lucide-react';
@@ -13,18 +13,37 @@ interface ResultContentProps {
   } | null;
 }
 
+// Words shown sharp before the teaser starts fading out.
+const PREVIEW_WORDS = 35;
+// How far past the fade point we keep rendering. Enough to read as "there is
+// more speech here", short enough that the unlock card lands on the first
+// screen of a phone instead of below several thousand pixels of blurred text.
+const TEASER_WORDS = 25;
+
 export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const speech = results?.result1 || '';
   const { generatePdf, PdfContent } = usePdfGenerator(speech);
 
+  // The speech replaces a form the user was looking at further down the page,
+  // so bring the top of it into view rather than leaving them mid-document.
+  useEffect(() => {
+    // Anchor on the document card, not the text inside it, so the card's own
+    // chrome doesn't end up tucked behind the site's fixed header.
+    const el = rootRef.current?.closest('[data-speech-document]') ?? rootRef.current;
+    if (!el) return;
+    const headerOffset = 80;
+    const y = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+  }, []);
+
   if (!results) return null;
 
-  const words = speech.split(' ');
-  const visibleWordCount = isUnlocked ? words.length : 35;
+  const teaserWords = speech.split(' ').slice(0, PREVIEW_WORDS + TEASER_WORDS);
 
   const handleUnlock = () => {
     posthog.capture('speech_unlocked');
@@ -53,17 +72,17 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
   };
 
   return (
-    <div className="font-sans text-base leading-relaxed min-h-screen flex flex-col">
+    <div ref={rootRef} className="font-sans text-base leading-relaxed">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex-grow flex flex-col items-center max-w-2xl mx-auto p-8 pb-24 overflow-y-auto"
+        className="flex flex-col items-center w-full max-w-2xl mx-auto"
       >
         <motion.h1
           initial={{ y: -20 }}
           animate={{ y: 0 }}
-          className="text-3xl font-bold mb-6 text-center text-foreground"
+          className="font-display text-2xl sm:text-3xl font-bold mb-6 text-center text-foreground"
         >
           Best Man Speech
         </motion.h1>
@@ -78,7 +97,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
             <p className="text-primary font-semibold mb-4 text-center">
               You&apos;ve unlocked your full speech!
             </p>
-            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
               <Button onClick={handleCopy} className="flex items-center w-full sm:w-auto">
                 {isCopied ? <CheckCircle className="mr-2" size={16} /> : <Copy className="mr-2" size={16} />}
                 {isCopied ? 'Copied!' : 'Copy Text'}
@@ -91,48 +110,48 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
           </motion.div>
         )}
 
-        <div className="w-full mb-8">
-          <AnimatePresence mode="wait">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <p ref={contentRef} className={`whitespace-pre-wrap break-words text-foreground text-justify ${isUnlocked ? 'select-text' : 'select-none pointer-events-none'}`}>
-                {words.map((word, index) => (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-full relative"
+        >
+          <p
+            ref={contentRef}
+            className={`whitespace-pre-wrap break-words text-foreground text-left sm:text-justify ${isUnlocked ? 'select-text' : 'select-none'}`}
+          >
+            {/* Once unlocked there is nothing to blur, so skip the per-word
+                spans entirely - a long speech is well over a thousand of them,
+                which is a lot of DOM to hand a phone for no visual gain. */}
+            {isUnlocked
+              ? speech
+              : teaserWords.map((word, index) => (
                   <React.Fragment key={index}>
                     {index > 0 && ' '}
                     <span
                       style={{
-                        filter: index >= visibleWordCount ? `blur(${Math.min((index - visibleWordCount) * 0.2 + 1, 5)}px)` : 'none',
-                        opacity: index >= visibleWordCount ? Math.max(1 - (index - visibleWordCount) * 0.02, 0.5) : 1,
+                        filter: index >= PREVIEW_WORDS ? `blur(${Math.min((index - PREVIEW_WORDS) * 0.2 + 1, 5)}px)` : 'none',
+                        opacity: index >= PREVIEW_WORDS ? Math.max(1 - (index - PREVIEW_WORDS) * 0.02, 0.5) : 1,
                       }}
                     >
                       {word}
                     </span>
                   </React.Fragment>
                 ))}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+          </p>
+          {!isUnlocked && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-card" />
+          )}
+        </motion.div>
+
+        {!isUnlocked && (
+          <div className="w-full flex justify-center mt-6">
+            <UnlockCard onUnlock={handleUnlock} />
+          </div>
+        )}
 
         <PdfContent />
       </motion.div>
-
-      {!isUnlocked && (
-        <>
-          <div className="fixed inset-x-0 bottom-0 flex items-center justify-center z-50 md:hidden mx-4">
-            <div className="bg-background rounded-t-lg shadow-lg p-6 w-full">
-              <UnlockCard onUnlock={handleUnlock} />
-            </div>
-          </div>
-          <div className="absolute bottom-[6.5rem] left-0 right-0 hidden md:flex justify-center mx-4">
-            <UnlockCard onUnlock={handleUnlock} />
-          </div>
-        </>
-      )}
     </div>
   );
 };

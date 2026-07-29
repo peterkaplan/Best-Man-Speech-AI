@@ -49,7 +49,11 @@ const FormPage: React.FC = () => {
           </AnimatePresence>
           <motion.div
             key="fakeDocument"
-            className="flex-1 w-full lg:w-1/2 h-full md:overflow-hidden overflow-y-scroll max-h-[600px] lg:max-h-none"
+            className={`flex-1 w-full h-full ${
+              formStage === 'results'
+                ? ''
+                : 'lg:w-1/2 md:overflow-hidden overflow-y-scroll max-h-[600px] lg:max-h-none'
+            }`}
             animate={{
               width: '100%',
             }}

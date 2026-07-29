@@ -22,6 +22,12 @@ interface FakeDocumentProps {
 const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, questionsRemaining, results, onAnimationComplete }) => {
   const { displayedText, isTyping } = useTypingEffect(progress);
 
+  // While the form is running, the document is a fixed-height preview pane
+  // sitting next to the questions. Once the speech is real it becomes the thing
+  // the user is actually reading, so it grows with its content and the page
+  // scrolls - no nested scroll containers to fight with on a phone.
+  const isResults = formStage === 'results';
+
   const totalWords = useMemo(() => {
     return (displayedText.title + ' ' + displayedText.content).split(/\s+/).filter(Boolean).length;
   }, [displayedText]);
@@ -54,12 +60,15 @@ const FakeDocument: React.FC<FakeDocumentProps> = ({ progress, formStage, questi
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-card shadow-xl border border-border/60 stage-ring overflow-hidden">
-      <div className="flex flex-col lg:h-[800px] relative">
+    <Card
+      data-speech-document
+      className="w-full max-w-4xl mx-auto bg-card shadow-xl border border-border/60 stage-ring overflow-hidden"
+    >
+      <div className={`flex flex-col relative ${isResults ? '' : 'lg:h-[800px]'}`}>
         <DocumentHeader />
-        <div className="flex-grow md:overflow-hidden overflow-y-scroll">
-          <div className="h-full flex">
-            <div className="w-full p-6 relative overflow-y-auto">
+        <div className={`flex-grow ${isResults ? '' : 'md:overflow-hidden overflow-y-scroll'}`}>
+          <div className={`flex ${isResults ? '' : 'h-full'}`}>
+            <div className={`w-full p-4 sm:p-6 relative ${isResults ? '' : 'overflow-y-auto'}`}>
               {renderContent()}
             </div>
           </div>
