@@ -48,20 +48,33 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   // actually remounts (text <-> textarea) and keyboard/Enter navigation.
   useEffect(() => {
     // Don't grab focus on first paint — that would pop the keyboard open (and
-    // scroll the page) the moment someone lands on the form.
+    // scroll the page) the moment someone lands on the form. The exception is
+    // arriving from a CTA, which appends #start: that click was a request to
+    // begin typing, so honour it once and then drop the hash so a refresh or a
+    // shared link doesn't inherit the behaviour.
+    let cameFromCta = false;
     if (isFirstRender.current) {
       isFirstRender.current = false;
-      return;
+      cameFromCta =
+        typeof window !== 'undefined' && window.location.hash === '#start';
+      if (!cameFromCta) return;
+      window.history.replaceState(null, '', window.location.pathname);
+      if (!isTypedField) return;
     }
     const id = requestAnimationFrame(() => {
-      // preventScroll throughout, because scrollToForm() already positions the
-      // card; letting focus scroll as well makes the view fight itself.
+      // preventScroll for in-form navigation, because scrollToForm() already
+      // positions the card and letting focus scroll too makes the view fight
+      // itself. On the CTA path nothing has positioned anything yet, so the
+      // field does need bringing into view.
       if (isTypedField) {
         const field = answerRef.current;
         if (!field) return;
         field.focus({ preventScroll: true });
         const end = field.value.length;
         field.setSelectionRange(end, end);
+        if (cameFromCta) {
+          field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         return;
       }
 

@@ -151,7 +151,7 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
               <span>Step-by-Step Guide</span>
             </div>
           </div>
-          <Link href="/creator">
+          <Link href="/creator#start">
             <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
               Try Our Best Man Speech Writer
             </Button>
@@ -458,7 +458,7 @@ export default function HowToWriteABestManSpeechPage(): JSX.Element {
                   Use our AI-powered speech writer to create a personalized, funny, and heartfelt best man speech in minutes.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/creator">
+                  <Link href="/creator#start">
                     <Button size="lg" variant="secondary" className="bg-background text-primary hover:bg-background/90 rounded-full">
                       Start Writing Your Speech
                     </Button>

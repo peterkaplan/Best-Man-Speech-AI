@@ -13,7 +13,9 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
 
   return (
     <div className="w-full max-w-md p-4 rounded-lg shadow-lg border relative bg-card/80 backdrop-blur-sm">
-      <div className="flex items-center justify-between mb-4">
+      {/* Vertical rhythm tightens below sm so the whole card, button included,
+          fits on one phone screen under the fixed header. */}
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className="flex items-center">
           <Lock className="text-primary mr-2" size={20} />
           <h2 className="text-xl font-bold text-card-foreground">Unlock Full Speech</h2>
@@ -24,7 +26,7 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
         </div>
       </div>
 
-      <ul className="mb-4 space-y-2">
+      <ul className="mb-3 sm:mb-4 space-y-1.5 sm:space-y-2">
         {['Access the complete speech', 'Download as PDF', 'All premium features included'].map((benefit, index) => (
           <li key={index} className="flex items-center text-sm">
             <Check className="text-primary mr-2" size={18} />
@@ -33,7 +35,7 @@ const UnlockCard: React.FC<UnlockCardProps> = ({ onUnlock }) => {
         ))}
       </ul>
 
-      <div className="flex items-center justify-between mb-4 border-2 border-border rounded-lg p-3">
+      <div className="flex items-center justify-between mb-3 sm:mb-4 border-2 border-border rounded-lg p-2.5 sm:p-3">
         <span className="font-semibold text-card-foreground">Full speech</span>
         <div className="flex items-center">
           <span className="text-muted-foreground line-through text-sm mr-2">$2.99</span>

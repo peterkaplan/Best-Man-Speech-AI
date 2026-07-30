@@ -99,9 +99,13 @@ const Navbar = () => {
         </div>
       );
     } else {
+      // #start tells the form to focus its first field on arrival. Someone who
+      // clicked "Write Your Speech" wants to start typing; someone who landed
+      // on /creator from search does not want a keyboard thrown at them, so the
+      // behaviour is opt-in via the hash.
       return (
-        <Link href="/creator">
-          <Button 
+        <Link href="/creator#start">
+          <Button
             className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 transform hover:scale-105"
           >
             Write Your Speech

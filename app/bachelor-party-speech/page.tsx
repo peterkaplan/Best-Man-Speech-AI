@@ -153,7 +153,7 @@ export default function BachelorPartySpeechPage(): JSX.Element {
             </div>
           </div>
 
-          <Link href="/creator">
+          <Link href="/creator#start">
             <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
               Use Our Speech Writer Tool
             </Button>
@@ -262,7 +262,7 @@ export default function BachelorPartySpeechPage(): JSX.Element {
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/creator">
+                  <Link href="/creator#start">
                     <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
                       Create Your Bachelor Party Speech
                     </Button>
@@ -335,7 +335,7 @@ export default function BachelorPartySpeechPage(): JSX.Element {
                 <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
                   Let our AI do the heavy lifting. Get a personalized, funny, and perfectly crafted bachelor party speech in minutes.
                 </p>
-                <Link href="/creator">
+                <Link href="/creator#start">
                   <Button size="lg" variant="secondary" className="bg-background text-primary hover:bg-background/90 rounded-full">
                     Get Started for Free
                   </Button>

@@ -52,7 +52,7 @@ const BestManSpeechTips = () => {
           <div className="px-6 py-8">
             <p className="text-lg mb-6 text-muted-foreground">Crafting the perfect best man speech can be challenging, but with these tips and the help of Best Man Speech AI, you&apos;ll deliver a memorable and heartfelt speech that will have everyone smiling (and maybe shedding a tear or two).</p>
 
-            <Link href="/creator">
+            <Link href="/creator#start">
               <Button className="w-full mb-8 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-300 transform hover:scale-105">
                 Get Started with Best Man Speech AI
               </Button>
@@ -97,7 +97,7 @@ const BestManSpeechTips = () => {
               <li>Provide instant feedback and improvements as you refine your speech</li>
             </ul>
             <p className="mb-6 text-muted-foreground">With Best Man Speech AI, you&apos;ll have the confidence to deliver a speech that&apos;s memorable for all the right reasons.</p>
-            <Link href="/creator">
+            <Link href="/creator#start">
               <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-300 transform hover:scale-105">
                 Create Your Perfect Speech Now
               </Button>

@@ -15,10 +15,11 @@ interface ResultContentProps {
 
 // Words shown sharp before the teaser starts fading out.
 const PREVIEW_WORDS = 35;
-// How far past the fade point we keep rendering. Enough to read as "there is
-// more speech here", short enough that the unlock card lands on the first
-// screen of a phone instead of below several thousand pixels of blurred text.
-const TEASER_WORDS = 25;
+// How far past the fade point we keep rendering. The gradient does most of the
+// "there is more speech here" work, so this only needs enough blurred text to
+// look like a cut-off page. Kept short because every line here pushes the
+// unlock button closer to the bottom of a phone screen.
+const TEASER_WORDS = 15;
 
 export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -36,7 +37,9 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
     // chrome doesn't end up tucked behind the site's fixed header.
     const el = rootRef.current?.closest('[data-speech-document]') ?? rootRef.current;
     if (!el) return;
-    const headerOffset = 80;
+    // Just clears the 57px fixed header. Anything more is screen height spent on
+    // empty space, which pushes the unlock button off the bottom of a phone.
+    const headerOffset = 64;
     const y = el.getBoundingClientRect().top + window.scrollY - headerOffset;
     window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
   }, []);
@@ -82,7 +85,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
         <motion.h1
           initial={{ y: -20 }}
           animate={{ y: 0 }}
-          className="font-display text-2xl sm:text-3xl font-bold mb-6 text-center text-foreground"
+          className="font-display text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-foreground"
         >
           Best Man Speech
         </motion.h1>
@@ -114,7 +117,13 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="w-full relative"
+          // While locked, the teaser is capped in viewport units rather than by
+          // word count alone. A fixed number of words is a different number of
+          // pixels on every phone, and on a short screen it pushed the unlock
+          // button below the fold. This keeps the button in roughly the same
+          // place regardless of device height; the word cap below is now just a
+          // guard so we don't hand the DOM a whole speech to clip.
+          className={`w-full relative ${isUnlocked ? '' : 'max-h-[26vh] sm:max-h-none overflow-hidden'}`}
         >
           <p
             ref={contentRef}
@@ -145,7 +154,7 @@ export const ResultContent: React.FC<ResultContentProps> = ({ results }) => {
         </motion.div>
 
         {!isUnlocked && (
-          <div className="w-full flex justify-center mt-6">
+          <div className="w-full flex justify-center mt-4 sm:mt-6">
             <UnlockCard onUnlock={handleUnlock} />
           </div>
         )}

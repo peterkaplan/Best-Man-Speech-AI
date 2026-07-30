@@ -72,7 +72,7 @@ const BestManSpeechTipsTwoGrooms = () => {
           <div className="px-6 py-8">
             <p className="text-lg mb-6 text-muted-foreground">Giving a best man speech at a wedding with two grooms is a special honor. These tips will help you craft a speech that celebrates both individuals and their unique love story. Best Man Speech AI can assist you in creating a personalized, heartfelt speech that honors this special occasion.</p>
 
-            <Link href="/creator">
+            <Link href="/creator#start">
               <Button className="w-full mb-8 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-300 transform hover:scale-105">
                 Start Your Speech with Best Man Speech AI
               </Button>
@@ -117,7 +117,7 @@ const BestManSpeechTipsTwoGrooms = () => {
               <li>Assists in crafting a tone that&apos;s respectful, celebratory, and personalized</li>
             </ul>
             <p className="mb-6 text-muted-foreground">With Best Man Speech AI, you&apos;ll have the tools to create a speech that truly honors and celebrates both grooms on their special day.</p>
-            <Link href="/creator">
+            <Link href="/creator#start">
               <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-300 transform hover:scale-105">
                 Craft Your Speech Now
               </Button>

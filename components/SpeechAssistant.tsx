@@ -119,7 +119,7 @@ const SpeechAssistant = () => {
                 {inputValue === '' && placeholders[placeholderIndex]}
               </motion.span>
             </AnimatePresence>
-            <Link href="/creator">
+            <Link href="/creator#start">
               <Button 
                 size="sm" 
                 className={`absolute right-1 top-1/2 transform -translate-y-1/2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-300 ${isTyping ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}

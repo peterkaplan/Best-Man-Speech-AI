@@ -71,6 +71,10 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         return (
           <Input
             {...a11y}
+            // Lets the page-level CTAs find and focus the field without having
+            // to thread a ref up through the form. Only typed fields carry it:
+            // focusing a radio or checkbox would pop the keyboard for nothing.
+            data-answer-field
             ref={fieldRef as React.RefObject<HTMLInputElement>}
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
@@ -88,6 +92,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         return (
           <Textarea
             {...a11y}
+            data-answer-field
             ref={fieldRef as React.RefObject<HTMLTextAreaElement>}
             value={value as string}
             onChange={(e) => onChange(e.target.value)}
