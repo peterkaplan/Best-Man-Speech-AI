@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Send } from 'lucide-react';
 import { useScroll } from './ScrollContext';
-import useKeyboardInset from './useKeyboardInset';
 
 interface NavigationButtonsProps {
   onPrevious: () => void;
@@ -24,13 +22,6 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
   const { scrollToForm } = useScroll();
 
   const nextButtonRef = useRef<HTMLDivElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
-
-  // While the keyboard is up these buttons sit below it, so typing an answer
-  // meant dismissing the keyboard just to reach Next. Lift them into a bar
-  // pinned to the top of the keyboard instead.
-  const keyboardInset = useKeyboardInset();
-  const isDocked = keyboardInset > 0;
 
   const combinedClick = () => {
     scrollToForm();
@@ -85,37 +76,10 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
     };
   }, [onNext, isSubmitting]);
 
-  // The browser scrolls the caret clear of the keyboard, but it knows nothing
-  // about the bar we just put on top of that — so if the bar covers the field,
-  // nudge the page up by the overlap.
-  useEffect(() => {
-    if (!isDocked) return;
-
-    const frame = requestAnimationFrame(() => {
-      const bar = barRef.current;
-      const field = document.querySelector<HTMLElement>('[data-answer-field]');
-      const viewport = window.visualViewport;
-      if (!bar || !field || !viewport) return;
-
-      // getBoundingClientRect is relative to the layout viewport; offsetTop
-      // converts it into what's actually on screen.
-      const fieldBottom = field.getBoundingClientRect().bottom - viewport.offsetTop;
-      const overlap = fieldBottom - (viewport.height - bar.offsetHeight) + 8;
-      if (overlap > 0) {
-        window.scrollBy({ top: overlap, behavior: 'smooth' });
-      }
-    });
-
-    return () => cancelAnimationFrame(frame);
-  }, [isDocked]);
-
-  // Skip gets its own line rather than sitting between Previous and Next:
-  // three items in one row overflows a phone-width card and clips Next.
-  // `live` marks the copy people actually press: when docked, the in-flow copy
-  // stays behind as a hidden spacer so the card keeps its height, and the
-  // portalled copy takes the interactions and the glow ref.
-  const renderControls = (live: boolean) => (
-    <div className="flex flex-col gap-2">
+  return (
+    // Skip gets its own line rather than sitting between Previous and Next:
+    // three items in one row overflows a phone-width card and clips Next.
+    <div className="flex flex-col gap-2 mt-8">
       {canSkip && (
         <div className="flex justify-center">
           <Button
@@ -143,7 +107,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
           </Button>
         </motion.div>
         <motion.div
-          ref={live ? nextButtonRef : undefined}
+          ref={nextButtonRef}
           variants={buttonVariants}
           whileHover="hover"
           whileTap="tap"
@@ -175,30 +139,6 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ onPrevious, onNex
         </motion.div>
       </div>
     </div>
-  );
-
-  return (
-    <>
-      {/* visibility:hidden also takes the duplicated buttons out of the tab
-          order and off the accessibility tree, so only the docked copy is
-          reachable. */}
-      <div className={`mt-8 ${isDocked ? 'invisible' : ''}`} aria-hidden={isDocked || undefined}>
-        {renderControls(!isDocked)}
-      </div>
-      {isDocked &&
-        createPortal(
-          // Portalled to the body because the form card clips its overflow and
-          // animates a transform, either of which would trap a fixed child.
-          <div
-            ref={barRef}
-            style={{ bottom: keyboardInset }}
-            className="fixed left-0 right-0 z-50 border-t border-border bg-background/95 px-4 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.12)] backdrop-blur supports-[backdrop-filter]:bg-background/85"
-          >
-            <div className="mx-auto w-full max-w-md">{renderControls(true)}</div>
-          </div>,
-          document.body
-        )}
-    </>
   );
 };
 

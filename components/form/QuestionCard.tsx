@@ -3,8 +3,12 @@ import QuestionText from './QuestionText';
 import QuestionPrompts from './QuestionPrompts';
 import AnswerInput from './AnswerInput';
 import FormProgress from './FormProgress';
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, Loader2, Send } from 'lucide-react';
 import NavigationButtons from './NavigationButtons';
+import { Button } from "@/components/ui/button";
+import { useScroll } from './ScrollContext';
+import useOutOfView from './useOutOfView';
 import { Question } from '@/app/form/questions';
 
 interface QuestionCardProps {
@@ -38,9 +42,17 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 }) => {
   const answerRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
+  const { scrollToForm } = useScroll();
 
   const isTypedField = question.type === 'text' || question.type === 'textarea';
+
+  // On a phone the keyboard covers the bottom of the page, buttons included, so
+  // answering a question used to mean dismissing the keyboard just to press
+  // Next. When that happens Next moves up next to the question, which stays in
+  // view above the keyboard.
+  const navOutOfReach = useOutOfView(navRef, currentStep);
 
   // Keep the caret in the answer box as you move between questions, so the
   // mobile keyboard never collapses mid-form. NavigationButtons also blocks
@@ -103,6 +115,58 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
     });
   };
 
+  // Same pair of actions as the button at the bottom of the card: reposition
+  // the form first so the next question lands in view, then move on.
+  const handleNextFromTitle = () => {
+    scrollToForm();
+    onNext();
+  };
+
+  // Pressing it must not blur the answer field — that would collapse the very
+  // keyboard this button exists to work around.
+  const keepFocusInField = (event: React.MouseEvent) => {
+    event.preventDefault();
+  };
+
+  const titleAction = (
+    <AnimatePresence>
+      {navOutOfReach && (
+        <motion.div
+          initial={{ opacity: 0, x: 8 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 8 }}
+          transition={{ duration: 0.15 }}
+          className="shrink-0"
+        >
+          <Button
+            onClick={handleNextFromTitle}
+            onMouseDown={keepFocusInField}
+            disabled={isSubmitting}
+            size="sm"
+            className="flex items-center gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {isSubmitting ? (
+              <>
+                <span>Writing...</span>
+                <Loader2 size={14} className="animate-spin" />
+              </>
+            ) : isLastStep ? (
+              <>
+                <span>Submit</span>
+                <Send size={14} />
+              </>
+            ) : (
+              <>
+                <span>Next</span>
+                <ArrowRight size={14} />
+              </>
+            )}
+          </Button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: {
@@ -125,7 +189,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       animate="visible"
       variants={cardVariants}
     >
-      <QuestionText text={question.text} hint={question.hint} />
+      <QuestionText text={question.text} hint={question.hint} action={titleAction} />
       <AnswerInput
           type={question.type}
           options={question.options}
@@ -144,15 +208,17 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       {question.prompts && (
         <QuestionPrompts prompts={question.prompts} onSelect={handlePromptSelect} />
       )}
-      <NavigationButtons
-        onPrevious={onPrevious}
-        onNext={onNext}
-        onSkip={onSkip}
-        canSkip={!!question.skippable}
-        isFirstStep={isFirstStep}
-        isLastStep={isLastStep}
-        isSubmitting={isSubmitting}
-      />
+      <div ref={navRef}>
+        <NavigationButtons
+          onPrevious={onPrevious}
+          onNext={onNext}
+          onSkip={onSkip}
+          canSkip={!!question.skippable}
+          isFirstStep={isFirstStep}
+          isLastStep={isLastStep}
+          isSubmitting={isSubmitting}
+        />
+      </div>
     </motion.div>
   );
 };
